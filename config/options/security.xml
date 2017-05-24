@@ -1,0 +1,5 @@
+<application>
+  <component name="SSHConnectionSettings">
+    <successfulAuthentication user="git@192.168.0.233" method="publickey" />
+  </component>
+</application>

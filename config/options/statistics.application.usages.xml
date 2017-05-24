@@ -1,0 +1,39 @@
+<application>
+  <component name="UsageTrigger">
+    <counts>
+      <entry feature="StripeButton[Version_Control].shown" count="3" />
+      <entry feature="debugger.reload.classes" count="76" />
+      <entry feature="execute.#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory.Debug" count="297" />
+      <entry feature="execute.#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory.Run" count="1" />
+      <entry feature="execute.Application.Debug" count="1" />
+      <entry feature="execute.Application.Run" count="14" />
+      <entry feature="execute.JUnit.Debug" count="8" />
+      <entry feature="execute.JUnit.Run" count="21" />
+      <entry feature="ide.settings.Appearance" count="1" />
+      <entry feature="ide.settings.Auto_Import" count="1" />
+      <entry feature="ide.settings.Code_Completion" count="2" />
+      <entry feature="ide.settings.Colors_&amp;_Fonts" count="1" />
+      <entry feature="ide.settings.Console_Font" count="1" />
+      <entry feature="ide.settings.Editor_Tabs" count="2" />
+      <entry feature="ide.settings.File_Encodings" count="2" />
+      <entry feature="ide.settings.Font" count="2" />
+      <entry feature="ide.settings.General" count="1" />
+      <entry feature="ide.settings.Importing" count="1" />
+      <entry feature="ide.settings.Java_Compiler" count="2" />
+      <entry feature="ide.settings.Maven" count="2" />
+      <entry feature="ide.settings.Plugins" count="1" />
+      <entry feature="ide.settings.Smart_Keys" count="1" />
+      <entry feature="ideaapp.started" count="24" />
+      <entry feature="spring.SpringConfigurationCheck.FileCount.java" count="2" />
+      <entry feature="spring.SpringConfigurationCheck.FileCount.xml" count="14" />
+      <entry feature="spring.SpringFacetInspection.ConfigureFileSetFix" count="1" />
+      <entry feature="terminal.win" count="1" />
+      <entry feature="uml.ShowDiagram.JAVA" count="4" />
+      <entry feature="uml.ShowDiagram.JAVA.popup" count="3" />
+      <entry feature="vcs.log.ShowDiff" count="8" />
+      <entry feature="welcome.screen.WelcomeScreen.Configure" count="1" />
+      <entry feature="welcome.screen.WelcomeScreen.ImportProject" count="1" />
+      <entry feature="welcome.screen.null" count="1" />
+    </counts>
+  </component>
+</application>

@@ -1,0 +1,67 @@
+<application>
+  <component name="RecentProjectsManager">
+    <option name="recentPaths">
+      <list>
+        <option value="E:\houhe_api\code" />
+        <option value="G:\dubbodemo" />
+        <option value="E:\platform" />
+        <option value="E:\\untitled" />
+      </list>
+    </option>
+    <option name="openPaths">
+      <list>
+        <option value="E:\houhe_api\code" />
+      </list>
+    </option>
+    <option name="lastPath" value="E:\houhe_api\code" />
+    <option name="additionalInfo">
+      <map>
+        <entry key="E:\\untitled">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-171.3780.107" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="C:\Program Files (x86)\JetBrains\IntelliJ IDEA 2017.1\bin" />
+              <option name="projectOpenTimestamp" value="1491994134219" />
+              <option name="buildTimestamp" value="1490172625971" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:\houhe_api\code">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-171.4424.56" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="C:\Program Files (x86)\JetBrains\IntelliJ IDEA 2017.1\bin" />
+              <option name="projectOpenTimestamp" value="1495592989497" />
+              <option name="buildTimestamp" value="1494606703529" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:\platform">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-171.3780.107" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="C:\Program Files (x86)\JetBrains\IntelliJ IDEA 2017.1\bin" />
+              <option name="projectOpenTimestamp" value="1492050621281" />
+              <option name="buildTimestamp" value="1490172603018" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="G:\dubbodemo">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-171.4073.35" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="C:\Program Files (x86)\JetBrains\IntelliJ IDEA 2017.1\bin" />
+              <option name="projectOpenTimestamp" value="1492998064933" />
+              <option name="buildTimestamp" value="1491502701705" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="lastProjectLocation" value="G:/" />
+  </component>
+</application>
