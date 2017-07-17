@@ -5,8 +5,12 @@
 	],
 	"installed_packages":
 	[
+		"ConvertToUTF8",
 		"Markdown Preview",
 		"MarkdownEditing",
+		"MarkdownHighlighting",
+		"MarkdownLivePreview",
+		"MarkdownTOC",
 		"Package Control"
 	]
 }
