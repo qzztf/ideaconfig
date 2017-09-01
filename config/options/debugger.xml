@@ -1,5 +1,8 @@
 <application>
   <component name="DebuggerSettings">
+    <option name="SHOW_ALTERNATIVE_SOURCE" value="false" />
+    <option name="SKIP_GETTERS" value="true" />
+    <option name="HOTSWAP_HANG_WARNING_ENABLED" value="true" />
     <filter>
       <option name="PATTERN" value="com.sun.*" />
       <option name="ENABLED" value="true" />
@@ -63,7 +66,9 @@
   </component>
   <component name="XDebuggerSettings">
     <data-views />
-    <general />
+    <general>
+      <evaluation-dialog-mode>CODE_FRAGMENT</evaluation-dialog-mode>
+    </general>
     <debuggers>
       <debugger id="javascript">
         <configuration>

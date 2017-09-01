@@ -1,0 +1,11 @@
+ClearcasePlugin
+CloudBees
+CloudFoundry
+StrutsAssistant
+com.intellij.dmserver
+com.intellij.flex
+com.intellij.gwt
+com.intellij.vaadin
+com.jetbrains.plugins.asp
+hg4idea
+org.jetbrains.android

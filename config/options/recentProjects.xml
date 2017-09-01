@@ -2,59 +2,294 @@
   <component name="RecentProjectsManager">
     <option name="recentPaths">
       <list>
-        <option value="E:\houhe_api\code" />
-        <option value="G:\dubbodemo" />
-        <option value="E:\platform" />
-        <option value="E:\\untitled" />
+        <option value="E:/springboot-demo" />
+        <option value="D:/work/BPMS/branches/ddjf-bims_dz" />
+        <option value="E:/ico_site_engine/trunk/engine/fxicoAdmin" />
+        <option value="E:/ico_site_engine/branches/db_editor/trunk/engine/fxicoAdmin" />
+        <option value="E:/ico_site_engine/trunk/engine/engine_business" />
+        <option value="D:/work/BPMS/branches/bugfix-ddjf-bims_v1.0" />
+        <option value="E:/qinzaizhen/dubbodemo" />
+        <option value="E:/qinzaizhen/springstudy" />
+        <option value="E:/springo" />
+        <option value="D:/work/BPMS/branches/ddjf-bims-v2.0" />
+        <option value="D:/work/BPMS/branches/x5-modules_v1.0" />
+        <option value="D:/work/BPMS/trunk/x5-modules/x5-tools" />
+        <option value="D:/work/BPMS/doc/宏天x5源码及文档/x5_all" />
+        <option value="D:/work/BPMS/trunk/x5-modules" />
+        <option value="E:/springo-org/code" />
+        <option value="E:/qinzaizhen/javasedemo" />
+        <option value="D:/work/BPMS/trunk/ddjf-bims" />
+        <option value="E:/demoactiviti" />
+        <option value="D:/work/payment/trunk/SOURCE/payment-gateway-parent" />
       </list>
     </option>
     <option name="openPaths">
       <list>
-        <option value="E:\houhe_api\code" />
+        <option value="D:/work/BPMS/branches/ddjf-bims_dz" />
       </list>
     </option>
-    <option name="lastPath" value="E:\houhe_api\code" />
+    <option name="lastPath" value="E:/springboot-demo" />
     <option name="additionalInfo">
       <map>
-        <entry key="E:\\untitled">
+        <entry key="D:/work/BPMS/branches/bugfix-ddjf-bims_v1.0">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.3757.52" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1503477605345" />
+              <option name="buildTimestamp" value="1502780396203" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="D:/work/BPMS/branches/ddjf-bims-v2.0">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.3317.76" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1500604667630" />
+              <option name="buildTimestamp" value="1500115269888" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="D:/work/BPMS/branches/ddjf-bims_dz">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.3757.52" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1504184444481" />
+              <option name="buildTimestamp" value="1502780376256" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="D:/work/BPMS/branches/x5-modules_v1.0">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.3317.76" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1500426488404" />
+              <option name="buildTimestamp" value="1500115263751" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="D:/work/BPMS/doc/宏天x5源码及文档/x5_all">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-171.4694.23" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1499153757339" />
+              <option name="buildTimestamp" value="1496751205275" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="D:/work/BPMS/trunk">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-171.4694.23" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1498470415654" />
+              <option name="buildTimestamp" value="1496751215393" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="D:/work/BPMS/trunk/ddjf-bims">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-171.4694.23" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1498553902590" />
+              <option name="buildTimestamp" value="1496751183642" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="D:/work/BPMS/trunk/x5-modules">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-171.4694.23" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1499153484234" />
+              <option name="buildTimestamp" value="1496751205275" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="D:/work/BPMS/trunk/x5-modules/x5-tools">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-171.4694.23" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1499154432119" />
+              <option name="buildTimestamp" value="1496751205275" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="D:/work/payment/trunk/SOURCE/payment-gateway-parent">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-171.4694.23" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1498460618049" />
+              <option name="buildTimestamp" value="1496751215393" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E://untitled">
           <value>
             <RecentProjectMetaInfo>
               <option name="build" value="IU-171.3780.107" />
               <option name="productionCode" value="IU" />
-              <option name="binFolder" value="C:\Program Files (x86)\JetBrains\IntelliJ IDEA 2017.1\bin" />
+              <option name="binFolder" value="C:/Program Files (x86)/JetBrains/IntelliJ IDEA 2017.1/bin" />
               <option name="projectOpenTimestamp" value="1491994134219" />
               <option name="buildTimestamp" value="1490172625971" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
-        <entry key="E:\houhe_api\code">
+        <entry key="E:/demoactiviti">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-171.4694.23" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1498535287348" />
+              <option name="buildTimestamp" value="1496751183642" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/houhe_api/code">
           <value>
             <RecentProjectMetaInfo>
               <option name="build" value="IU-171.4424.56" />
               <option name="productionCode" value="IU" />
-              <option name="binFolder" value="C:\Program Files (x86)\JetBrains\IntelliJ IDEA 2017.1\bin" />
+              <option name="binFolder" value="C:/Program Files (x86)/JetBrains/IntelliJ IDEA 2017.1/bin" />
               <option name="projectOpenTimestamp" value="1495592989497" />
               <option name="buildTimestamp" value="1494606703529" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
-        <entry key="E:\platform">
+        <entry key="E:/ico_site_engine/branches/db_editor/trunk/engine/fxicoAdmin">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.3757.52" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1504010557495" />
+              <option name="buildTimestamp" value="1502780376256" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/ico_site_engine/trunk/engine/engine_business">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.3757.52" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1503655847339" />
+              <option name="buildTimestamp" value="1502780387219" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/ico_site_engine/trunk/engine/fxicoAdmin">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.3757.52" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1504173633107" />
+              <option name="buildTimestamp" value="1502780376256" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/platform">
           <value>
             <RecentProjectMetaInfo>
               <option name="build" value="IU-171.3780.107" />
               <option name="productionCode" value="IU" />
-              <option name="binFolder" value="C:\Program Files (x86)\JetBrains\IntelliJ IDEA 2017.1\bin" />
+              <option name="binFolder" value="C:/Program Files (x86)/JetBrains/IntelliJ IDEA 2017.1/bin" />
               <option name="projectOpenTimestamp" value="1492050621281" />
               <option name="buildTimestamp" value="1490172603018" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
-        <entry key="G:\dubbodemo">
+        <entry key="E:/qinzaizhen/dubbodemo">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.3544.35" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1501827398886" />
+              <option name="buildTimestamp" value="1501515086941" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/qinzaizhen/javasedemo">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-171.4694.23" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1499043982558" />
+              <option name="buildTimestamp" value="1496751228410" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/qinzaizhen/springstudy">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.3317.76" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1501123100538" />
+              <option name="buildTimestamp" value="1500115309882" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/springboot-demo">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.3757.52" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1504184581987" />
+              <option name="buildTimestamp" value="1502780376256" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/springo">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.3317.76" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1501030473722" />
+              <option name="buildTimestamp" value="1500115286211" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/springo-org/code">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-171.4694.23" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1499068663128" />
+              <option name="buildTimestamp" value="1496751205275" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="G:/dubbodemo">
           <value>
             <RecentProjectMetaInfo>
               <option name="build" value="IU-171.4073.35" />
               <option name="productionCode" value="IU" />
-              <option name="binFolder" value="C:\Program Files (x86)\JetBrains\IntelliJ IDEA 2017.1\bin" />
+              <option name="binFolder" value="C:/Program Files (x86)/JetBrains/IntelliJ IDEA 2017.1/bin" />
               <option name="projectOpenTimestamp" value="1492998064933" />
               <option name="buildTimestamp" value="1491502701705" />
             </RecentProjectMetaInfo>
@@ -62,6 +297,6 @@
         </entry>
       </map>
     </option>
-    <option name="lastProjectLocation" value="G:/" />
+    <option name="lastProjectLocation" value="D:/work/BPMS/branches" />
   </component>
 </application>

@@ -2,10 +2,6 @@
   <component name="FileBasedIndex">
     <option name="registeredIndices">
       <list>
-        <option value="java.module.name" />
-        <option value="java.class.fqn" />
-        <option value="java.class.shortname" />
-        <option value="java.method.parameter.types" />
         <option value="java.anonymous.baseref" />
         <option value="jvm.static.member.type" />
         <option value="jvm.static.member.name" />
@@ -21,6 +17,7 @@
         <option value="Scss.variable" />
         <option value="Less.variables" />
         <option value="Less.mixins" />
+        <option value="org.jetbrains.kotlin.idea.stubindex.KotlinOverridableInternalMembersShortNameIndex" />
         <option value="org.jetbrains.kotlin.idea.stubindex.KotlinTypeAliasByExpansionShortNameIndex" />
         <option value="org.jetbrains.kotlin.idea.stubindex.KotlinScriptFqnIndex" />
         <option value="org.jetbrains.kotlin.idea.stubindex.KotlinMultifileClassPartIndex" />
@@ -65,7 +62,20 @@
         <option value="sql.names" />
         <option value="sql.column.name" />
         <option value="sql.table.shortName" />
+        <option value="angularjs.delimiter.index" />
+        <option value="angularjs.generic.modules.index" />
+        <option value="angularjs.ui.router.generic.states.index" />
+        <option value="angularjs.ui.router.states.index" />
+        <option value="angularjs.symbol.index" />
+        <option value="angularjs.filter.index" />
+        <option value="angularjs.module.index" />
+        <option value="angularjs.decorators.index" />
+        <option value="angularjs.controller.index" />
+        <option value="angularjs.directives.doc.index" />
+        <option value="angularjs.directives.index" />
+        <option value="js.gcl.modules" />
         <option value="js.nonglobal.symbol.index" />
+        <option value="es6.assignment.index" />
         <option value="js.exported.index" />
         <option value="js.global.symbol.index" />
         <option value="amd.requirePaths.index" />
@@ -92,9 +102,13 @@
         <option value="Css.attr" />
         <option value="Css.id" />
         <option value="Css.class" />
+        <option value="Css.ampersand.selector" />
         <option value="dom.elementClass" />
         <option value="dom.namespaceKey" />
-        <option value="org.jetbrains.kotlin.idea.stubindex.KotlinOverridableInternalMembersShortNameIndex" />
+        <option value="java.module.name" />
+        <option value="java.class.fqn" />
+        <option value="java.class.shortname" />
+        <option value="java.method.parameter.types" />
       </list>
     </option>
   </component>
