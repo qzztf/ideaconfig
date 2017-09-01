@@ -1,0 +1,250 @@
+{
+	"name": "tortoise-svn",
+	"displayName": "TortoiseSVN",
+	"description": "tortoise-svn is a simple extension for VSCode to use TortoiseSVN.",
+	"version": "0.1.1",
+	"publisher": "fantasytyx",
+	"author": {
+		"name": "TangYaxin",
+		"email": "380984620@qq.com"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"homepage": "https://github.com/fantacytyx",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/fantacytyx/vscode-tortoise-svn"
+	},
+	"bugs": {
+		"url": "https://github.com/fantacytyx/vscode-tortoise-svn/issues"
+	},
+	"engines": {
+		"vscode": "^1.4.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/src/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "workspace tortoise-svn update",
+				"title": "Workspace: SVN Update"
+			},
+			{
+				"command": "workspace tortoise-svn commit",
+				"title": "Workspace: SVN Commit"
+			},
+			{
+				"command": "workspace tortoise-svn log",
+				"title": "Workspace: SVN Log"
+			},
+			{
+				"command": "workspace tortoise-svn revert",
+				"title": "Workspace: SVN Revert"
+			},
+			{
+				"command": "workspace tortoise-svn cleanup",
+				"title": "Workspace: SVN Cleanup"
+			},
+			{
+				"command": "workspace tortoise-svn add",
+				"title": "Workspace: SVN Add"
+			},
+			{
+				"command": "workspace tortoise-svn diff",
+				"title": "Workspace: SVN Diff"
+			},
+			{
+				"command": "workspace tortoise-svn lock",
+				"title": "Workspace: SVN Lock"
+			},
+			{
+				"command": "workspace tortoise-svn unlock",
+				"title": "Workspace: SVN Unlock"
+			},
+			{
+				"command": "file tortoise-svn update",
+				"title": "File: SVN Update"
+			},
+			{
+				"command": "file tortoise-svn commit",
+				"title": "File: SVN Commit"
+			},
+			{
+				"command": "file tortoise-svn log",
+				"title": "File: SVN Log"
+			},
+			{
+				"command": "file tortoise-svn revert",
+				"title": "File: SVN Revert"
+			},
+			{
+				"command": "file tortoise-svn cleanup",
+				"title": "File: SVN Cleanup"
+			},
+			{
+				"command": "file tortoise-svn add",
+				"title": "File: SVN Add"
+			},
+			{
+				"command": "file tortoise-svn blame",
+				"title": "File: SVN Blame"
+			},
+			{
+				"command": "file tortoise-svn diff",
+				"title": "File: SVN Diff"
+			},
+			{
+				"command": "file tortoise-svn lock",
+				"title": "File: SVN Lock"
+			},
+			{
+				"command": "file tortoise-svn unlock",
+				"title": "File: SVN Unlock"
+			},
+			{
+				"command": "tortoise-svn ...",
+				"title": "SVN ... (Select Action)"
+			},
+			{
+				"command": "tortoise-svn ...(select path)",
+				"title": "SVN ... (Select Path)"
+			}
+		],
+		"menus": {
+			"explorer/context": [
+				{
+					"command": "workspace tortoise-svn update",
+					"group": "tortoise-svn"
+				},
+				{
+					"command": "workspace tortoise-svn commit",
+					"group": "tortoise-svn"
+				},
+				{
+					"command": "tortoise-svn ...",
+					"group": "tortoise-svn"
+				},
+				{
+					"command": "tortoise-svn ...(select path)",
+					"group": "tortoise-svn"
+				}
+			],
+			"editor/context": [
+				{
+					"command": "workspace tortoise-svn update",
+					"group": "tortoise-svn"
+				},
+				{
+					"command": "workspace tortoise-svn commit",
+					"group": "tortoise-svn"
+				},
+				{
+					"command": "tortoise-svn ...",
+					"group": "tortoise-svn"
+				},
+				{
+					"command": "tortoise-svn ...(select path)",
+					"group": "tortoise-svn"
+				}
+			]
+		},
+		"configuration": {
+			"type": "object",
+			"title": "tortoise-svn configuration",
+			"properties": {
+				"TortoiseSVN.autoCloseUpdateDialog": {
+					"type": "boolean",
+					"default": false,
+					"description": "Auto close dialog when no errors, conflicts and merges."
+				},
+				"TortoiseSVN.tortoiseSVNProcExePath": {
+					"type": "string",
+					"default": "",
+					"description": "Specify the TortoiseProc.exe path when auto detect path fail. Notice: must replace \\ to \\\\"
+				},
+				"TortoiseSVN.showPath.exclude": {
+					"type": "array",
+					"default": [
+						"**/{node_modules,bower_components}/**"
+					],
+					"description": "Setting  glob pattern to exclude files and folders"
+				}
+			}
+		},
+		"keybindings": [
+			{
+				"command": "workspace tortoise-svn add",
+				"key": "alt+s a"
+			},
+			{
+				"command": "workspace tortoise-svn update",
+				"key": "alt+s u"
+			},
+			{
+				"command": "workspace tortoise-svn commit",
+				"key": "alt+s c"
+			},
+			{
+				"command": "workspace tortoise-svn log",
+				"key": "alt+s l"
+			},
+			{
+				"command": "workspace tortoise-svn revert",
+				"key": "alt+s r"
+			},
+			{
+				"command": "workspace tortoise-svn diff",
+				"key": "alt+s d"
+			},
+			{
+				"command": "file tortoise-svn add",
+				"key": "alt+s a",
+				"when": "editorFocus"
+			},
+			{
+				"command": "file tortoise-svn log",
+				"key": "alt+s l",
+				"when": "editorFocus"
+			},
+			{
+				"command": "file tortoise-svn revert",
+				"key": "alt+s r",
+				"when": "editorFocus"
+			},
+			{
+				"command": "file tortoise-svn diff",
+				"key": "alt+s d",
+				"when": "editorFocus"
+			},
+			{
+				"command": "tortoise-svn ...",
+				"key": "alt+s s"
+			},
+			{
+				"command": "tortoise-svn ...(select path)",
+				"key": "alt+s m"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+		"compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install"
+	},
+	"devDependencies": {
+		"typescript": "^1.8.5",
+		"vscode": "^0.11.0"
+	},
+	"dependencies": {
+		"glob": "^7.0.6"
+	},
+	"__metadata": {
+		"id": "ef81779a-9bac-4d8b-bcf3-f6bd2950b0d3",
+		"publisherId": "964c5c41-4677-4543-80da-7bcda9511c5d",
+		"publisherDisplayName": "fantasytyx"
+	}
+}

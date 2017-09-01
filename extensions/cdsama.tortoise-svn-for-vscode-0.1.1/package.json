@@ -1,0 +1,119 @@
+{
+	"name": "tortoise-svn-for-vscode",
+	"displayName": "TortoiseSVN for VS Code",
+	"description": "Using SVN in VS Code",
+	"version": "0.1.1",
+	"publisher": "cdsama",
+	"engines": {
+		"vscode": "^1.0.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:svn.pick",
+		"onCommand:svn.pickroot",
+		"onCommand:svn.commit",
+		"onCommand:svn.diff",
+		"onCommand:svn.revert",
+		"onCommand:svn.update",
+		"onCommand:svn.add",
+		"onCommand:svn.rename",
+		"onCommand:svn.log",
+		"onCommand:svn.blame",
+		"onCommand:svn.lock",
+		"onCommand:svn.unlock"
+	],
+	"main": "./out/src/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "svn.pick",
+				"title": "SVN ..."
+			},
+			{
+				"command": "svn.pickroot",
+				"title": "SVN ... (Project Directory)"
+			},
+			{
+				"command": "svn.commit",
+				"title": "SVN: commit"
+			},
+			{
+				"command": "svn.diff",
+				"title": "SVN: diff"
+			},
+			{
+				"command": "svn.revert",
+				"title": "SVN: revert"
+			},
+			{
+				"command": "svn.update",
+				"title": "SVN: update"
+			},
+			{
+				"command": "svn.add",
+				"title": "SVN: add"
+			},
+			{
+				"command": "svn.rename",
+				"title": "SVN: rename"
+			},
+			{
+				"command": "svn.log",
+				"title": "SVN: log"
+			},
+			{
+				"command": "svn.blame",
+				"title": "SVN: blame"
+			},
+			{
+				"command": "svn.lock",
+				"title": "SVN: lock"
+			},
+			{
+				"command": "svn.unlock",
+				"title": "SVN: unlock"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"command": "svn.pick",
+					"group": "svn"
+				}
+			],
+			"explorer/context": [
+				{
+					"command": "svn.pick",
+					"group": "svn"
+				},
+				{
+					"command": "svn.pickroot",
+					"group": "svn"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "tsc -p ./",
+		"compile": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install"
+	},
+	"devDependencies": {
+		"typescript": "^2.0.3",
+		"vscode": "^1.0.0",
+		"mocha": "^2.3.3",
+		"@types/node": "^6.0.40",
+		"@types/mocha": "^2.2.32"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/cdsama/tortoise-svn-for-vscode.git"
+	},
+	"__metadata": {
+		"id": "cd6085a3-0d31-4489-959e-c5ee3d42b943",
+		"publisherId": "bcdfc89b-79b4-4335-81cc-1e832d7f756d",
+		"publisherDisplayName": "cdsama"
+	}
+}
