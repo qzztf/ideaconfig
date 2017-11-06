@@ -1,17 +1,141 @@
 <application>
   <component name="AppserversManager">
-    <ServerDK NAME="Tomcat 9.0.0.M1">
+    <ServerDK NAME="Jetty 9.4.7.v20170914">
+      <option name="SOURCE_INTEGRATION_NAME" value="Jetty Server" />
+      <DATA>
+        <state>
+          <option name="configFilePaths">
+            <list>
+              <option value="modules/home-base-warning.mod" />
+              <option value="modules/ext.mod" />
+              <option value="modules/server.mod" />
+              <option value="modules/jsp.mod" />
+              <option value="modules/resources.mod" />
+              <option value="modules/deploy.mod" />
+              <option value="modules/jstl.mod" />
+              <option value="modules/websocket.mod" />
+              <option value="modules/http.mod" />
+              <option value="modules/alpn.mod" />
+              <option value="modules/annotations.mod" />
+              <option value="modules/apache-jsp.mod" />
+              <option value="modules/apache-jstl.mod" />
+              <option value="modules/cdi.mod" />
+              <option value="modules/client.mod" />
+              <option value="modules/connectionlimit.mod" />
+              <option value="modules/conscrypt.mod" />
+              <option value="modules/console-capture.mod" />
+              <option value="modules/continuation.mod" />
+              <option value="modules/debug.mod" />
+              <option value="modules/debuglog.mod" />
+              <option value="modules/fcgi.mod" />
+              <option value="modules/flight-recorder.mod" />
+              <option value="modules/gcloud-datastore.mod" />
+              <option value="modules/gcloud.mod" />
+              <option value="modules/gzip.mod" />
+              <option value="modules/hawtio.mod" />
+              <option value="modules/hazelcast-embedded-sessions.mod" />
+              <option value="modules/hazelcast-remote-sessions.mod" />
+              <option value="modules/http-forwarded.mod" />
+              <option value="modules/http2.mod" />
+              <option value="modules/http2c.mod" />
+              <option value="modules/https.mod" />
+              <option value="modules/ipaccess.mod" />
+              <option value="modules/jaas.mod" />
+              <option value="modules/jamon.mod" />
+              <option value="modules/jaspi.mod" />
+              <option value="modules/jcl-slf4j.mod" />
+              <option value="modules/jminix.mod" />
+              <option value="modules/jmx-remote.mod" />
+              <option value="modules/jmx.mod" />
+              <option value="modules/jndi.mod" />
+              <option value="modules/jolokia.mod" />
+              <option value="modules/jul-impl.mod" />
+              <option value="modules/jul-slf4j.mod" />
+              <option value="modules/jvm.mod" />
+              <option value="modules/log4j-impl.mod" />
+              <option value="modules/log4j2-api.mod" />
+              <option value="modules/log4j2-impl.mod" />
+              <option value="modules/log4j2-slf4j.mod" />
+              <option value="modules/logback-access.mod" />
+              <option value="modules/logback-impl.mod" />
+              <option value="modules/logging-jetty.mod" />
+              <option value="modules/logging-jul.mod" />
+              <option value="modules/logging-log4j.mod" />
+              <option value="modules/logging-log4j2.mod" />
+              <option value="modules/logging-logback.mod" />
+              <option value="modules/logging-slf4j.mod" />
+              <option value="modules/lowresources.mod" />
+              <option value="modules/mail.mod" />
+              <option value="modules/plus.mod" />
+              <option value="modules/proxy-protocol-ssl.mod" />
+              <option value="modules/proxy-protocol.mod" />
+              <option value="modules/proxy.mod" />
+              <option value="modules/quickstart.mod" />
+              <option value="modules/requestlog.mod" />
+              <option value="modules/rewrite-compactpath.mod" />
+              <option value="modules/rewrite-customizer.mod" />
+              <option value="modules/rewrite.mod" />
+              <option value="modules/security.mod" />
+              <option value="modules/servlet.mod" />
+              <option value="modules/servlets.mod" />
+              <option value="modules/session-cache-hash.mod" />
+              <option value="modules/session-cache-null.mod" />
+              <option value="modules/session-store-cache.mod" />
+              <option value="modules/session-store-file.mod" />
+              <option value="modules/session-store-gcloud.mod" />
+              <option value="modules/session-store-hazelcast-embedded.mod" />
+              <option value="modules/session-store-hazelcast-remote.mod" />
+              <option value="modules/session-store-infinispan-embedded.mod" />
+              <option value="modules/session-store-infinispan-remote.mod" />
+              <option value="modules/session-store-jdbc.mod" />
+              <option value="modules/session-store-mongo.mod" />
+              <option value="modules/sessions.mod" />
+              <option value="modules/setuid.mod" />
+              <option value="modules/slf4j-api.mod" />
+              <option value="modules/slf4j-jul.mod" />
+              <option value="modules/slf4j-log4j.mod" />
+              <option value="modules/slf4j-log4j2.mod" />
+              <option value="modules/slf4j-logback.mod" />
+              <option value="modules/slf4j-simple-impl.mod" />
+              <option value="modules/spring.mod" />
+              <option value="modules/ssl.mod" />
+              <option value="modules/stats.mod" />
+              <option value="modules/stop.mod" />
+              <option value="modules/threadlimit.mod" />
+              <option value="modules/transactions.mod" />
+              <option value="modules/unixsocket-forwarded.mod" />
+              <option value="modules/unixsocket-http.mod" />
+              <option value="modules/unixsocket-http2c.mod" />
+              <option value="modules/unixsocket-proxy-protocol.mod" />
+              <option value="modules/unixsocket-secure.mod" />
+              <option value="modules/unixsocket.mod" />
+              <option value="modules/webapp.mod" />
+            </list>
+          </option>
+          <option name="home" value="$USER_HOME$/jetty-distribution-9.4.7.v20170914" />
+        </state>
+      </DATA>
+    </ServerDK>
+    <ServerDK NAME="Tomcat 7.0.82">
       <option name="SOURCE_INTEGRATION_NAME" value="Tomcat Server" />
       <DATA>
-        <option name="CATALINA_HOME" value="E:/工具/apache-tomcat-9.0.0.M1" />
+        <option name="CATALINA_HOME" value="$USER_HOME$/apache-tomcat-7.0.82" />
         <option name="CATALINA_BASE" value="" />
       </DATA>
     </ServerDK>
     <LibraryTable>
-      <library name="Tomcat 9.0.0.M1">
+      <library name="Jetty 9.4.7.v20170914">
         <CLASSES>
-          <root url="jar://E:/工具/apache-tomcat-9.0.0.M1/lib/jsp-api.jar!/" />
-          <root url="jar://E:/工具/apache-tomcat-9.0.0.M1/lib/servlet-api.jar!/" />
+          <root url="jar://$USER_HOME$/jetty-distribution-9.4.7.v20170914/lib/apache-jsp/org.mortbay.jasper.apache-jsp-8.5.9.1.jar!/" />
+          <root url="jar://$USER_HOME$/jetty-distribution-9.4.7.v20170914/lib/servlet-api-3.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+      <library name="Tomcat 7.0.82">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/apache-tomcat-7.0.82/lib/jsp-api.jar!/" />
+          <root url="jar://$USER_HOME$/apache-tomcat-7.0.82/lib/servlet-api.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

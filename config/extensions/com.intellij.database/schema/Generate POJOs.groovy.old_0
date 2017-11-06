@@ -67,9 +67,7 @@ def calcFields(table) {
 }
 
 def javaName(str, capitalize) {
-  def s = com.intellij.psi.codeStyle.NameUtil.splitNameIntoWords(str)
-    .collect { Case.LOWER.apply(it).capitalize() }
-    .join("")
-    .replaceAll(/[^\p{javaJavaIdentifierPart}[_]]/, "_")
+  def s = str.split(/(?<=[^\p{IsLetter}])/).collect { Case.LOWER.apply(it).capitalize() }
+          .join("").replaceAll(/[^\p{javaJavaIdentifierPart}]/, "_")
   capitalize || s.length() == 1? s : Case.LOWER.apply(s[0]) + s[1..-1]
 }

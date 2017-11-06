@@ -2,35 +2,23 @@
   <component name="RecentProjectsManager">
     <option name="recentPaths">
       <list>
-        <option value="E:/springboot-demo" />
-        <option value="D:/work/BPMS/branches/ddjf-bims_dz" />
-        <option value="E:/ico_site_engine/trunk/engine/fxicoAdmin" />
-        <option value="E:/ico_site_engine/branches/db_editor/trunk/engine/fxicoAdmin" />
-        <option value="E:/ico_site_engine/trunk/engine/engine_business" />
-        <option value="D:/work/BPMS/branches/bugfix-ddjf-bims_v1.0" />
-        <option value="E:/qinzaizhen/dubbodemo" />
-        <option value="E:/qinzaizhen/springstudy" />
-        <option value="E:/springo" />
-        <option value="D:/work/BPMS/branches/ddjf-bims-v2.0" />
-        <option value="D:/work/BPMS/branches/x5-modules_v1.0" />
-        <option value="D:/work/BPMS/trunk/x5-modules/x5-tools" />
-        <option value="D:/work/BPMS/doc/宏天x5源码及文档/x5_all" />
-        <option value="D:/work/BPMS/trunk/x5-modules" />
-        <option value="E:/springo-org/code" />
-        <option value="E:/qinzaizhen/javasedemo" />
-        <option value="D:/work/BPMS/trunk/ddjf-bims" />
-        <option value="E:/demoactiviti" />
-        <option value="D:/work/payment/trunk/SOURCE/payment-gateway-parent" />
+        <option value="/Volumes/DATA/code/BPMS/ddjf-bims-v2.0" />
       </list>
     </option>
-    <option name="openPaths">
-      <list>
-        <option value="D:/work/BPMS/branches/ddjf-bims_dz" />
-      </list>
-    </option>
-    <option name="lastPath" value="E:/springboot-demo" />
+    <option name="lastPath" value="/Volumes/DATA/code/BPMS/ddjf-bims-v2.0" />
     <option name="additionalInfo">
       <map>
+        <entry key="/Volumes/DATA/code/BPMS/ddjf-bims-v2.0">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.4343.14" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1509930992490" />
+              <option name="buildTimestamp" value="1506404264414" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
         <entry key="D:/work/BPMS/branches/bugfix-ddjf-bims_v1.0">
           <value>
             <RecentProjectMetaInfo>
@@ -297,6 +285,6 @@
         </entry>
       </map>
     </option>
-    <option name="lastProjectLocation" value="D:/work/BPMS/branches" />
+    <option name="lastProjectLocation" value="/Volumes/DATA/code/BPMS" />
   </component>
 </application>

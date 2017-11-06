@@ -17,7 +17,8 @@
       <component name="MavenImportPreferences">
         <option name="generalSettings">
           <MavenGeneralSettings>
-            <option name="mavenHome" value="E:/apache-maven-3.3.9" />
+            <option name="alwaysUpdateSnapshots" value="true" />
+            <option name="mavenHome" value="/Volumes/DATA/apache-maven-3.3.9" />
           </MavenGeneralSettings>
         </option>
         <option name="importingSettings">
@@ -27,8 +28,8 @@
         </option>
       </component>
       <component name="PropertiesComponent">
-        <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
-        <property name="project.structure.last.edited" value="Global Libraries" />
+        <property name="settings.editor.selected.configurable" value="com.zeroturnaround.javarebel.idea.plugin.settings.AboutConfigurable" />
+        <property name="project.structure.last.edited" value="SDKs" />
         <property name="project.structure.proportion" value="0.0" />
         <property name="project.structure.side.proportion" value="0.2" />
         <property name="nodejs_interpreter_path" value="C:/Program Files/nodejs/node" />
@@ -139,7 +140,7 @@
           </state>
           <state key="JdkListConfigurable.UI">
             <settings>
-              <last-edited>1.8</last-edited>
+              <last-edited>9</last-edited>
               <splitter-proportions>
                 <option name="proportions">
                   <list>
