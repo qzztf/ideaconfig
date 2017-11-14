@@ -1016,15 +1016,99 @@
         <option name="tabIndex" value="3" />
         <option name="window" value="0" />
       </ViewImpl>
+      <ViewImpl>
+        <option name="ID" value="$USER_HOME$/Library/Caches/IntelliJIdea2017.2/tomcat/Unnamed_ddjf-root_2/logs/localhost.2017-11-07.log" />
+        <option name="minimizedInGrid" value="false" />
+        <option name="placeInGrid" value="bottom" />
+        <option name="tabIndex" value="2" />
+        <option name="window" value="0" />
+      </ViewImpl>
+      <ViewImpl>
+        <option name="ID" value="$USER_HOME$/Library/Caches/IntelliJIdea2017.2/tomcat/Unnamed_ddjf-root_2/logs/catalina.2017-11-07.log" />
+        <option name="minimizedInGrid" value="false" />
+        <option name="placeInGrid" value="bottom" />
+        <option name="tabIndex" value="3" />
+        <option name="window" value="0" />
+      </ViewImpl>
+      <ViewImpl>
+        <option name="ID" value="$USER_HOME$/Library/Caches/IntelliJIdea2017.2/tomcat/Unnamed_ddjf-root_2/logs/localhost.2017-11-08.log" />
+        <option name="minimizedInGrid" value="false" />
+        <option name="placeInGrid" value="bottom" />
+        <option name="tabIndex" value="2" />
+        <option name="window" value="0" />
+      </ViewImpl>
+      <ViewImpl>
+        <option name="ID" value="$USER_HOME$/Library/Caches/IntelliJIdea2017.2/tomcat/Unnamed_ddjf-root_2/logs/catalina.2017-11-08.log" />
+        <option name="minimizedInGrid" value="false" />
+        <option name="placeInGrid" value="bottom" />
+        <option name="tabIndex" value="3" />
+        <option name="window" value="0" />
+      </ViewImpl>
+      <ViewImpl>
+        <option name="ID" value="$USER_HOME$/Library/Caches/IntelliJIdea2017.2/tomcat/Unnamed_bugfix-ddjf-bims-damery/logs/localhost.2017-11-09.log" />
+        <option name="minimizedInGrid" value="false" />
+        <option name="placeInGrid" value="bottom" />
+        <option name="tabIndex" value="2" />
+        <option name="window" value="0" />
+      </ViewImpl>
+      <ViewImpl>
+        <option name="ID" value="$USER_HOME$/Library/Caches/IntelliJIdea2017.2/tomcat/Unnamed_bugfix-ddjf-bims-damery/logs/catalina.2017-11-09.log" />
+        <option name="minimizedInGrid" value="false" />
+        <option name="placeInGrid" value="bottom" />
+        <option name="tabIndex" value="3" />
+        <option name="window" value="0" />
+      </ViewImpl>
+      <ViewImpl>
+        <option name="ID" value="$USER_HOME$/Library/Caches/IntelliJIdea2017.2/tomcat/Unnamed_bugfix-ddjf-bims-damery/logs/localhost.2017-11-10.log" />
+        <option name="minimizedInGrid" value="false" />
+        <option name="placeInGrid" value="bottom" />
+        <option name="tabIndex" value="2" />
+        <option name="window" value="0" />
+      </ViewImpl>
+      <ViewImpl>
+        <option name="ID" value="$USER_HOME$/Library/Caches/IntelliJIdea2017.2/tomcat/Unnamed_bugfix-ddjf-bims-damery/logs/catalina.2017-11-10.log" />
+        <option name="minimizedInGrid" value="false" />
+        <option name="placeInGrid" value="bottom" />
+        <option name="tabIndex" value="3" />
+        <option name="window" value="0" />
+      </ViewImpl>
+      <ViewImpl>
+        <option name="ID" value="$USER_HOME$/Library/Caches/IntelliJIdea2017.2/tomcat/Unnamed_bugfix-ddjf-bims-damery/logs/localhost.2017-11-11.log" />
+        <option name="minimizedInGrid" value="false" />
+        <option name="placeInGrid" value="bottom" />
+        <option name="tabIndex" value="2" />
+        <option name="window" value="0" />
+      </ViewImpl>
+      <ViewImpl>
+        <option name="ID" value="$USER_HOME$/Library/Caches/IntelliJIdea2017.2/tomcat/Unnamed_bugfix-ddjf-bims-damery/logs/catalina.2017-11-11.log" />
+        <option name="minimizedInGrid" value="false" />
+        <option name="placeInGrid" value="bottom" />
+        <option name="tabIndex" value="3" />
+        <option name="window" value="0" />
+      </ViewImpl>
+      <ViewImpl>
+        <option name="ID" value="$USER_HOME$/Library/Caches/IntelliJIdea2017.2/tomcat/Unnamed_bugfix-ddjf-bims-damery/logs/localhost.2017-11-13.log" />
+        <option name="minimizedInGrid" value="false" />
+        <option name="placeInGrid" value="bottom" />
+        <option name="tabIndex" value="2" />
+        <option name="window" value="0" />
+      </ViewImpl>
+      <ViewImpl>
+        <option name="ID" value="$USER_HOME$/Library/Caches/IntelliJIdea2017.2/tomcat/Unnamed_bugfix-ddjf-bims-damery/logs/catalina.2017-11-13.log" />
+        <option name="minimizedInGrid" value="false" />
+        <option name="placeInGrid" value="bottom" />
+        <option name="tabIndex" value="3" />
+        <option name="window" value="0" />
+      </ViewImpl>
       <TabImpl>
         <option name="displayName" value="Debugger" />
-        <option name="leftProportion" value="0.19631237" />
+        <option name="leftProportion" value="0.19577007" />
       </TabImpl>
       <TabImpl>
         <option name="defaultIndex" value="1" />
         <option name="displayName" value="Server" />
         <option name="index" value="1" />
-        <option name="leftProportion" value="0.21691974" />
+        <option name="leftProportion" value="0.09002169" />
       </TabImpl>
       <TabImpl>
         <option name="bottomProportion" value="0.0" />

@@ -1,30 +1,34 @@
 <application>
   <component name="UsageTrigger">
     <counts>
-      <entry feature="StripeButton[Version_Control].shown" count="1" />
-      <entry feature="debugger.reload.classes" count="80" />
+      <entry feature="StripeButton[Version_Control].shown" count="2" />
+      <entry feature="debugger.reload.classes" count="107" />
       <entry feature="execute.#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory.Debug" count="23" />
-      <entry feature="execute.#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory.JRebel Debug" count="11" />
+      <entry feature="execute.#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory.JRebel Debug" count="33" />
+      <entry feature="execute.Application.Run" count="13" />
       <entry feature="ide.settings.Advanced" count="1" />
       <entry feature="ide.settings.Appearance" count="1" />
       <entry feature="ide.settings.Application&#10;Servers" count="1" />
       <entry feature="ide.settings.Color_Scheme" count="1" />
       <entry feature="ide.settings.Color_Scheme_Font" count="1" />
+      <entry feature="ide.settings.Eclipse_Code_Formatter" count="1" />
       <entry feature="ide.settings.Font" count="2" />
       <entry feature="ide.settings.General" count="1" />
       <entry feature="ide.settings.Jetty_Server" count="1" />
       <entry feature="ide.settings.Keymap" count="3" />
       <entry feature="ide.settings.Maven" count="2" />
       <entry feature="ide.settings.Maven_environment" count="2" />
+      <entry feature="ide.settings.Plugins" count="1" />
       <entry feature="ide.settings.Tomcat_Server" count="1" />
-      <entry feature="ideaapp.started" count="19" />
-      <entry feature="spring.SpringConfigurationCheck.FileCount.xml" count="30" />
-      <entry feature="welcome.screen.WelcomeScreen.Configure" count="7" />
+      <entry feature="ideaapp.started" count="28" />
+      <entry feature="spring.SpringConfigurationCheck.FileCount.xml" count="48" />
+      <entry feature="welcome.screen.WelcomeScreen.Configure" count="9" />
       <entry feature="welcome.screen.WelcomeScreen.Configure.Export" count="2" />
       <entry feature="welcome.screen.WelcomeScreen.CreateNewProject" count="1" />
-      <entry feature="welcome.screen.WelcomeScreen.ImportProject" count="3" />
+      <entry feature="welcome.screen.WelcomeScreen.ImportProject" count="4" />
       <entry feature="welcome.screen.WelcomeScreen.OpenProject" count="3" />
-      <entry feature="welcome.screen.WelcomeScreen.Settings" count="3" />
+      <entry feature="welcome.screen.WelcomeScreen.Plugins" count="1" />
+      <entry feature="welcome.screen.WelcomeScreen.Settings" count="4" />
       <entry feature="welcome.screen.null" count="2" />
     </counts>
   </component>

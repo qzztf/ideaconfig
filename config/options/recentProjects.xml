@@ -2,20 +2,56 @@
   <component name="RecentProjectsManager">
     <option name="recentPaths">
       <list>
+        <option value="/Volumes/DATA/code1/BPMS/branches/bugfix-ddjf-bims-damery" />
         <option value="/Volumes/DATA/code/BPMS/ddjf-bims-v2.0" />
+        <option value="/Volumes/DATA/code/BPMS" />
+        <option value="/Volumes/DATA/code/uploadJD" />
       </list>
     </option>
-    <option name="lastPath" value="/Volumes/DATA/code/BPMS/ddjf-bims-v2.0" />
+    <option name="lastPath" value="/Volumes/DATA/code1/BPMS/branches/bugfix-ddjf-bims-damery" />
     <option name="additionalInfo">
       <map>
+        <entry key="/Volumes/DATA/code/BPMS">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.4343.14" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1510278256227" />
+              <option name="buildTimestamp" value="1506404253714" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
         <entry key="/Volumes/DATA/code/BPMS/ddjf-bims-v2.0">
           <value>
             <RecentProjectMetaInfo>
               <option name="build" value="IU-172.4343.14" />
               <option name="productionCode" value="IU" />
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1509930992490" />
-              <option name="buildTimestamp" value="1506404264414" />
+              <option name="projectOpenTimestamp" value="1510278280198" />
+              <option name="buildTimestamp" value="1506404253714" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="/Volumes/DATA/code/uploadJD">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.4343.14" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1510196213553" />
+              <option name="buildTimestamp" value="1506404255271" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="/Volumes/DATA/code1/BPMS/branches/bugfix-ddjf-bims-damery">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-172.4343.14" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1510623443909" />
+              <option name="buildTimestamp" value="1506404237295" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
@@ -285,6 +321,6 @@
         </entry>
       </map>
     </option>
-    <option name="lastProjectLocation" value="/Volumes/DATA/code/BPMS" />
+    <option name="lastProjectLocation" value="/Volumes/DATA/code1/BPMS/branches" />
   </component>
 </application>

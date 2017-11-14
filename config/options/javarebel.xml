@@ -4,6 +4,8 @@
       <map>
         <entry key="com.zeroturnaround.jrebel.FormatVersion" value="7.0.0" />
         <entry key="com.zeroturnaround.jrebel.intellij.plugin.old-agent-version" value="7.1.1" />
+        <entry key="com.zeroturnaround.jrebel.update.LastKnownVersionOnUpdateSite" value="7.1.2" />
+        <entry key="com.zeroturnaround.jrebel.update.UpdateNotificationCount" value="2" />
       </map>
     </option>
   </component>

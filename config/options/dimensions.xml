@@ -130,9 +130,22 @@
     <location key="CommitChangelistDialog2.3200.0.3840.2160@192dpi" x="4248" y="332" />
     <location key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate.3200.0.3840.2160@192dpi" x="4634" y="792" />
     <location key="svn.passwordDialog.3200.0.3840.2160@192dpi" x="4744" y="904" />
-    <location key="WELCOME_SCREEN.0.0.3200.1800@192dpi" x="1648" y="806" />
+    <location key="WELCOME_SCREEN.0.0.3200.1800@192dpi" x="1652" y="806" />
     <location key="com.intellij.ide.util.TipDialog.3200.0.3840.2160@192dpi" x="4556" y="754" />
     <location key="#com.intellij.ide.actions.ChooseComponentsToExportDialog.3200.0.3840.2160@192dpi" x="4584" y="790" />
+    <location key="#com.intellij.ide.util.MemberChooser.3200.0.3840.2160@192dpi" x="4746" y="486" />
+    <location key="#xdebugger.evaluate.3200.0.3840.2160@192dpi" x="4562" y="526" />
+    <location key="RollbackChangesDialog.3200.0.3840.2160@192dpi" x="4506" y="564" />
+    <location key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog.3200.0.3840.2160@192dpi" x="4754" y="612" />
+    <location key="com.intellij.ide.util.TipDialog.0.0.3200.1800@192dpi" x="1088" y="574" />
+    <location key="new project wizard.3200.0.3840.2160@192dpi" x="4320" y="514" />
+    <location key="VCS.ChangeListViewerDialog.3200.0.3840.2160@192dpi" x="4408" y="552" />
+    <location key="NewModule_or_Project.wizard.0.0.3200.1800@192dpi" x="678" y="278" />
+    <location key="#com.intellij.execution.impl.EditConfigurationsDialog.3200.0.3840.2160@192dpi" x="4190" y="334" />
+    <location key="SettingsEditor.3200.0.3840.2160@192dpi" x="4218" y="216" />
+    <location key="MergeDialog.3200.0.3840.2160@192dpi" x="3854" y="324" />
+    <location key="MultipleFileMergeDialog.3200.0.3840.2160@192dpi" x="4512" y="590" />
+    <location key="#Plugins.0.0.3200.1800@192dpi" x="906" y="280" />
     <size key="ProcessPopupWindow.0.0.1920.1080" width="637" height="122" />
     <size key="#com.intellij.execution.impl.EditConfigurationsDialog.0.0.1920.1080" width="1092" height="789" />
     <size key="GridCell.Tab.0.left.0.0.1920.1080" width="1876" height="333" />
@@ -266,23 +279,26 @@
     <size key="StructurePopup.0.0.3840.2160@192dpi" width="856" height="884" />
     <size key="find.popup.3200.0.3840.2160@192dpi" width="1906" height="1296" />
     <size key="StructurePopup.3200.0.3840.2160@192dpi" width="856" height="884" />
-    <size key="GridCell.Tab.0.left.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.0.center.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.0.right.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.0.bottom.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.1.left.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.1.center.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.1.right.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.1.bottom.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.2.left.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.2.center.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.2.right.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.2.bottom.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.3.left.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.3.center.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.3.right.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="GridCell.Tab.3.bottom.3200.0.3840.2160@192dpi" width="3752" height="634" />
-    <size key="javadoc.popup.3200.0.3840.2160@192dpi" width="888" height="338" />
+    <size key="GridCell.Tab.0.left.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.0.center.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.0.right.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.0.bottom.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.1.left.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.1.center.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.1.right.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.1.bottom.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.2.left.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.2.center.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.2.right.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.2.bottom.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.3.left.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.3.center.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.3.right.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="GridCell.Tab.3.bottom.3200.0.3840.2160@192dpi" width="3752" height="558" />
+    <size key="javadoc.popup.3200.0.3840.2160@192dpi" width="1350" height="708" />
     <size key="DebuggerActiveHint.3200.0.3840.2160@192dpi" width="1292" height="804" />
+    <size key="#xdebugger.evaluate.3200.0.3840.2160@192dpi" width="1612" height="1336" />
+    <size key="#com.intellij.execution.impl.EditConfigurationsDialog.3200.0.3840.2160@192dpi" width="2142" height="1450" />
+    <size key="SettingsEditor.0.0.3200.1800@192dpi" width="2556" height="1354" />
   </component>
 </application>

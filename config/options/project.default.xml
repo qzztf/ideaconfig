@@ -7,6 +7,15 @@
       <component name="CompilerConfiguration">
         <bytecodeTargetLevel target="1.8" />
       </component>
+      <component name="EclipseCodeFormatterProjectSettings">
+        <option name="projectSpecificProfile">
+          <ProjectSpecificProfile>
+            <option name="formatter" value="ECLIPSE" />
+            <option name="pathToConfigFileJava" value="/Volumes/DATA/code/eclipse-code-formatter.xml" />
+            <option name="selectedJavaProfile" value="Spring Boot Java Conventions" />
+          </ProjectSpecificProfile>
+        </option>
+      </component>
       <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
         <file url="PROJECT" charset="UTF-8" />
       </component>
@@ -28,7 +37,7 @@
         </option>
       </component>
       <component name="PropertiesComponent">
-        <property name="settings.editor.selected.configurable" value="com.zeroturnaround.javarebel.idea.plugin.settings.AboutConfigurable" />
+        <property name="settings.editor.selected.configurable" value="preferences.pathVariables" />
         <property name="project.structure.last.edited" value="SDKs" />
         <property name="project.structure.proportion" value="0.0" />
         <property name="project.structure.side.proportion" value="0.2" />
@@ -152,7 +161,7 @@
           </state>
           <state key="ProjectJDKs.UI">
             <settings>
-              <last-edited>1.8</last-edited>
+              <last-edited>8</last-edited>
               <splitter-proportions>
                 <option name="proportions">
                   <list>

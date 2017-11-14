@@ -5,26 +5,26 @@
     <property name="installed.kotlin.plugin.version" value="1.1.4-release-IJ2017.2-3" />
     <property name="android-component-compatibility-check" value="1498449610829" />
     <property name="file.chooser.recent.files" value="E:/ico_site_engine/trunk/engine/fxicoAdmin&#10;E:/ico_site_engine/branches/db_editor/trunk/engine/fxicoAdmin&#10;E:/ico_site_engine/branches/db_editor/trunk/engine/fxicoAdmin/web/WEB-INF/lib&#10;E:/ico_site_engine/trunk/engine/engine_business&#10;E:/ico_site_engine/trunk/engine/fxicoAdmin/web/WEB-INF/lib&#10;D:/work/BPMS/branches/bugfix-ddjf-bims_v1.0/pom.xml&#10;E:/springboot-demo&#10;E:/springo/pom.xml&#10;E:/qinzaizhen&#10;D:/work/BPMS/branches/x5-modules_v1.0/x5-bpmx-root/modules/x5-bpmx-core&#10;D:/work/BPMS/branches/ddjf-bims-v2.0&#10;E:/qinzaizhen/springstudy/src&#10;E:/qinzaizhen/springstudy&#10;D:/work/BPMS/trunk/x5-modules/x5-bpmx-root/modules/x5-bpmx-core&#10;D:/work/BPMS/branches/x5-modules_v1.0/pom.xml&#10;D:/work/BPMS/branches/x5-modules_v1.0/x5-bpmx-root/modules/x5-bpmx-api&#10;D:/work/BPMS/trunk/x5-modules/x5-tools/modules/codegen/build.xml&#10;D:/work/BPMS/trunk/x5-modules/x5-tools/pom.xml&#10;D:/work/BPMS/trunk/x5-modules/pom.xml&#10;D:/work/settings_ddjf.xml&#10;E:/qinzaizhen/springstudy/pom.xml&#10;E:/springo-org/code/src/main/java/io/springo/org/api/service&#10;E:/springo-org/code&#10;D:/work/BPMS/doc/宏天x5源码及文档/x5_all/x5-sys-root/modules/x5-sys-core&#10;D:/work/BPMS/doc/宏天x5源码及文档/x5_all/pom.xml&#10;D:/work/BPMS/branches/ddjf-bims_dz/pom.xml&#10;E:/qinzaizhen/javasedemo/out&#10;E:/qinzaizhen/javasedemo&#10;E:/&#10;E:/工具/apache-tomcat-9.0.0.M1" />
-    <property name="last.imported.location" value="/Volumes/DATA/code/BPMS/ddjf-bims-v2.0" />
+    <property name="last.imported.location" value="/Volumes/DATA/code1/BPMS/branches/bugfix-ddjf-bims-damery" />
     <property name="create.project.preferred.importer" value="Maven" />
     <property name="DeploymentNotificationsComponent.WarnDisplayed.Java7&amp;Windows7FTPIssue" value="false" />
-    <property name="lastTip" value="99" />
+    <property name="lastTip" value="107" />
     <property name="typescript.show.auto.import" value="true" />
-    <property name="file.gist.reindex.count" value="26068" />
+    <property name="file.gist.reindex.count" value="28241" />
     <property name="ExpandBeforeRunStepsPanel" value="true" />
     <property name="Copy.OpenInEditor" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="com.intellij.openapi.roots.ui.configuration.TabbedModuleEditor.selectedEditor" value="Sources" />
     <property name="decompiler.legal.notice.accepted" value="true" />
-    <property name="CommitChangeListDialog.DETAILS_SPLITTER_PROPORTION_2" value="0.6438953" />
+    <property name="CommitChangeListDialog.DETAILS_SPLITTER_PROPORTION_2" value="0.72030073" />
     <property name="RESTClient.httpMethod" value="GET&#10;POST&#10;PUT&#10;PATCH&#10;DELETE&#10;HEAD&#10;OPTIONS" />
     <property name="JUnitSupport.hidePassedTests" value="false" />
     <property name="CommitChangeListDialog.SPLITTER_PROPORTION_2" value="0.6573034" />
-    <property name="PLUGIN_FILTER" value="ali&#10;reb&#10;jreb&#10;al&#10;jre" />
-    <property name="project.wizard.group" value="SpringInitializr" />
+    <property name="PLUGIN_FILTER" value="eclipse code&#10;ali&#10;reb&#10;jreb&#10;al" />
+    <property name="project.wizard.group" value="org.jetbrains.idea.maven.wizards.MavenModuleBuilder" />
     <property name="IJ_BASE_PACKAGE" value="com.company" />
-    <property name="project.wizard.template" value="Maven" />
+    <property name="project.wizard.template" value="Spring Initializr" />
     <property name="CommittedChanges.SplitterProportions.0" value="700" />
     <property name="CommittedChanges.SplitterProportions.1" value="500" />
     <property name="MavenModuleWizard.inheritGroupId" value="true" />
@@ -47,12 +47,14 @@
     <property name="ignore.outdated.jvm.version.message2" value="true" />
     <property name="SplitFileEditor.Proportion" value="0.74037087" />
     <property name="ts.lib.d.ts.version" value="2.4.1" />
-    <property name="jdk.selected.JAVA_MODULE" value="1.8" />
+    <property name="jdk.selected.JAVA_MODULE" value="8" />
     <property name="SpringBeansModulesPanel[2]" value="0.13860014" />
     <property name="spring.initializr.service.url.history" value="" />
     <property name="spring.initializr.service.url.last" value="https://start.spring.io" />
     <property name="LiveContextsPanel[0]" value="0.16116035" />
     <property name="eclipse.project.dir" value="E:\ico_site_engine\trunk\engine\fxicoAdmin" />
-    <property name="search.everywhere.max.popup.width" value="996" />
+    <property name="COMMITTED_CHANGES_FILTER_HISTORY" value="chenju" />
+    <property name="XDebuggerExpressionEditor_Use_Soft_Wraps" value="true" />
+    <property name="search.everywhere.max.popup.width" value="1088" />
   </component>
 </application>
