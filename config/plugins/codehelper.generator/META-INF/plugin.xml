@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>com.ccnode.codegenerator.mybatis.generator</id>
   <name>codehelper.generator</name>
-  <version>2017.08.11</version>
+  <version>2017.12.09</version>
   <vendor email="zhengjunbase@gmail.com" url="http://www.codehelper.me/generator">CodeHelper</vendor>
   <description>
       &lt;div&gt;
@@ -9,14 +9,14 @@
       |&amp;nbsp&lt;a href="https://github.com/zhengjunbase/codehelper.generator/issues"&gt;Issues&lt;/a&gt;&lt;/p&gt;
 
       &lt;p&gt;An Generator, generate code more easily and productive.&lt;/p&gt;
-      &lt;p&gt;AutoCoding Features&lt;/p&gt;
+      &lt;p&gt;GenAllSetter Features&lt;/p&gt;
       &lt;ul&gt;
       &lt;li&gt;&lt;p&gt;Auto gen all Setter method(method start with set) when you click AutoCoding btn(support shortcut).&lt;/p&gt;&lt;/li&gt;
       &lt;li&gt;&lt;p&gt;Auto gen all Setter method with default value when you click AutoCoding btn twice.&lt;/p&gt;&lt;/li&gt;
       &lt;/ul&gt;
-       &lt;p&gt;AutoCoding Usage&lt;/p&gt;
+       &lt;p&gt;GenAllSetter Usage&lt;/p&gt;
       &lt;ul&gt;
-      &lt;li&gt;&lt;p&gt;Click main menu Tools-&gt; Codehelper-&gt; AutoCoding button to generate the code&lt;/p&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;p&gt;Click main menu Tools-&gt; Codehelper-&gt; GenAllSetter button to generate the code&lt;/p&gt;&lt;/li&gt;
       &lt;/ul&gt;
       &lt;p&gt;GenDaoCode Features&lt;/p&gt;
       &lt;ul&gt;
@@ -28,7 +28,7 @@
       &lt;li&gt;&lt;p&gt;Support rich config by config file, and use default config for no config file.&lt;/p&gt;&lt;/li&gt;
       &lt;li&gt;&lt;p&gt;Shortcut for generate.&lt;/p&gt;&lt;/li&gt;
       &lt;li&gt;&lt;p&gt;Support java + MySQL and later will support more DB.&lt;/p&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href="http://www.codehelper.me/generator?from=jetbrains"&gt;www.codehelper.me&lt;/a&gt; to learn more.&lt;/li&gt;
+      &lt;li&gt;&lt;a href="https://github.com/zhengjunbase/codehelper.generator"&gt;code at GitHub&lt;/a&gt; to learn more.&lt;/li&gt;
       &lt;/ul&gt;
       &lt;p&gt;GenDaoCode Usages&lt;/p&gt;
       &lt;ul&gt;
@@ -36,6 +36,16 @@
       &lt;li&gt;Method One: Click GenDaoCode, and then enter the Pojo name in prompt box,&lt;/br&gt; multiple Pojo separated by | ,
       CodeHelper will generate code use default config.&lt;/li&gt;
       &lt;li&gt;Method two: Add a codehelper.properties in you project directory.&lt;/br&gt;Click GenDaoCode and Codehelper Generator will generates code for you based on codehelper.properties file.&lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;p&gt;&lt;strong&gt;GenAllSetter 特性&lt;/strong&gt;&lt;/p&gt;
+      &lt;ul&gt;
+      &lt;li&gt;在Java方法中, 根据 &lt;code&gt;new&lt;/code&gt; 关键词, 为Java Bean 生成所有Setter方法。&lt;/li&gt;
+      &lt;li&gt;按GenAllSetter键两次, 会为Setter方法生成默认值。&lt;/li&gt;
+      &lt;li&gt;可在&lt;code&gt;Intellij Idea&lt;/code&gt;中为&lt;code&gt;GenAllSetter&lt;/code&gt;设置快捷键。&lt;/li&gt;
+      &lt;li&gt;如何使用:
+      &lt;ul&gt;
+      &lt;li&gt;将光标移动到 &lt;code&gt;new&lt;/code&gt; 语句的下一行。&lt;/li&gt;
+      &lt;li&gt;点击主菜单Tools-&amp;gt; Codehelper-&amp;gt; GenAllSetter, 或者按下&lt;code&gt;GenAllSetter&lt;/code&gt;快捷键。&lt;/li&gt;
       &lt;/ul&gt;
       &lt;p&gt;GenDaoCode 特性&lt;/p&gt;
       &lt;ul&gt;
@@ -56,7 +66,7 @@
       &lt;li&gt;&lt;p&gt;Codehelper Generator会根据默认配置为您生成代码。&lt;/p&gt;&lt;/li&gt;
       &lt;li&gt;&lt;p&gt;方法二：在工程目录下添加文件名为codehelper.properties的文件。&lt;/p&gt;&lt;/li&gt;
       &lt;li&gt;&lt;p&gt;点击GenDaoCode，Codehelper Generator会根据您的配置文件为您生成代码&lt;/p&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;p&gt;如何配置: http://codehelper.me/generator/config&lt;/p&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;p&gt;如何配置: https://github.com/zhengjunbase/codehelper.generator&lt;/p&gt;&lt;/li&gt;
       &lt;/ul&gt;
       &lt;p&gt;联系作者 &amp; 加入开发&lt;/p&gt;
       &lt;ul&gt;
@@ -65,7 +75,7 @@
       &lt;/div&gt;
     </description>
   <change-notes>
-      use gradle, fix bugs.
+       improve stability.
     
   </change-notes>
   <actions>
@@ -73,7 +83,7 @@
       <separator/>
       <group id="TestActionSubGroup"/>
       <add-to-group group-id="ToolsMenu" relative-to-action="GenerateJavadoc" anchor="before"/>
-      <action id="mybatis.AutoCoding" class="com.ccnode.codegenerator.view.AutoCodingAction" text="AutoCoding" description="AutoCoding"/>
+      <action id="mybatis.AutoCoding" class="com.ccnode.codegenerator.view.AutoCodingAction" text="GenAllSetter" description="GenAllSetter"/>
       <action id="mybatis.genMybatisCode" class="com.ccnode.codegenerator.view.GenCodeAction" text="GenDaoCode" description="GenMybatisCode"/>
       <action id="mybatis.LearnMore" class="com.ccnode.codegenerator.view.ShowLearnMoreAction" text="Learn More" description="Learn_More"/>
     </group>

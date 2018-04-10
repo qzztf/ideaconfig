@@ -3,7 +3,7 @@
     <ServerDK NAME="Tomcat 9.0.0.M1">
       <option name="SOURCE_INTEGRATION_NAME" value="Tomcat Server" />
       <DATA>
-        <option name="CATALINA_HOME" value="E:/工具/apache-tomcat-9.0.0.M1" />
+        <option name="CATALINA_HOME" value="E:/apache-tomcat-9.0.0.M1" />
         <option name="CATALINA_BASE" value="" />
       </DATA>
     </ServerDK>

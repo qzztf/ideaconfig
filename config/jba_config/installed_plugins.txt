@@ -1,0 +1,8 @@
+EclipseCodeFormatter
+com.fireline.plugin.id
+mobi.hsz.idea.gitignore
+JRebelPlugin
+Docker
+com.github.tinselspoon.intellij.kubernetes
+org.asciidoctor.intellij.asciidoc
+com.intellij.plugins.html.instantEditing
