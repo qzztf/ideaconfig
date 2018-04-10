@@ -3,7 +3,13 @@
     <option name="ideInstallationStorage">
       <map>
         <entry key="com.zeroturnaround.jrebel.FormatVersion" value="7.0.0" />
+<<<<<<< HEAD
         <entry key="com.zeroturnaround.jrebel.intellij.plugin.old-agent-version" value="2018.1.0" />
+=======
+        <entry key="com.zeroturnaround.jrebel.intellij.plugin.old-agent-version" value="7.1.1" />
+        <entry key="com.zeroturnaround.jrebel.update.LastKnownVersionOnUpdateSite" value="7.1.2" />
+        <entry key="com.zeroturnaround.jrebel.update.UpdateNotificationCount" value="2" />
+>>>>>>> 408d27544295f1d426a7a3383915421e1fa66262
       </map>
     </option>
   </component>

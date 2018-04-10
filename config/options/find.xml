@@ -1,5 +1,6 @@
 <application>
   <component name="FindSettings">
+<<<<<<< HEAD
     <option name="customScope" value="All Places" />
     <option name="defaultScopeName" value="All Places" />
     <option name="SEARCH_SCOPE" value="All Places" />
@@ -13,5 +14,26 @@
     <mask>*.java</mask>
     <mask>*.js</mask>
     <mask>*.xml</mask>
+=======
+    <option name="customScope" value="Project and Libraries" />
+    <option name="defaultScopeName" value="Project and Libraries" />
+    <option name="SEARCH_SCOPE" value="Project and Libraries" />
+    <option name="FILE_MASK" value="*.xml" />
+    <recentFileMasks>
+      <mask>*.properties</mask>
+      <mask>*.jsp</mask>
+      <mask>*.js</mask>
+      <mask>*.as</mask>
+      <mask>*.css</mask>
+      <mask>*.mxml</mask>
+      <mask>*.java</mask>
+      <mask>*.xm</mask>
+      <mask>*.x</mask>
+      <mask>*.</mask>
+      <mask>*.h</mask>
+      <mask>*.html</mask>
+      <mask>*.xml</mask>
+    </recentFileMasks>
+>>>>>>> 408d27544295f1d426a7a3383915421e1fa66262
   </component>
 </application>

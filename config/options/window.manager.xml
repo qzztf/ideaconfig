@@ -1,6 +1,10 @@
 <application>
   <component name="WindowManager">
+<<<<<<< HEAD
     <frame x="-7" y="0" width="1936" height="1056" extended-state="6" />
+=======
+    <frame x="1600" y="23" width="1920" height="1057" />
+>>>>>>> 408d27544295f1d426a7a3383915421e1fa66262
     <layout>
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Find" order="1" />
