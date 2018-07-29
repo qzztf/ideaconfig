@@ -1,0 +1,8 @@
+<templateSet group="other">
+  <template name="logger" value="private static final Logger LOGGER = LoggerFactory.getLogger($CLASS_NAME$.class);" description="slf4j logger" toReformat="false" toShortenFQNames="true">
+    <variable name="CLASS_NAME" expression="className()" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_DECLARATION" value="true" />
+    </context>
+  </template>
+</templateSet>

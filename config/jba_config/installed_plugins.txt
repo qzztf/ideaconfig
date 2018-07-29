@@ -6,3 +6,16 @@ Docker
 com.github.tinselspoon.intellij.kubernetes
 org.asciidoctor.intellij.asciidoc
 com.intellij.plugins.html.instantEditing
+com.intellij.bigdecimal-folding
+PlantUML integration
+ch.raffael.mddoclet.integrations.idea.MarkdownDocletIdea
+org.sonarlint.idea
+com.alibaba.p3c.smartfox
+com.ccnode.codegenerator.MyBatisCodeHelperPro
+Key Promoter X
+com.seventh7.plugin.mybatis
+PMDPlugin
+com.ccnode.codegenerator.mybatis.generator
+Lombook Plugin
+org.mayevskiy.intellij.sonar
+org.mapstruct.intellij

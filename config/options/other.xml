@@ -11,4 +11,17 @@
     <option name="INTRODUCE_FIELD_VISIBILITY" value="private" />
     <option name="INTRODUCE_LOCAL_CREATE_FINALS" value="false" />
   </component>
+  <component name="SvnApplicationSettings">
+    <option name="myCheckoutURLs">
+      <list>
+        <option value="https://10.96.2.112/svn/BPMS" />
+      </list>
+    </option>
+    <option name="myTypedURLs">
+      <list>
+        <option value="https://10.96.2.112/svn/BPMS" />
+        <option value="https://10.96.2.112/svn/BPMS/branches/ddjf-bims-develop20180622" />
+      </list>
+    </option>
+  </component>
 </application>

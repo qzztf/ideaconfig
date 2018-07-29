@@ -1,2 +1,2 @@
+JRebelPlugin
 com.seventh7.plugin.mybatis
-org.mayevskiy.intellij.sonar

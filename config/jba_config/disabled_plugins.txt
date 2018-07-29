@@ -31,5 +31,5 @@ org.jetbrains.plugins.haml
 org.jetbrains.plugins.javaFX
 org.jetbrains.plugins.sass
 org.jetbrains.plugins.stylus
-org.sonarlint.idea
 spy-js
+com.intellij.bigdecimal-folding

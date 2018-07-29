@@ -2,7 +2,7 @@
   <component name="FileBasedIndex">
     <option name="registeredIndices">
       <list>
-        <option value="java.annotations" />
+        <option value="Scss.variable" />
         <option value="Less.variables" />
         <option value="Less.mixins" />
         <option value="org.jetbrains.kotlin.idea.stubindex.KotlinOverridableInternalMembersShortNameIndex" />
@@ -45,6 +45,9 @@
         <option value="gr.field.name" />
         <option value="gr.script.fqn" />
         <option value="gr.class.fqn" />
+        <option value="cfml.interface.shortName" />
+        <option value="cfml.inheritors.shortName" />
+        <option value="cfml.component.shortName" />
         <option value="sql.names" />
         <option value="sql.column.name" />
         <option value="sql.table.shortName" />
@@ -63,6 +66,7 @@
         <option value="js.nonglobal.symbol.index" />
         <option value="ts.local.classes" />
         <option value="es6.assignment.index" />
+        <option value="es6.exported.index" />
         <option value="js.exported.index" />
         <option value="js.global.symbol.index" />
         <option value="amd.requirePaths.index" />
@@ -102,6 +106,12 @@
         <option value="java.method.name" />
         <option value="java.field.name" />
         <option value="java.class.extlist" />
+        <option value="java.annotations" />
+        <option value="Stylus.mixins" />
+        <option value="Stylus.variables" />
+        <option value="Scss.mixin" />
+        <option value="Scss.function" />
+        <option value="Scss.placeholder.selector" />
       </list>
     </option>
   </component>

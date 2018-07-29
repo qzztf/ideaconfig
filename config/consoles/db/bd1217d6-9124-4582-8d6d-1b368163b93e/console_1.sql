@@ -1,0 +1,1 @@
+select *from bpmx5.s_material_partner_detail where data_type like '%WC%'
