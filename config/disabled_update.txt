@@ -1,2 +1,1 @@
 JRebelPlugin
-com.seventh7.plugin.mybatis

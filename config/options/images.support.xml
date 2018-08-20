@@ -1,6 +1,6 @@
 <application>
   <component name="Images.OptionsManager">
-    <setting name="Editor.Grid.showDefault" value="false" />
+    <setting name="Editor.Grid.showDefault" value="true" />
     <setting name="Editor.Grid.lineZoomFactor" value="3" />
     <setting name="Editor.Grid.lineSpan" value="1" />
     <setting name="Editor.Grid.lineColor" value="c0c0c0" />

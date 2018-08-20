@@ -2,606 +2,95 @@
   <component name="RecentProjectsManager">
     <option name="recentPaths">
       <list>
-        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180727" />
-        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop" />
+        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180824" />
         <option value="/media/qzz/FILE/java8demo" />
-        <option value="$USER_HOME$/mybatisutil" />
+        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop" />
+        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180831" />
         <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop-agile" />
-        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180704" />
-        <option value="/media/qzz/FILE/webflux-demo" />
+        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_sit" />
       </list>
     </option>
     <option name="openPaths">
       <list>
-        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180727" />
+        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180824" />
       </list>
     </option>
-    <option name="lastPath" value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180727" />
-    <option name="pid" value="" />
+    <option name="lastPath" value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180824" />
+    <option name="pid" value="28039" />
     <option name="additionalInfo">
       <map>
-        <entry key="$USER_HOME$/mybatisutil">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.5540.3" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1531472357833" />
-              <option name="buildTimestamp" value="1530604129840" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
         <entry key="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop">
           <value>
             <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.5540.7" />
+              <option name="build" value="IU-182.4129.4" />
               <option name="productionCode" value="IU" />
+              <option name="eap" value="true" />
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1532678897391" />
-              <option name="buildTimestamp" value="1531309700859" />
+              <option name="projectOpenTimestamp" value="1534489398230" />
+              <option name="buildTimestamp" value="1533797238807" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
         <entry key="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop-agile">
           <value>
             <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.5540.1" />
+              <option name="build" value="IU-182.3911.13" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1533695787698" />
+              <option name="buildTimestamp" value="1533017616017" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180824">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-182.4129.4" />
               <option name="productionCode" value="IU" />
               <option name="eap" value="true" />
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1531128266619" />
-              <option name="buildTimestamp" value="1530011923187" />
+              <option name="projectOpenTimestamp" value="1534725824993" />
+              <option name="buildTimestamp" value="1533797238807" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
-        <entry key="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop20180622">
+        <entry key="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180831">
           <value>
             <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.5281.24" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1529398035212" />
-              <option name="buildTimestamp" value="1528805067122" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180704">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.5540.1" />
+              <option name="build" value="IU-182.4129.4" />
               <option name="productionCode" value="IU" />
               <option name="eap" value="true" />
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1530757290758" />
-              <option name="buildTimestamp" value="1530011906199" />
+              <option name="projectOpenTimestamp" value="1534320267398" />
+              <option name="buildTimestamp" value="1533797273033" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
-        <entry key="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180727">
+        <entry key="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_sit">
           <value>
             <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.5540.7" />
+              <option name="build" value="IU-182.3911.13" />
               <option name="productionCode" value="IU" />
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1532834221889" />
-              <option name="buildTimestamp" value="1531309700859" />
+              <option name="projectOpenTimestamp" value="1533519075917" />
+              <option name="buildTimestamp" value="1533017639807" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
         <entry key="/media/qzz/FILE/java8demo">
           <value>
             <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.5540.3" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1531831122697" />
-              <option name="buildTimestamp" value="1530604099234" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="/media/qzz/FILE/webflux-demo">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.5281.24" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1529912946949" />
-              <option name="buildTimestamp" value="1528805098401" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/JasperReports-Server/jasperserver">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.3757.52" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1504870929050" />
-              <option name="buildTimestamp" value="1502780346059" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/bugfix-ddjf-bims_v1.0">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.4155.36" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1506479948415" />
-              <option name="buildTimestamp" value="1505156607346" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-develop">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.4203.519" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1527220916494" />
-              <option name="buildTimestamp" value="1521653181400" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-develop-agile">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.4203.519" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1527478738794" />
-              <option name="buildTimestamp" value="1521653211750" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-develop20171129">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.4343.14" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1510881713400" />
-              <option name="buildTimestamp" value="1506404260287" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-develop20171215">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.4343.14" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1512488324577" />
-              <option name="buildTimestamp" value="1506404265105" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-develop20171229">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.4574.11" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1515634553188" />
-              <option name="buildTimestamp" value="1510606410413" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-develop20180226">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.3870.7" />
+              <option name="build" value="IU-182.4129.4" />
               <option name="productionCode" value="IU" />
               <option name="eap" value="true" />
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1519722065957" />
-              <option name="buildTimestamp" value="1519135512217" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-develop20180323">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.4203.519" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1522031622252" />
-              <option name="buildTimestamp" value="1521653163661" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-develop20180427">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.4203.519" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1523946642723" />
-              <option name="buildTimestamp" value="1521653162244" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-develop20180525">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.4203.519" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1527756427148" />
-              <option name="buildTimestamp" value="1521653177544" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-develop20180622">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-182.2757.3" />
-              <option name="productionCode" value="IU" />
-              <option name="eap" value="true" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1527825193868" />
-              <option name="buildTimestamp" value="1527573001735" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-develop_UAT">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.4343.14" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1513914536126" />
-              <option name="buildTimestamp" value="1506404278180" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-develop_YTJH">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.3870.7" />
-              <option name="productionCode" value="IU" />
-              <option name="eap" value="true" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1520215455259" />
-              <option name="buildTimestamp" value="1519135553966" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-v2.0">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.4343.14" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1510713333072" />
-              <option name="buildTimestamp" value="1506404272550" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-v2.0/ddjf-bpms">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.4343.14" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1508416305495" />
-              <option name="buildTimestamp" value="1506404252041" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims-warn">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.4343.14" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1510818061403" />
-              <option name="buildTimestamp" value="1506404240014" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/ddjf-bims_dz">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.4343.14" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1510713448420" />
-              <option name="buildTimestamp" value="1506404272550" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/x5-modules-v2.0/x5-tools">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.4155.36" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1505995521973" />
-              <option name="buildTimestamp" value="1505156606574" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/x5-modules_v1.0">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.3317.76" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1500426488404" />
-              <option name="buildTimestamp" value="1500115263751" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/branches/x5-modules_v1.0/x5-tools/modules/codegen">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.4343.14" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1513564620137" />
-              <option name="buildTimestamp" value="1506404272148" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/doc/宏天x5源码及文档/x5_all">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-171.4694.23" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1499153757339" />
-              <option name="buildTimestamp" value="1496751205275" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/trunk">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-171.4694.23" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1498470415654" />
-              <option name="buildTimestamp" value="1496751215393" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/trunk/ddjf-bims">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-171.4694.23" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1498553902590" />
-              <option name="buildTimestamp" value="1496751183642" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/trunk/x5-modules">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-171.4694.23" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1499153484234" />
-              <option name="buildTimestamp" value="1496751205275" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/BPMS/trunk/x5-modules/x5-tools">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-171.4694.23" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1499154432119" />
-              <option name="buildTimestamp" value="1496751205275" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/JasperReports-Server-cp-6.4.0-src/JasperReports-Server-cp-6.4.0-src/jasperserver">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.3757.52" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1504766066999" />
-              <option name="buildTimestamp" value="1502780369002" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/code/ddjf-bims-develop20180622">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-182.2949.4" />
-              <option name="productionCode" value="IU" />
-              <option name="eap" value="true" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1528974018797" />
-              <option name="buildTimestamp" value="1528225609321" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/payment/trunk/SOURCE/payment-gateway-parent">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-171.4694.23" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1498460618049" />
-              <option name="buildTimestamp" value="1496751215393" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="D:/work/x5/x5-org-root">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.4203.519" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1527220667235" />
-              <option name="buildTimestamp" value="1521653181400" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="E://untitled">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-171.3780.107" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="C:/Program Files (x86)/JetBrains/IntelliJ IDEA 2017.1/bin" />
-              <option name="projectOpenTimestamp" value="1491994134219" />
-              <option name="buildTimestamp" value="1490172625971" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="E:/demoactiviti">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-171.4694.23" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1498535287348" />
-              <option name="buildTimestamp" value="1496751183642" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="E:/houhe_api/code">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-171.4424.56" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="C:/Program Files (x86)/JetBrains/IntelliJ IDEA 2017.1/bin" />
-              <option name="projectOpenTimestamp" value="1495592989497" />
-              <option name="buildTimestamp" value="1494606703529" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="E:/ico_site_engine/branches/db_editor/trunk/engine/fxicoAdmin">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.3757.52" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1504233810758" />
-              <option name="buildTimestamp" value="1502780376256" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="E:/ico_site_engine/trunk/engine/engine_business">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.3757.52" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1503655847339" />
-              <option name="buildTimestamp" value="1502780387219" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="E:/ico_site_engine/trunk/engine/fxicoAdmin">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.3757.52" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1504173633107" />
-              <option name="buildTimestamp" value="1502780376256" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="E:/platform">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-171.3780.107" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="C:/Program Files (x86)/JetBrains/IntelliJ IDEA 2017.1/bin" />
-              <option name="projectOpenTimestamp" value="1492050621281" />
-              <option name="buildTimestamp" value="1490172603018" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="E:/qinzaizhen/dubbodemo">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.3544.35" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1501827398886" />
-              <option name="buildTimestamp" value="1501515086941" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="E:/qinzaizhen/javasedemo">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-182.2949.4" />
-              <option name="productionCode" value="IU" />
-              <option name="eap" value="true" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1528719149794" />
-              <option name="buildTimestamp" value="1528225598339" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="E:/qinzaizhen/springstudy">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-181.3870.7" />
-              <option name="productionCode" value="IU" />
-              <option name="eap" value="true" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1519951413118" />
-              <option name="buildTimestamp" value="1519135524683" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="E:/springboot-demo">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.3757.52" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1504184581987" />
-              <option name="buildTimestamp" value="1502780376256" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="E:/springo">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-172.4155.36" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1505286367814" />
-              <option name="buildTimestamp" value="1505156630681" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="E:/springo-org/code">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-171.4694.23" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1499068663128" />
-              <option name="buildTimestamp" value="1496751205275" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="G:/dubbodemo">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-171.4073.35" />
-              <option name="productionCode" value="IU" />
-              <option name="binFolder" value="C:/Program Files (x86)/JetBrains/IntelliJ IDEA 2017.1/bin" />
-              <option name="projectOpenTimestamp" value="1492998064933" />
-              <option name="buildTimestamp" value="1491502701705" />
+              <option name="projectOpenTimestamp" value="1534501104008" />
+              <option name="buildTimestamp" value="1533797238807" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
       </map>
     </option>
-    <option name="lastProjectLocation" value="$USER_HOME$" />
+    <option name="lastProjectLocation" value="/media/qzz/DATA/work/BPMS/branches" />
   </component>
 </application>

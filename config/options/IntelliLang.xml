@@ -1,0 +1,8 @@
+<application>
+  <component name="LanguageInjectionConfiguration">
+    <injection language="CSS" injector-id="xml">
+      <display-name>root</display-name>
+      <place><![CDATA[xmlTag().withLocalName(string().equalTo("root")).withNamespace(string().equalTo("http://java.sun.com/JSP/Page"))]]></place>
+    </injection>
+  </component>
+</application>

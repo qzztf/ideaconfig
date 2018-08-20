@@ -14,7 +14,7 @@
         <option name="generalSettings">
           <MavenGeneralSettings>
             <option name="alwaysUpdateSnapshots" value="true" />
-            <option name="localRepository" value="/media/qzz/DATA/maven/repository" />
+            <option name="localRepository" value="$MAVEN_REPOSITORY$" />
             <option name="mavenHome" value="/media/qzz/FILE/apache-maven-3.3.9" />
             <option name="userSettingsFile" value="/media/qzz/FILE/apache-maven-3.3.9/conf/settings.xml" />
           </MavenGeneralSettings>
@@ -35,7 +35,7 @@
         <property name="project.structure.last.edited" value="Global Libraries" />
         <property name="project.structure.proportion" value="0.0" />
         <property name="project.structure.side.proportion" value="0.2" />
-        <property name="settings.editor.selected.configurable" value="com.zeroturnaround.javarebel.idea.plugin.settings.JRebelSettingsComponent" />
+        <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
       </component>
       <component name="RunManager">
         <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">

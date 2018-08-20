@@ -3,7 +3,7 @@
     <property name="#xdebugger.evaluate.splitter" value="0.5205128" />
     <property name="COMMITTED_CHANGES_FILTER_HISTORY" value="qinzai&#10;wudi" />
     <property name="ChangesViewManager.DETAILS_SPLITTER_PROPORTION" value="0.50689465" />
-    <property name="CommitChangeListDialog.DETAILS_SPLITTER_PROPORTION_2" value="0.7734057" />
+    <property name="CommitChangeListDialog.DETAILS_SPLITTER_PROPORTION_2" value="0.85155195" />
     <property name="CommitChangeListDialog.SPLITTER_PROPORTION_2" value="0.67490494" />
     <property name="CommittedChanges.SplitterProportions.0" value="700" />
     <property name="CommittedChanges.SplitterProportions.1" value="500" />
@@ -18,10 +18,14 @@
     <property name="FileTemplates.CurrentTab" value="Includes" />
     <property name="FileTemplates.SelectedTemplate" value="ActionScript File Header" />
     <property name="FrameworksFinderRecursivePanel[0]" value="0.10840108" />
+    <property name="FrameworksFinderRecursivePanel[1]" value="0.12539186" />
+    <property name="FrameworksFinderRecursivePanel[2]" value="0.14347202" />
+    <property name="FrameworksFinderRecursivePanel[3]" value="0.16750419" />
     <property name="IJ_BASE_PACKAGE" value="com.qzztf" />
     <property name="JUnit.Splitter.Proportion" value="0.17630544" />
     <property name="JUnitSupport.hidePassedTests" value="false" />
-    <property name="KEYMAP" value="spring&#10;push&#10;format&#10;for&#10;select" />
+    <property name="KEYMAP" value="favorite&#10;bookm&#10;back&#10;spring&#10;push" />
+    <property name="LAST_INJECTED_LANGUAGE" value="CSS" />
     <property name="LOG_FILTER_HISTORY" value="" />
     <property name="LayoutCode.optimizeImports" value="true" />
     <property name="LayoutCode.rearrangeEntries" value="true" />
@@ -33,12 +37,10 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MoveClassWithTarget.OpenInEditor" value="false" />
-    <property name="PLUGIN_FILTER" value="mapst&#10;lom&#10;ali&#10;alib&#10;jclasslib" />
-    <property name="ProjectStructure.SecondLevelElements" value="0.460374" />
+    <property name="PLUGIN_FILTER" value="myba&#10;BackgroundImage&#10;mapst&#10;lom&#10;ali" />
     <property name="RESTClient.httpMethod" value="GET&#10;POST&#10;PUT&#10;PATCH&#10;DELETE&#10;HEAD&#10;OPTIONS" />
-    <property name="SHOW_INHERITED.file.structure.state" value="true" />
     <property name="SearchEveryWhereHistory" value="ide sync" />
-    <property name="SettingsSearchHistory" value="maven&#10;lom&#10;compile&#10;comp&#10;syncing ide" />
+    <property name="SettingsSearchHistory" value="svn&#10;console&#10;add bookmark&#10;maven&#10;lom" />
     <property name="SplitFileEditor.Proportion" value="0.74037087" />
     <property name="SpringBeansModulesPanel[0]" value="0.10840108" />
     <property name="SpringBeansModulesPanel[1]" value="0.1216545" />
@@ -47,10 +49,14 @@
     <property name="SpringMvcModulesPanel[0]" value="0.10840108" />
     <property name="SpringMvcModulesPanel[1]" value="0.1216545" />
     <property name="SpringMvcModulesPanel[2]" value="0.13860014" />
+    <property name="SqlStructureView.filterD.file.structure.state" value="true" />
     <property name="TEMPLATES_FILTER_HISTORY" value="maven&#10;idea&#10;java" />
+    <property name="VISIBILITY_SORTER.file.structure.state" value="true" />
     <property name="android-component-compatibility-check" value="1498449610829" />
     <property name="annotate.short.names.type" value="full" />
-    <property name="com.intellij.openapi.roots.ui.configuration.TabbedModuleEditor.selectedEditor" value="Dependencies" />
+    <property name="com.intellij.history.integration.ui.views.FileHistoryDialog.0" value="300" />
+    <property name="com.intellij.history.integration.ui.views.FileHistoryDialog.1" value="800" />
+    <property name="com.intellij.openapi.roots.ui.configuration.TabbedModuleEditor.selectedEditor" value="Sources" />
     <property name="com.intellij.openapi.vcs.actions.ShowMessageHistoryAction$1.splitter" value="0.54545456" />
     <property name="completion.stats.allow.message.shown" value="true" />
     <property name="completion.stats.experiment.salt" value="dd66e3db" />
@@ -68,28 +74,33 @@
     <property name="evlsprt2.IU-182.2757.3" value="163ec6cc593" />
     <property name="evlsprt3.171" value="17" />
     <property name="evlsprt3.181" value="15" />
+    <property name="evlsprt3.182" value="13" />
     <property name="evlsprt3.IU-181.3007.14" value="19" />
     <property name="evlsprt3.IU-181.3870.7" value="14" />
     <property name="evlsprt3.IU-182.2757.3" value="18" />
     <property name="evlsprt3.IU-182.2949.4" value="15" />
-    <property name="file.chooser.recent.files" value="/home/qzz&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop/ddjf-bpms/target&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop-agile&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180727&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180704&#10;/media/qzz/FILE/java8demo&#10;/media/qzz/FILE/Alibaba Java Coding Guidelines-1.0.5.zip&#10;/media/qzz/FILE&#10;/media/qzz/DATA/maven/repository&#10;/media/qzz/FILE/apache-maven-3.3.9/conf/settings.xml&#10;/media/qzz/FILE/apache-maven-3.3.9&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop20180622&#10;/media/qzz/FILE/apache-tomcat-9.0.0.M1&#10;/opt/jdk10&#10;/usr/local/jdk1.8.0_171&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop&#10;E:/qinzaizhen/javasedemo&#10;D:/work/code&#10;D:/work/BPMS/branches/ddjf-bims-develop20180622/ddjf-bpms/src/main/webapp&#10;D:/work/BPMS/branches/ddjf-bims-develop20180622/ddjf-bpms/src/main/webapp/WEB-INF/web.xml&#10;D:/work/BPMS/branches/ddjf-bims-develop20180622&#10;D:/work/BPMS/branches/ddjf-bims-develop20180525&#10;D:/work/BPMS/branches/ddjf-bims-develop20180622/ddjf-bpms/target/x5&#10;D:/work/BPMS/branches/ddjf-bims-develop-agile&#10;D:/work/BPMS/branches/ddjf-bims-develop&#10;D:/work/x5/x5-org-root&#10;E:/MyBatis-3.60.zip&#10;E:/MyBatis-3.61.zip&#10;E:/jr-ide-intellij-2018.1.0_13-17.zip&#10;D:/work/BPMS/branches/ddjf-bims-develop20180427" />
-    <property name="file.gist.reindex.count" value="103122" />
+    <property name="file.chooser.recent.files" value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180824&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop&#10;/media/qzz/FILE/ideaconfig/eclipse-code-formatter.xml&#10;/media/qzz/FILE/java8demo&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180831&#10;/home/qzz/桌面/1432975371.jar&#10;/home/qzz/桌面/timg2.jpeg&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_sit&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop-agile&#10;/home/qzz&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop/ddjf-bpms/target&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180727&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180704&#10;/media/qzz/FILE/Alibaba Java Coding Guidelines-1.0.5.zip&#10;/media/qzz/FILE&#10;/media/qzz/DATA/maven/repository&#10;/media/qzz/FILE/apache-maven-3.3.9/conf/settings.xml&#10;/media/qzz/FILE/apache-maven-3.3.9&#10;/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop20180622&#10;/media/qzz/FILE/apache-tomcat-9.0.0.M1&#10;/opt/jdk10&#10;/usr/local/jdk1.8.0_171&#10;E:/qinzaizhen/javasedemo&#10;D:/work/code&#10;D:/work/BPMS/branches/ddjf-bims-develop20180622/ddjf-bpms/src/main/webapp&#10;D:/work/BPMS/branches/ddjf-bims-develop20180622/ddjf-bpms/src/main/webapp/WEB-INF/web.xml&#10;D:/work/BPMS/branches/ddjf-bims-develop20180622&#10;D:/work/BPMS/branches/ddjf-bims-develop20180525&#10;D:/work/BPMS/branches/ddjf-bims-develop20180622/ddjf-bpms/target/x5&#10;D:/work/BPMS/branches/ddjf-bims-develop-agile" />
+    <property name="file.gist.reindex.count" value="120018" />
     <property name="fileTypeChangedCounter" value="1" />
+    <property name="idea.background.editor" value="$USER_HOME$/桌面/timg2.jpeg,20,scale,top_left" />
+    <property name="idea.background.frame" value="$USER_HOME$/桌面/timg2.jpeg,50,scale,middle_left" />
     <property name="ignore.outdated.jvm.version.message2" value="true" />
-    <property name="installed.kotlin.plugin.version" value="1.2.31-release-IJ2018.1-1" />
+    <property name="installed.kotlin.plugin.version" value="1.2.51-release-IJ2018.2-1" />
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
-    <property name="js.extract.function.global.scope.was.selected" value="true" />
     <property name="js.rename.search.for.text.occurrences" value="false" />
     <property name="js.rename.search.in.comments" value="true" />
-    <property name="last.imported.location" value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop" />
-    <property name="lastTip" value="4" />
+    <property name="last.imported.location" value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180831" />
+    <property name="lastTip" value="26" />
+    <property name="org.intellij.images.editor.actions.BackgroundImageDialog#recent" value="$USER_HOME$/桌面/timg2.jpeg" />
     <property name="plugins.preselection.path" value="/media/qzz/FILE" />
-    <property name="project.wizard.group" value="SpringInitializr" />
+    <property name="project.wizard.group" value="JAVA_MODULE" />
     <property name="project.wizard.template" value="Java" />
     <property name="search.everywhere.max.popup.width" value="620" />
+    <property name="selected.color.option.type" value="BOOKMARKS_ATTRIBUTES" />
+    <property name="settings.code.style.selected.tab.HTML" value="Other" />
     <property name="spring.initializr.service.url.history" value="" />
     <property name="spring.initializr.service.url.last" value="https://start.spring.io" />
-    <property name="ts.lib.d.ts.version" value="2.8.1" />
+    <property name="ts.lib.d.ts.version" value="3.0.1" />
     <property name="typescript.show.auto.import" value="true" />
   </component>
 </application>
