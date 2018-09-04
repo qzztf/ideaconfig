@@ -1,0 +1,813 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="3bd7bf3c-3dd8-4b9e-b309-a8ee1869de71" name="Default" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseLocalColorSettings">
+    <option name="use-colors" value="false" />
+    <option name="in-editor" value="true" />
+    <colors>
+      <entry key="bpms/031e5abb-206c-4ff3-a0c7-774a3a14d091:SCHEMA" value="Blue" />
+    </colors>
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="sit" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="sit" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="sit" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="bpms: schema" type="c314c289:MysqlImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="sit" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="bpms: schema" type="c314c289:MysqlImplModel$Schema" />
+        <item name="tables" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ExecutionTargetDialog">
+    <checked>
+      <node key="031e5abb-206c-4ff3-a0c7-774a3a14d091" />
+    </checked>
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-1494826417">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="14" />
+          <entry key="project.open.time.11" value="2" />
+          <entry key="project.open.time.12" value="2" />
+          <entry key="project.open.time.13" value="1" />
+          <entry key="project.open.time.14" value="4" />
+          <entry key="project.open.time.17" value="1" />
+          <entry key="project.open.time.18" value="1" />
+          <entry key="project.open.time.19" value="1" />
+          <entry key="project.open.time.32" value="1" />
+          <entry key="project.open.time.6" value="1" />
+          <entry key="project.open.time.7" value="1" />
+          <entry key="project.opened" value="15" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="cell" value="6" />
+          <entry key="sql" value="2731" />
+          <entry key="txt" value="10" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="PLAIN_TEXT" value="10" />
+          <entry key="SQL" value="202" />
+          <entry key="Scratch" value="2535" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="b_cooperate_bank_info" value="1" />
+          <entry key="b_cooperate_capital" value="1" />
+          <entry key="b_cooperate_capital_land" value="1" />
+          <entry key="b_cooperate_insurance_land" value="1" />
+          <entry key="b_cooperate_p2p_info" value="1" />
+          <entry key="b_product" value="1" />
+          <entry key="biz_apply_order" value="6" />
+          <entry key="biz_house" value="1" />
+          <entry key="biz_isr_mixed" value="2" />
+          <entry key="biz_land_cert" value="2" />
+          <entry key="biz_missing_materials" value="2" />
+          <entry key="biz_order_matter_record" value="1" />
+          <entry key="biz_ori_loan" value="4" />
+          <entry key="biz_product_mate" value="1" />
+          <entry key="biz_product_mate_relation" value="2" />
+          <entry key="bpm_task_candidate" value="1" />
+          <entry key="custom_query" value="2" />
+          <entry key="material_type" value="1" />
+          <entry key="policy_product_end_view" value="1" />
+          <entry key="s_bank_info" value="2" />
+          <entry key="s_material_node" value="2" />
+          <entry key="s_material_relation" value="2" />
+          <entry key="sql" value="26" />
+          <entry key="sys_org" value="1" />
+          <entry key="sys_org_user" value="1" />
+          <entry key="v_user_org_role" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Database Element" value="41" />
+          <entry key="SQL" value="1" />
+          <entry key="Scratch" value="25" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console.sql">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="6" column="26" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_43.sql">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="21">
+              <caret line="1" column="14" selection-end-line="1" selection-end-column="55" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/b_cooperate_bank_info">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" text="bank_code='BIZBFS02JT'">
+                <filter text="bank_code='BIZBFS02JT'" />
+                <filter text="bank_code='20180800036398'" />
+              </filtering>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/b_cooperate_capital_land">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" text="capital_id='1707120036'">
+                <filter text="capital_id='1707120036'" />
+              </filtering>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/b_cooperate_capital">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" text="capital_code='BIZBFS02JT'">
+                <filter text="capital_code='BIZBFS02JT'" />
+              </filtering>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/b_cooperate_p2p_info">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true">
+                <filter text="fundraising_name like '%金安小额%'" />
+              </filtering>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/s_bank_info">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" text="bank_name like '%交通银行股份有限公司佛山分行%'">
+                <filter text="bank_name like '%交通银行股份有限公司佛山分行%'" />
+                <filter text="bank_name like '%金安小额%'" />
+                <filter text="bank_code =''" />
+              </filtering>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="das://6c42bfa4-2fbb-46d6-92f3-1eaa9c5ee3cc/schema/springo/table/custom_query">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/custom_query">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_42.sql">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="5" column="37" selection-start-line="5" selection-end-line="5" selection-end-column="59" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>JYB_YSL_YJY_ISR</find>
+      <find>MY_TABLE</find>
+      <find>curdate()</find>
+      <find>10000046402306</find>
+      <find>10000046340202</find>
+      <find>10000040790833</find>
+      <find>bpms.</find>
+      <find>10000046404351</find>
+      <find>20000009675728</find>
+      <find>10000041690877</find>
+      <find>10000041690878</find>
+      <find>10000046405207</find>
+      <find>10000046405208</find>
+      <find>10000046405212</find>
+      <find>10000046402337</find>
+      <find>10000033940240</find>
+      <find>'#{flow_type}'</find>
+      <find>10000040429528</find>
+      <find>10000040439380</find>
+      <find>10000040439379</find>
+      <find>10000040439382</find>
+      <find>10000040439465</find>
+      <find>insert</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>ZYB_YSL_YJY_ISR</replace>
+      <replace>s_material_relation</replace>
+      <replace>s_material_node</replace>
+      <replace>'2018-06-15'</replace>
+      <replace>&quot;#{flow_type}&quot;</replace>
+      <replace>'#{flow_type}''</replace>
+      <replace>&quot;#{flow_type}&quot;'</replace>
+      <replace>replace</replace>
+    </replaceStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_21.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_19.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_23.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_17.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_26.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_24.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_27.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_25.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_28.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_29.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_31.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_22.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_32.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_17.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_18.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_16.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_19.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_20.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_33.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_34.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_30.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_21.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_22.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_23.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_24.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_25.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_35.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_27.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_30.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_36.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_32.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_37.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_31.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_26.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_29.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_33.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_34.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_35.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_36.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_28.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_38.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_38.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_40.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_41.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_39.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_37.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/6c42bfa4-2fbb-46d6-92f3-1eaa9c5ee3cc/console.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_42.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_39.sql" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_43.sql" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="291" />
+    <option name="y" value="139" />
+    <option name="width" value="1395" />
+    <option name="height" value="820" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="true" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="GoToSymbol.includeLibraries" value="false" />
+    <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/Edit As Language" value="MySQL" />
+    <property name="database.console.LAST_STATE" value="true" />
+    <property name="database.data.extractors.current.id" value="SQL Inserts" />
+    <property name="last_opened_file_path" value="$USER_HOME$" />
+    <property name="settings.editor.selected.configurable" value="database.data.views" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="29" width="1920" height="1021" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info content_ui="combo" id="Database" order="0" visible="true" weight="0.21314102" />
+      <window_info id="Favorites" order="1" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49964157" weight="0.32900432" />
+      <window_info anchor="bottom" id="Inspection" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="4" />
+      <window_info active="true" anchor="bottom" id="Database Console" order="5" sideWeight="0.49895832" visible="true" weight="0.4695752" />
+      <window_info anchor="bottom" id="Database Changes" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50104165" side_tool="true" weight="0.5548523" />
+      <window_info anchor="right" content_ui="combo" id="Project" order="0" weight="0.18719742" />
+      <window_info anchor="right" id="Structure" order="1" side_tool="true" weight="0.25" />
+    </layout>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/sys_org">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/view/v_user_org_role">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" text="roleAlias = 'ZCGA' and address_ like '%深圳%'">
+            <filter text="roleAlias = 'ZCGA' and address_ like '%深圳%'" />
+            <filter text="roleAlias = 'ZCGA' and address_ like '%%'" />
+            <filter text="roleAlias = 'ZCGA' and address_ like '%中山%'" />
+            <filter text="roleAlias = 'ZCGA'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/bpm_task_candidate">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_3.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-241" />
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_35.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="14" column="48" selection-start-line="14" selection-start-column="48" selection-end-line="14" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_36.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="14" column="46" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_26.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="10" column="38" selection-start-line="10" selection-start-column="38" selection-end-line="10" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_30.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="609">
+          <caret line="29" column="59" selection-start-column="8" selection-end-line="29" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_27.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1575">
+          <caret line="75" column="46" selection-start-column="8" selection-end-line="75" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_29.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="609">
+          <caret line="29" column="37" selection-end-line="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/biz_isr_mixed">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" text="apply_no='FZS0720180802001'">
+            <filter text="apply_no='FZS0720180802001'" />
+            <filter text="apply_no='SZC0120180528008'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/biz_product_mate">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/biz_product_mate_relation">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbSrc:///8579d97e/031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/view/policy_product_end_view.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/view/policy_product_end_view">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/s_bank_info">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_38.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="74" column="17" selection-start-line="74" selection-start-column="17" selection-end-line="74" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/biz_order_matter_record">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true">
+            <filter text="apply_no='SZS0720180815002'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_40.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="588">
+          <caret line="28" selection-start-line="28" selection-end-line="28" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/biz_missing_materials">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true">
+            <filter text="apply_no='FSC0420180815003'" />
+            <filter text="apply_no='SZS0720180815002'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_28.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="861">
+          <caret line="41" column="51" selection-start-line="41" selection-start-column="37" selection-end-line="41" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_41.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="332">
+          <caret line="214" column="17" lean-forward="true" selection-start-line="214" selection-start-column="17" selection-end-line="214" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/biz_land_cert">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" text="house_no='20180500023790'">
+            <filter text="house_no='20180500023790'" />
+            <filter text="apply_no='ZZF0120180525004'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/biz_ori_loan">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" text="borrower_type is not null ">
+            <filter text="borrower_type is not null" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/biz_land_cert">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" text="apply_no='ZZF0120180525004'">
+            <filter text="apply_no='ZZF0120180525004'" />
+            <filter text="house_no='20180500023790'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/b_product">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/biz_house">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true">
+            <filter text="house_no='20180500023790'" />
+            <filter text="owner_type is not null" />
+            <filter text="house_no='ZZF0120180525004'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/material_type">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_37.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1449">
+          <caret line="69" selection-start-line="69" selection-end-line="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/biz_apply_order">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true">
+            <filter text="apply_no='GZC0120180809001'" />
+            <filter text="apply_no='ZZF0120180525004'" />
+            <filter text="apply_no='20180500023790'" />
+            <filter text="product_id LIKE '%NSL%'" />
+            <filter text="product_id like '%YSL%'" />
+            <filter text="apply_no='SZC0320180802002'" />
+            <filter text="apply_no='SZC0220180801007'" />
+            <filter text="apply_no='SZC0320180801002'" />
+            <filter text="man_check_first is not null" />
+            <filter text="apply_no='SZC0320180801005'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/biz_apply_order">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true">
+            <filter text="apply_no='ZZF0120180525004'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/biz_product_mate_relation">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_39.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/s_material_relation">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_38.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" column="8" selection-end-line="50" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/s_material_node">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/biz_ori_loan">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true">
+            <filter text="house_no='20180500022065'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="38" selection-end-column="139" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/031e5abb-206c-4ff3-a0c7-774a3a14d091/console_39.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="8637" selection-start-column="8637" selection-end-column="8637" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/6c42bfa4-2fbb-46d6-92f3-1eaa9c5ee3cc/console.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="6" column="26" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://6c42bfa4-2fbb-46d6-92f3-1eaa9c5ee3cc/schema/springo/table/custom_query">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://031e5abb-206c-4ff3-a0c7-774a3a14d091/schema/bpms/table/custom_query">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_42.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="5" column="37" selection-start-line="5" selection-end-line="5" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/console_43.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="1" column="14" selection-end-line="1" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/s_bank_info">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" text="bank_name like '%交通银行股份有限公司佛山分行%'">
+            <filter text="bank_name like '%交通银行股份有限公司佛山分行%'" />
+            <filter text="bank_name like '%金安小额%'" />
+            <filter text="bank_code =''" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/b_cooperate_insurance_land">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/b_cooperate_capital_land">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" text="capital_id='1707120036'">
+            <filter text="capital_id='1707120036'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/b_cooperate_capital">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" text="capital_code='BIZBFS02JT'">
+            <filter text="capital_code='BIZBFS02JT'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/b_cooperate_bank_info">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" text="bank_code='BIZBFS02JT'">
+            <filter text="bank_code='BIZBFS02JT'" />
+            <filter text="bank_code='20180800036398'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://f5b0feb5-6b49-41c0-bc62-d53d6fdfb108/schema/bpms/table/b_cooperate_p2p_info">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true">
+            <filter text="fundraising_name like '%金安小额%'" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

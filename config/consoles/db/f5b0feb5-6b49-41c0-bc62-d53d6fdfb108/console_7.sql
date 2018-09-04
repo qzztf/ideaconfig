@@ -1,0 +1,1 @@
+select  * from biz_apply_order where partner_insurance_id = 'XDA-WC001'

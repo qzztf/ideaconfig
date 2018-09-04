@@ -1,0 +1,1 @@
+select  * from biz_apply_order o join biz_after_loan_material m on o.apply_no = m.apply_no group by m.apply_no having count(m.apply_no) > 1
