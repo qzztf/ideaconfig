@@ -3,17 +3,15 @@
     <option name="visitedUrls">
       <list>
         <UrlAndUserName>
-          <option name="url" value="http://git.oschina.net" />
-          <option name="userName" value="qzzsunly@163.com" />
-        </UrlAndUserName>
-        <UrlAndUserName>
           <option name="url" value="http://github.com" />
-          <option name="userName" value="qzzsunly@163.com" />
+          <option name="userName" value="qzzsunly" />
         </UrlAndUserName>
       </list>
     </option>
   </component>
-  <component name="VcsApplicationSettings">
-    <option name="SHOW_LST_WORD_DIFFERENCES" value="false" />
+  <component name="Vcs.Log.App.Settings">
+    <option name="SHOW_TAG_NAMES" value="true" />
+    <option name="SHOW_CHANGES_FROM_PARENTS" value="true" />
+    <option name="SHOW_DIFF_PREVIEW" value="true" />
   </component>
 </application>

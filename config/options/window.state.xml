@@ -1,7 +1,17 @@
 <application>
   <component name="WindowStateApplicationService">
-    <state x="393" y="256" width="1195" height="592" key="com.intellij.history.integration.ui.views.FileHistoryDialog" />
-    <state x="393" y="256" width="1195" height="592" key="com.intellij.history.integration.ui.views.FileHistoryDialog/1920.1080" />
-    <state x="393" y="256" width="1195" height="592" key="com.intellij.history.integration.ui.views.FileHistoryDialog@1920.1080" />
+    <state x="-9" y="-9" width="1938" height="1048" maximized="true" key="DiffContextDialog" />
+    <state x="-9" y="-9" width="1938" height="1048" maximized="true" key="DiffContextDialog/1920.1080" />
+    <state x="-8" y="-8" width="1936" height="1056" maximized="true" key="DiffContextDialog@1920.1080" />
+    <state x="-9" y="-9" width="1938" height="1048" maximized="true" key="DiffContextDialog@1920.1080@120dpi" />
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.dvcs.ui.CompareBranchesDialog" />
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.dvcs.ui.CompareBranchesDialog/1920.1080" />
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.dvcs.ui.CompareBranchesDialog@1920.1080@120dpi" />
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" />
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/1920.1080" />
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog@1920.1080" />
+    <state x="92" y="92" width="1736" height="856" key="dock-window-1" />
+    <state x="92" y="92" width="1736" height="856" key="dock-window-1/1920.1080" />
+    <state x="92" y="92" width="1736" height="856" key="dock-window-1@1920.1080" />
   </component>
 </application>

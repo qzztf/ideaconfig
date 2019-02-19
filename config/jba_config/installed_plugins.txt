@@ -1,7 +1,6 @@
 EclipseCodeFormatter
 com.fireline.plugin.id
 mobi.hsz.idea.gitignore
-JRebelPlugin
 Docker
 com.github.tinselspoon.intellij.kubernetes
 org.asciidoctor.intellij.asciidoc
@@ -19,3 +18,28 @@ com.ccnode.codegenerator.mybatis.generator
 Lombook Plugin
 org.mayevskiy.intellij.sonar
 org.mapstruct.intellij
+com.baomidou.plugin.idea.mybatisx
+cn.wuzhizhan.plugin.mybatis
+org.jetbrains.plugins.vue
+NodeJS
+String Manipulation
+BashSupport
+training
+Mongo Plugin
+MavenRunHelper
+com.jetbrains.php.framework
+jd-intellij
+org.zalando.intellij.swagger
+Pythonid
+JRebelPlugin
+common.plugin.extension
+cn.kt.better.mybatis.generator.id
+cn.kevin.mybatis.hepler
+com.bruce.intellijplugin.dubboPlugin
+com.vladsch.idea.multimarkdown
+com.intellij.ideolog
+io.protostuff.protostuff-jetbrains-plugin
+com.chrisrm.idea.MaterialThemeUI
+com.intellij.plugins.watcher
+com.github.pshirshov.bytecodeeditor
+in.1ton.idea.spring.assistant.plugin

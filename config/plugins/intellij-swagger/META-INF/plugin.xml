@@ -1,0 +1,53 @@
+<idea-plugin version="2">
+  <id>org.zalando.intellij.swagger</id>
+  <name>Swagger</name>
+  <version>1.0.22</version>
+  <vendor email="sebastian.monte@zalando.de" url="https://tech.zalando.com/">Zalando SE</vendor>
+  <depends>com.intellij.modules.lang</depends>
+  <depends>org.jetbrains.plugins.yaml</depends>
+  <description>
+     &lt;p&gt;A plugin to help you easily edit Swagger and Open API specification files.&lt;/p&gt;&lt;br/&gt;
+
+     &lt;p&gt;Like this plugin? &lt;b&gt;Give it a star&lt;/b&gt; at &lt;a href="https://github.com/zalando/intellij-swagger"&gt;GitHub&lt;/a&gt; and spread the word!&lt;/p&gt;
+    </description>
+  <idea-version since-build="145"/>
+  <extensionPoints>
+    <extensionPoint qualifiedName="org.zalando.intellij.swagger.customFieldFactory" interface="org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomFieldCompletionFactory"/>
+    <extensionPoint qualifiedName="org.zalando.intellij.swagger.customValueFactory" interface="org.zalando.intellij.swagger.extensions.completion.swagger.SwaggerCustomValueCompletionFactory"/>
+  </extensionPoints>
+  <extensions defaultExtensionNs="com.intellij">
+    <completion.contributor language="JSON" implementationClass="org.zalando.intellij.swagger.completion.contributor.swagger.SwaggerJsonCompletionContributor"/>
+    <completion.contributor language="yaml" implementationClass="org.zalando.intellij.swagger.completion.contributor.swagger.SwaggerYamlCompletionContributor"/>
+    <completion.contributor language="JSON" implementationClass="org.zalando.intellij.swagger.completion.contributor.openapi.OpenApiJsonCompletionContributor"/>
+    <completion.contributor language="yaml" implementationClass="org.zalando.intellij.swagger.completion.contributor.openapi.OpenApiYamlCompletionContributor"/>
+    <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.YamlReferenceContributor"/>
+    <psi.referenceContributor implementation="org.zalando.intellij.swagger.reference.JsonReferenceContributor"/>
+    <lang.findUsagesProvider language="yaml" implementationClass="org.zalando.intellij.swagger.reference.usage.YamlFindUsagesProvider"/>
+    <annotator language="JSON" implementationClass="org.zalando.intellij.swagger.annotator.JsonValidKeyAnnotator"/>
+    <annotator language="yaml" implementationClass="org.zalando.intellij.swagger.annotator.YamlValidKeyAnnotator"/>
+    <annotator language="JSON" implementationClass="org.zalando.intellij.swagger.annotator.JsonValidValueAnnotator"/>
+    <annotator language="yaml" implementationClass="org.zalando.intellij.swagger.annotator.YamlValidValueAnnotator"/>
+    <annotator language="JSON" implementationClass="org.zalando.intellij.swagger.annotator.swagger.JsonUnusedRefAnnotator"/>
+    <annotator language="yaml" implementationClass="org.zalando.intellij.swagger.annotator.swagger.YamlUnusedRefAnnotator"/>
+    <annotator language="JSON" implementationClass="org.zalando.intellij.swagger.annotator.openapi.JsonUnusedRefAnnotator"/>
+    <annotator language="yaml" implementationClass="org.zalando.intellij.swagger.annotator.openapi.YamlUnusedRefAnnotator"/>
+    <fileDocumentManagerListener implementation="org.zalando.intellij.swagger.ui.provider.FileDocumentListener"/>
+    <webBrowserUrlProvider implementation="org.zalando.intellij.swagger.ui.provider.SwaggerUiUrlProvider" order="last"/>
+    <fileBasedIndex implementation="org.zalando.intellij.swagger.index.swagger.SwaggerFileIndex"/>
+    <fileBasedIndex implementation="org.zalando.intellij.swagger.index.openapi.OpenApiFileIndex"/>
+    <applicationService serviceImplementation="org.zalando.intellij.swagger.service.SwaggerFileService"/>
+    <internalFileTemplate name="Swagger File (JSON)"/>
+    <internalFileTemplate name="Swagger File (YAML)"/>
+    <internalFileTemplate name="OpenAPI File (JSON)"/>
+    <internalFileTemplate name="OpenAPI File (YAML)"/>
+    <iconProvider implementation="org.zalando.intellij.swagger.file.icon.OpenApiIconProvider" id="openApiIconProvider"/>
+    <iconProvider implementation="org.zalando.intellij.swagger.file.icon.SwaggerIconProvider" id="swaggerIconProvider"/>
+    <documentationProvider implementation="org.zalando.intellij.swagger.documentation.openapi.OpenApiDocumentationProvider"/>
+    <documentationProvider implementation="org.zalando.intellij.swagger.documentation.swagger.SwaggerDocumentationProvider"/>
+  </extensions>
+  <actions>
+    <action id="SwaggerPlugin.CreateSwaggerFile" class="CreateSwaggerFile" text="Swagger/OpenAPI File" description="Create a Swagger or an OpenAPI file">
+      <add-to-group group-id="NewGroup" anchor="after" relative-to-action="CreateResourceBundle"/>
+    </action>
+  </actions>
+</idea-plugin>

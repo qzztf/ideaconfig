@@ -1,0 +1,538 @@
+var app = angular.module('app', ['base','commonCache']);
+app.controller("ctrl", ['$scope', 'baseService','productHelper', function ($scope, baseService, productHelper) {
+
+    function openDetail(id, action) {
+        var title = action == "edit" ? "编辑节点资料配置表" : action == "add" ? "添加节点资料配置表" : "查看节点资料配置表";
+        action = action == "edit" ? "Edit" : action == "add" ? "Edit" : "Get";
+        var url = "materialNode" + action;
+        if (!$.isEmpty(id)) {
+            url += '?id=' + id;
+        }
+        HT.window.openEdit(url, title, action, 'grid', 500, 500, null, null, id, true);
+    }
+    //SLY_YSL_NJY_CSH
+    var productId = __param.productId;
+    var productName = decodeURI(__param.productName);
+    var partnerCode = __param.partnerCode;
+    var partnerType = __param.partnerType;
+    var partnerName = decodeURI(__param.partnerName);
+
+    function getTitle(title) {
+        if (title.length > 15) {
+            title = title.substr(0,15) + "<br>" + title.substr(15, title.length);
+        }
+        return title;
+    }
+
+    var grid = $('#grid');
+    $scope.columns = [];
+    $scope.columns1 = [/*{
+        // width : 80,
+        align: 'center',
+        field: 'partnerCode',
+        title: partnerName,
+        rowspan: 2,
+        colspan: 2
+    }*/];
+    $scope.frozenColumns1 = [{
+        // width : 80,
+        align: 'center',
+        field: 'partnerCode',
+        title: getTitle(partnerName),
+        rowspan: 2,
+        colspan: 2
+    }];
+    $scope.columns2 = [];
+    $scope.frozenColumns2 = [];
+    $scope.columns3 = [];
+    $scope.frozenColumns3 = [{
+        width : 150,
+        align: 'center',
+        field: 'productId',
+        title: '业务品种',
+        formatter: function (value, row, index) {
+            return row.productName;
+        },
+        editor: {type:'combobox',options:{
+                valueField:'productId',
+                textField:'productName',
+                method:'get',
+                url:__ctx + '/business/materialProductRel/getProductList',
+                required:true,
+                loadFilter:function (data) {
+                    var rows = grid.datagrid('getRows');
+                    var row = rows[editIndex];
+                    var d;
+                    if (row.productId) {
+                        angular.forEach(data,function (val) {
+                            if (val.productId == row.productId) {
+                                d = val;
+                            }
+                        })
+                    }
+                    if(d){
+                        var dd =[];
+                        dd.push(d);
+                        return dd;
+                    }
+                    return data;
+                }
+            }}
+    },{
+        width : 120,
+        align: 'center',
+        field: 'eventType',
+        title: '事件',
+        formatter: function (value, row, index) {
+            return row.eventTypeName;
+        },
+        editor: {type:'combobox',options:{
+                valueField:'key',
+                textField:'name',
+                method:'get',
+                url:__ctx + '/business/dictionary/getDicListByKey?dicKey=PartnerMaterialEventType',
+                required:true,
+                loadFilter:function (data) {
+                    var rows = grid.datagrid('getRows');
+                    var row = rows[editIndex];
+                    var d;
+                    if (row.eventType) {
+                        angular.forEach(data,function (val) {
+                            if (val.key == row.eventType) {
+                                d = val;
+                            }
+                        })
+                    }
+                    if(d){
+                        var dd =[];
+                        dd.push(d);
+                        return dd;
+                    }
+                    return data;
+                }
+            }}
+    }];
+    var editIndex = undefined;
+    window.endEditing = function(){
+        if (editIndex == undefined){return true}
+        if ($('#grid').datagrid('validateRow', editIndex)){
+            $('#grid').datagrid('endEdit', editIndex);
+            editIndex = undefined;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    window.onClickCell = function(index, field){
+        if (editIndex != index){
+            if (endEditing()){
+                $('#grid').datagrid('selectRow', index)
+                    .datagrid('beginEdit', index);
+                var ed = $('#grid').datagrid('getEditor', {index:index,field:field});
+                if (ed){
+                    ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+                }
+                editIndex = index;
+            } else {
+                setTimeout(function(){
+                    $('#grid').datagrid('selectRow', editIndex);
+                },0);
+            }
+        }
+    }
+    window.onEndEdit = function(index, row){
+        var ed = $(this).datagrid('getEditor', {
+            index: index,
+            field: 'productId'
+        });
+        var ed1 = $(this).datagrid('getEditor', {
+            index: index,
+            field: 'eventType'
+        });
+
+        row.productName = $(ed.target).combobox('getText');
+        row.eventTypeName = $(ed1.target).combobox('getText');
+        row.partnerCode = partnerCode;
+        row.partnerName = partnerName;
+        row.partnerType = partnerType;
+    }
+
+    window.accept = function(){
+        if (endEditing()){
+            //调用后不能使用getChanges方法获取到修改的记录
+            $('#grid').datagrid('acceptChanges');
+        }
+    }
+    window.reject = function(){
+        $('#grid').datagrid('rejectChanges');
+        editIndex = undefined;
+    }
+
+    window.add = function(){
+        if (endEditing()){
+            $('#grid').datagrid('appendRow',{"productId": productId});
+            editIndex = $('#grid').datagrid('getRows').length-1;
+            $('#grid').datagrid('selectRow', editIndex)
+                .datagrid('beginEdit', editIndex);
+        }
+    }
+
+    //配置默认模板
+    var config = {
+        //借款人信息交互表
+        'M09027' : {'M09027_dataType':'exchangeInfo','M09027_deliveryName':'借款人信息交互表.xlsx','M09027_templateName':'exchangeInfo.xlsx'},
+        'M09027_BIZBXGSZJ' : {'M09027_dataType':'ZJBX_CUST_INFO_INTERACTIVE','M09027_deliveryName':'客户信息交互表.xlsx','M09027_templateName':'cust_info_interactive_zjbx.xml'},
+        //推荐确认书
+        'M09025' : {'M09025_dataType':'recomNote','M09025_deliveryName':'推荐确认书.pdf','M09025_templateName':'confirmNote.xml'},
+        'M09025_BIZIZZ01ZL' : {'M09025_dataType':'recomNote','M09025_deliveryName':'推荐确认书.pdf','M09025_templateName':'confirmNote_jyb_ZL.xml'},
+        //进件清单
+        'M09028' : {'M09028_dataType':'EntryListSNXD','M09028_deliveryName':'进件清单.xlsx','M09028_templateName':'EntryListSNXD.xlsx'},
+        //尽调情况调查表
+        'M09029' : {'M09029_dataType':'tuningSurvey','M09029_deliveryName':'尽调情况调查表.doc','M09029_templateName':'tuningSurvey_jyb_ZL.xml'},
+        //客户详情信息
+        'M09030' : {'M09030_dataType':'LangFangFinanceInfo_cash','M09030_deliveryName':'客户详情信息.xls','M09030_templateName':'LangFangFinanceInfo.xls'},
+        //按揭贷款释放（解冻）通知书
+        'M09032' : {'M09032_dataType':'fundRelease','M09032_deliveryName':'按揭贷款释放（解冻）通知书.doc','M09032_templateName':'fund_release_jyb.xml'},
+        //抵押贷款释放（解冻）通知书
+        'M09033' : {'M09033_dataType':'fundRelease','M09033_deliveryName':'抵押贷款释放（解冻）通知书.doc','M09033_templateName':'fund_release_tfb.xml'}
+    };
+
+    window.handleData = function(row){
+        angular.forEach(row,  function (value, name) {
+            if (name && name.split) {
+                var typeNo = name.split("_")[0];
+                if (!row[typeNo + '_dataType']) {
+                    if (config[typeNo + "_" + row.partnerCode]) {
+                        //不存在的时候设置默认值
+                        Object.assign(row, config[typeNo + "_" + row.partnerCode]);
+                    }else if (config[typeNo]) {
+                        Object.assign(row, config[typeNo]);
+                    }
+                }
+            }
+        })
+    }
+
+    window.validateDuplicate = function () {
+        var rows = grid.datagrid('getRows');
+        var row = rows[editIndex];
+        for (var i = 0; i < rows.length; i++) {
+            var value = rows[i];
+            if (editIndex != i
+                && value.eventType == row.eventType
+                && value.productId == row.productId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    window.save = function(){
+
+        //先调用这个
+        $('#grid').datagrid('endEdit',editIndex);
+        if (validateDuplicate()){
+            grid.datagrid('beginEdit',editIndex);
+            $.topCall.error("存在相同的配置");
+            return;
+        }
+        var rows = grid.datagrid('getRows');
+        var row = rows[editIndex];
+        handleData(row);
+        rows =[];
+        //如果新增的数据一个都没有选，会导致detail表为空，导致查不出来数据
+        //从表头中至少取一个出来赋为0
+        //复制一个模板对象
+        var field = $scope.columns3[0].field;
+        var tmp ={};
+        tmp[field] = 0;
+        row = Object.assign(tmp, row);
+        rows.push(row);
+        // var rows = $('#grid').datagrid('getChanges');
+        baseService.postForm(__ctx + "/bims/materialPartner/save" , {rows:JSON.stringify(rows)}).then(function (data) {
+            if (data.result == 1) {
+                $.topCall.success(data.message);
+            }else {
+                $.topCall.error(data.message);
+            }
+        })
+        accept();
+    }
+
+    window.remove=function(id,index){
+        $.topCall.confirm("温馨提示", '是否删除？', function(r) {
+            if (r) {
+                baseService.postForm(__ctx + "/bims/materialPartner/remove?id=" + id, {}).then(function (data) {
+                    if (data.result == 1) {
+                        $.topCall.success(data.message);
+                        $('#grid').datagrid("deleteRow", index);
+                    }else {
+                        $.topCall.error(data.message);
+                    }
+                })
+            }
+        })
+    }
+
+    window.chooseRelation = function(isShowOrRequire,typeNo,typeName){
+        //选择关系人
+        //, isShowOrRequire : 1 是必备选择，0 是展示选择
+        var passConf = {};
+        // passConf.calc = CloneUtil.shallow(calc);
+        //对话框的回调函数
+        var rows = grid.datagrid('getRows');
+        var row = rows[editIndex];
+
+        var ed = grid.datagrid('getEditor', {
+            index: editIndex,
+            field: 'productId'
+        });
+
+        var productId = $(ed.target).combobox('getValue');
+        if (!productId){
+            $.topCall.alert("提示","请先选产品");
+            return;
+        }
+        var callback = function(data, dialog) {
+            dialog.dialog('close');
+            // jQuery.extend(calc, data);
+            // !$rootScope.$$phase && $rootScope.$digest();
+            // console.log(data)
+
+            if ( Array.isArray(data) ) {
+
+                //重新计算一次
+                row[typeNo + '_show'] = 0;
+                row[typeNo + '_require'] = 0;
+                angular.forEach(data, function (value) {
+                    if (value.isShow == 1) {
+                        row[typeNo + '_show'] = 1;
+                    }
+                    if (value.isRequire == 1) {
+                        row[typeNo + '_require'] = 1;
+                    }
+                })
+                row[typeNo + '_relations'] = data;
+                //主借款人
+                if (isShowOrRequire == 1) {
+                    row[typeNo+"_main_require"] =  0;
+                }else if (isShowOrRequire == 0){
+                    row[typeNo+"_main_show"] =  0 ;
+                }
+            }else if (data == 1){
+                //主借款人
+                if (isShowOrRequire == 1) {
+                    row[typeNo+"_main_require"] =  data;
+                    row[typeNo + '_require'] = data;
+                }else if (isShowOrRequire == 0){
+                    row[typeNo+"_main_show"] =  data ;
+                    row[typeNo + '_show'] = data;
+                }
+                row[typeNo + '_relations']=[];
+            }
+        };
+        var isMain = isShowOrRequire == 1 ? row[typeNo+"_main_require"]:row[typeNo+"_main_show"];
+        isMain = isMain || 0;
+        DialogUtil.openDialog(__ctx + "/bims/material/materialNode/relation?productId=" + productId +"&type=" + isShowOrRequire +"&isMain="+isMain+"&typeName="+typeName +"&relations="+ encodeURI(JSON.stringify(row[typeNo + '_relations'])), "关系人", passConf, callback);
+    }
+
+    $(function () {
+        baseService.postForm(__ctx + "/bims/materialPartner/listMaterials", {partnerCode: partnerCode,partnerType:partnerType}).then(function (data) {
+            $scope.types = data;
+            angular.forEach(data, function ( value, i) {
+                $scope.columns2.push({
+                    // width : 300,
+                    align: 'center',
+                    field: value.typeNo,
+                    title: value.name,
+                    typeNo: value.typeNo,
+                    id: value.id,
+                    colspan: 2
+                });
+                $scope.columns3.push({
+                    width : 120,
+                    align: 'center',
+                    field: value.typeNo + '_show',
+                    title: '展示',
+                    editor: {type:'checkbox',options:{on:1,off:0,hasRelation:value['hasRelation'], isShowOrRequire : 0,typeNo:value.typeNo,typeName:value.name}},
+                    formatter: function (val, row, index) {
+
+                        if (value['hasRelation'] == 1){
+                            var s = '';
+                            if (row[value.typeNo+"_main_show"] == 1){
+                                var productHelperResult = productHelper.init(row.productId);
+                                return productHelperResult.isCSH ? "主借款人" : "投保人";
+                            }
+                            angular.forEach(row[value.typeNo + '_relations'],function (relation) {
+                                if (relation.isShow == 1) {
+                                    s += (relation.relationName + ",");
+                                }
+                            })
+
+                            if (s.lastIndexOf(",") == s.length -1){
+                                s = s.substr(0,s.length - 1);
+                            }
+
+
+                            return '<span title="'+s+'">'+s+'</span>';
+                        }
+                        if (val == 1) {
+                            return "<input type ='checkbox' readonly disabled checked='checked'>";
+                        }
+                    }
+                });
+                $scope.columns3.push({
+                    width : 120,
+                    align: 'center',
+                    field: value.typeNo + '_require',
+                    title: '必备',
+                    editor: {type:'checkbox',options:{on:1,off:0,hasRelation:value['hasRelation'], isShowOrRequire : 1,typeNo:value.typeNo,typeName:value.name}},
+                    formatter: function (val, row, index) {
+
+                        if (value['hasRelation'] == 1){
+                            var s = '';
+                            if (row[value.typeNo+"_main_require"] == 1){
+                                var productHelperResult = productHelper.init(row.productId);
+                                return productHelperResult.isCSH ? "主借款人" : "投保人";
+                            }
+                            angular.forEach(row[value.typeNo + '_relations'],function (relation) {
+                                if (relation.isRequire == 1) {
+                                    s += (relation.relationName + ",");
+                                }
+                            })
+                            if (s.lastIndexOf(",") == s.length -1){
+                                s = s.substr(0,s.length - 1);
+                            }
+
+                            return '<span title="'+s+'">'+s+'</span>';
+                        }
+                        if (val == 1) {
+                            return "<input type ='checkbox' readonly disabled checked='checked'>";
+                        }
+                    }
+                });
+                var contains = false;
+                var idx = -1;
+                angular.forEach($scope.columns1, function ( value1, j) {
+                    if (value.parentTypeNo == value1.typeNo){
+                        contains = true;
+                        idx = j;
+                    }
+                });
+                if (contains) {
+                    $scope.columns1[idx].colspan = ($scope.columns1[idx].colspan || 0) + 2;
+                }else {
+                    $scope.columns1.push({
+                        // width : 160,
+                        align: 'center',
+                        field: value.parentTypeNo,
+                        title: value.parentTypeName,
+                        typeNo: value.parentTypeNo,
+                        colspan: 2
+                    })
+                }
+                contains = false;
+                idx = -1;
+            })
+
+
+            $scope.columns1.push({
+                field: 'colMg',
+                title: '操作',
+                width: 150,
+                rowspan: 3,
+                align: 'center',
+                editor: 'button',
+                formatter: function (value, row, index) {
+                    var result = "<span><a class='btn btn-default fa fa-edit' onClick='onClickCell(" + index + ",\"id\")' herf='#'>编辑</a>";
+                    result += "<a class=' btn btn-default fa fa-remove' onclick='remove(\""+row.id+"\","+index+")' herf='#'>删除</a></span>";
+                    return result;
+                }
+            });
+            loadGrid();
+        })
+    })
+
+    $.extend($.fn.datagrid.defaults.editors, {
+        button: {
+            init: function(container, options){
+                // console.log(options)
+                var result = "<span><a class='btn btn-default fa fa-edit' onClick='save()' herf='#'>保存</a>";
+                result += "<a class='btn btn-default fa fa-remove' herf='#' onclick='reject()'>取消</a></span>";
+                return $(result).appendTo(container);
+            },
+            destroy: function(target){
+                $(target).remove();
+            },
+            getValue: function(target){
+                return $(target).val();
+            },
+            setValue: function(target, value){
+                $(target).val(value);
+            },
+            resize: function(target, width){
+                $(target)._outerWidth(width);
+            }
+        },checkbox: {
+            init: function(container, options){
+                if (options.hasRelation == 1){
+                    return $("<span><a class='btn btn-default fa fa-edit' onClick='chooseRelation("+ options.isShowOrRequire+",\""+options.typeNo +"\",\""+options.typeName+"\")' herf='#'>选择</a>").appendTo(container);
+                }
+                var checkbox = $('<input id="check_'+options.typeNo +'_'+(options.isShowOrRequire == 1? "require" : "show")+'" type="checkbox">');
+                $(checkbox).change(function () {
+                    var id=  $(this).attr("id");
+                    if (id.indexOf("require") > -1 && $(this).is(":checked")) {
+                        $("#" + id.replace("require", "show")).prop("checked",true);
+                    }
+                })
+                var input = checkbox.appendTo(container);
+                input.val(options.on);
+                input.attr('offval', options.off);
+                return input;
+            },
+            getValue: function(target){
+                if ($(target).is(':checked')){
+                    return $(target).val();
+                } else {
+                    return $(target).attr('offval');
+                }
+            },
+            setValue: function(target, value){
+                var checked = false;
+                if ($(target).val() == value){
+                    checked = true;
+                }
+                $(target)._propAttr('checked', checked);
+            }
+        }
+    });
+
+    function loadGrid() {
+        $('#grid').datagrid($.extend($defaultOptions, {
+            fitColumns: false,
+            url: __ctx+ "/bims/materialPartner/listJson",
+            queryParams: {
+                'partnerCode': partnerCode,
+                'Q^partner_code^S': partnerCode,
+                'type': partnerType,
+                'Q^type^S': partnerType
+            },
+            idField : "id",
+            // sortName : 'id',
+            onDblClickCell: onClickCell,
+            onEndEdit: onEndEdit,
+            sortOrder: 'desc',
+            striped: true,
+            autoRowHeight: true,
+            pagination: false,
+            frozenColumns:[$scope.frozenColumns1,$scope.frozenColumns2,$scope.frozenColumns3],
+            columns: [$scope.columns1,$scope.columns2,$scope.columns3],
+            onLoadSuccess: function () {
+                // handGridLoadSuccess();
+                grid.datagrid("resize");
+            }
+        }));
+    }
+
+
+}]);

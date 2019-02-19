@@ -3,15 +3,15 @@
     <ServerDK NAME="Tomcat 9.0.0.M1">
       <option name="SOURCE_INTEGRATION_NAME" value="Tomcat Server" />
       <DATA>
-        <option name="CATALINA_HOME" value="/media/qzz/FILE/apache-tomcat-9.0.0.M1" />
+        <option name="CATALINA_HOME" value="F:/apache-tomcat-9.0.0.M1" />
         <option name="CATALINA_BASE" value="" />
       </DATA>
     </ServerDK>
     <LibraryTable>
       <library name="Tomcat 9.0.0.M1">
         <CLASSES>
-          <root url="jar:///media/qzz/FILE/apache-tomcat-9.0.0.M1/lib/jsp-api.jar!/" />
-          <root url="jar:///media/qzz/FILE/apache-tomcat-9.0.0.M1/lib/servlet-api.jar!/" />
+          <root url="jar://F:/apache-tomcat-9.0.0.M1/lib/jsp-api.jar!/" />
+          <root url="jar://F:/apache-tomcat-9.0.0.M1/lib/servlet-api.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

@@ -2,95 +2,226 @@
   <component name="RecentProjectsManager">
     <option name="recentPaths">
       <list>
-        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180824" />
-        <option value="/media/qzz/FILE/java8demo" />
-        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop" />
-        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180831" />
-        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop-agile" />
-        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_sit" />
+        <option value="E:/work/code/bpms" />
+        <option value="F:/my-jpa" />
+        <option value="E:/work/code/ddjf-swagger2" />
+        <option value="E:/work/code/multi-tenancy-starter" />
+        <option value="F:/JSR269-demo" />
+        <option value="F:/jpa-demo" />
+        <option value="F:/spring-magic" />
+        <option value="F:/springo" />
+        <option value="F:/mybatis-jpa-master/mybatis-jpa-master" />
+        <option value="F:/xxl-job-master/xxl-job-master" />
+        <option value="E:/work/code/x5" />
+        <option value="D:/Users/qinzaizhen/Desktop/activiti-examples-develop/activiti-api-basic-full-example" />
+        <option value="F:/Activiti" />
+        <option value="D:/Users/qinzaizhen/Desktop/activiti-examples-develop/activiti-api-web-example" />
+        <option value="D:/Users/qinzaizhen/Desktop/activiti-examples-develop/activiti-api-spring-integration-example" />
+        <option value="D:/Users/qinzaizhen/Desktop/activiti-examples-develop/activiti-api-basic-process-example" />
       </list>
     </option>
     <option name="openPaths">
       <list>
-        <option value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180824" />
+        <option value="E:/work/code/bpms" />
       </list>
     </option>
-    <option name="lastPath" value="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180824" />
-    <option name="pid" value="28039" />
+    <option name="lastPath" value="E:/work/code/bpms" />
+    <option name="pid" value="" />
     <option name="additionalInfo">
       <map>
-        <entry key="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop">
+        <entry key="D:/Users/qinzaizhen/Desktop/activiti-examples-develop/activiti-api-basic-full-example">
           <value>
             <RecentProjectMetaInfo>
-              <option name="build" value="IU-182.4129.4" />
+              <option name="build" value="IU-183.2153.8" />
               <option name="productionCode" value="IU" />
               <option name="eap" value="true" />
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1534489398230" />
-              <option name="buildTimestamp" value="1533797238807" />
+              <option name="projectOpenTimestamp" value="1536994354477" />
+              <option name="buildTimestamp" value="1536068862230" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
-        <entry key="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop-agile">
+        <entry key="D:/Users/qinzaizhen/Desktop/activiti-examples-develop/activiti-api-basic-process-example">
           <value>
             <RecentProjectMetaInfo>
-              <option name="build" value="IU-182.3911.13" />
+              <option name="build" value="IU-182.4129.33" />
               <option name="productionCode" value="IU" />
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1533695787698" />
-              <option name="buildTimestamp" value="1533017616017" />
+              <option name="projectOpenTimestamp" value="1536135370850" />
+              <option name="buildTimestamp" value="1534836440917" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
-        <entry key="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180824">
+        <entry key="D:/Users/qinzaizhen/Desktop/activiti-examples-develop/activiti-api-spring-integration-example">
           <value>
             <RecentProjectMetaInfo>
-              <option name="build" value="IU-182.4129.4" />
-              <option name="productionCode" value="IU" />
-              <option name="eap" value="true" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1534725824993" />
-              <option name="buildTimestamp" value="1533797238807" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_20180831">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-182.4129.4" />
-              <option name="productionCode" value="IU" />
-              <option name="eap" value="true" />
-              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1534320267398" />
-              <option name="buildTimestamp" value="1533797273033" />
-            </RecentProjectMetaInfo>
-          </value>
-        </entry>
-        <entry key="/media/qzz/DATA/work/BPMS/branches/ddjf-bims-develop_sit">
-          <value>
-            <RecentProjectMetaInfo>
-              <option name="build" value="IU-182.3911.13" />
+              <option name="build" value="IU-182.4129.33" />
               <option name="productionCode" value="IU" />
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1533519075917" />
-              <option name="buildTimestamp" value="1533017639807" />
+              <option name="projectOpenTimestamp" value="1536137058182" />
+              <option name="buildTimestamp" value="1534836440917" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
-        <entry key="/media/qzz/FILE/java8demo">
+        <entry key="D:/Users/qinzaizhen/Desktop/activiti-examples-develop/activiti-api-web-example">
           <value>
             <RecentProjectMetaInfo>
-              <option name="build" value="IU-182.4129.4" />
+              <option name="build" value="IU-182.4129.33" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1536140678484" />
+              <option name="buildTimestamp" value="1534836440917" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/work/code/bpms">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-183.5912.2" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1550567380449" />
+              <option name="buildTimestamp" value="1550055478436" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/work/code/ddjf-bims">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-183.4284.36" />
               <option name="productionCode" value="IU" />
               <option name="eap" value="true" />
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1534501104008" />
-              <option name="buildTimestamp" value="1533797238807" />
+              <option name="projectOpenTimestamp" value="1542356392069" />
+              <option name="buildTimestamp" value="1541609980169" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/work/code/ddjf-swagger2">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-183.5429.30" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1549964466243" />
+              <option name="buildTimestamp" value="1548740286050" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/work/code/multi-tenancy-starter">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-183.5429.25" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1548410136177" />
+              <option name="buildTimestamp" value="1548183443695" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/work/code/x5">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-183.3647.12" />
+              <option name="productionCode" value="IU" />
+              <option name="eap" value="true" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1539761437101" />
+              <option name="buildTimestamp" value="1539161205337" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="F:/Activiti">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-183.2153.8" />
+              <option name="productionCode" value="IU" />
+              <option name="eap" value="true" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1536994349063" />
+              <option name="buildTimestamp" value="1536068862230" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="F:/JSR269-demo">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-183.5429.1" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1547806983538" />
+              <option name="buildTimestamp" value="1547196229031" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="F:/jpa-demo">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-183.5153.4" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1546073382693" />
+              <option name="buildTimestamp" value="1545321090942" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="F:/my-jpa">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-183.5429.30" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1549966577174" />
+              <option name="buildTimestamp" value="1548740286050" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="F:/mybatis-jpa-master/mybatis-jpa-master">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-183.4588.27" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1543994382238" />
+              <option name="buildTimestamp" value="1543421363614" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="F:/spring-magic">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-183.5153.4" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1546003002058" />
+              <option name="buildTimestamp" value="1545321090942" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="F:/springo">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-183.5153.4" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1546002996610" />
+              <option name="buildTimestamp" value="1545321090942" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="F:/xxl-job-master/xxl-job-master">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IU-183.4284.148" />
+              <option name="productionCode" value="IU" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1543305677481" />
+              <option name="buildTimestamp" value="1542779225436" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
       </map>
     </option>
-    <option name="lastProjectLocation" value="/media/qzz/DATA/work/BPMS/branches" />
+    <option name="lastProjectLocation" value="F:/" />
   </component>
 </application>

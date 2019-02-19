@@ -1,0 +1,3291 @@
+angular.module('template/formheader.html', []).run(["$templateCache", function($templateCache) {
+  $templateCache.put('template/formheader.html','<div><div class="ddjf-line ddjf-top-title">订单基本信息</div><table class="ddjf-gridtable column-4"><tr><td >订单编号</td><td ng-bind="ddjf.apply_order.applyNo"></td><td>卖方姓名</td><td ng-bind="ddjf.apply_order.sellerName"></td><td>房产地址</td><td ng-bind="ddjf.apply_order.houseAddress"></td><td>合作机构</td><td ng-bind="ddjf.apply_order.partnerName"></td></tr><tr><td>赎楼借款金额（元）</td><td ng-bind="ddjf.apply_order.borrowApplyAmount | number:2"></td><td>买方商业贷款金额(元)</td><td ng-bind="ddjf.apply_order.loanBizAmount | number:2" ></td><td>产品期限（天）</td><td ng-bind="ddjf.apply_order.productExpiry"></td><td>渠道经理</td><td ng-bind="ddjf.apply_order.channelName"></td></tr></table></div>');
+  
+}]);
+angular.module('template/ddjfarrange.html', []).run(["$templateCache", function($templateCache) {
+  $templateCache.put('template/ddjfarrange.html','<div><div style="line-height:20px;position:relative;padding:10px 50%;margin-left:-125px;"><a class="btn btn-primary btn-sm" href="{{ddjf.arrangeUrl}}" target="_self" title="点击进入主管安排"><span style="font-size: 24px;width:250px;">点击进入主管安排</span></a></div></div>'); 
+}]);
+angular.module('template/ddjfappointment.html', []).run(["$templateCache", function($templateCache) {
+ $templateCache.put('template/ddjfappointment.html','<div><div style="line-height:20px;width:100%;padding:10px 50%;margin-left:-125px;"><a class="btn btn-primary btn-sm" href="{{ddjf.appointmentUrl}}" target="_self" title="点击进入预约安排"><span style="font-size: 24px;width:250px;">点击进入预约安排</span></a></div></div>');
+}]);
+angular.module('template/ddjfmaterial.html', []).run(["$templateCache", function($templateCache) {
+ $templateCache.put('template/ddjfmaterial.html','<div><table class="table-form" align="center" valign="middle" ><tr><th style="text-align:left;width:50%;" >影像名称</th><th  style="text-align:center;width:10%;">上传数量</th><th  style="text-align:center;width:15%;">上传时间</th><th  style="text-align:center;width:25%;">操作</th></tr><tr ng-repeat="item in materials | filter:materialFilter"><td align="left" valign="middle"  ng-bind="item.typeName"></td><td align="center" valign="middle"  ng-bind="item.count"></td><td align="center" valign="middle"  ng-bind="item.time"></td><td align="center" valign="middle" ><a  class="btn btn-default fa fa-submit" ng-click="UploadDialog()" >上传</a><a style="margin-left:15px;margin-right:15px;" class="btn btn-default fa fa-submit" ng-click="openWindow()">查看</a><a class="btn btn-default fa fa-submit" ng-click="scanWindow()">扫描</a></td></tr></table></div>');
+}]);
+
+
+angular.module('ddjf.template',['template/formheader.html','template/ddjfarrange.html','template/ddjfappointment.html','template/ddjfmaterial.html']);
+
+angular.module('ddjf.business',['base','ddjf.template'])
+.factory('permissionUtil',[function(){
+	var permissionUtil = {};
+	permissionUtil.getPermission =function getPermission(permissionPath,scope){
+		var permission = scope.permission||scope.$parent.permission||scope.$parent.$parent&&scope.$parent.$parent.permission || (scope.$parent.$parent && scope.$parent.$parent.$parent&&scope.$parent.$parent.$parent.permission);
+		if(!permission||!permissionPath) return "w";
+		try {
+			var p = eval(permissionPath); 
+		} catch (e) {
+			console.info("获取权限出现了异常 permissionPath:"+permissionPath)
+			console.info(permission);
+			console.info(e);
+		}
+		return p ||'w'; 
+	}
+	return permissionUtil;
+}])
+.factory('businessFactory',['$rootScope', 'baseService', function ($rootScope, baseService) {
+	return {
+        queryBuyerCustomerInfo: function(applyNo){
+        	baseService.post(__ctx + '/customer/getBuyerList',{applyNo:applyNo}).then(function(data){
+        		$rootScope.$broadcast('ddjf:customerHtml',data);
+        	})
+        },
+        queryTrustCardInfo: function(applyNo,cardType){
+        	baseService.post(__ctx + '/account/getBankAccountByType',{applyNo:applyNo,cardType:cardType}).then(function(data){
+        		$rootScope.$broadcast('ddjf:trustCardHtml',data);
+        	})
+        },
+        queryPreRansomAmount: function(applyNo){
+        	baseService.postForm(__ctx + '/business/info/feeController/queryPreRansomAmount',{applyNo:applyNo}).then(function(data){
+        		$rootScope.$broadcast('ddjf:feeHtml',data);
+        	})
+        },
+        queryMaterials: function(applyNo,typeKey,productType){
+        	var param = {objectNo:applyNo,typeNos:typeKey};
+        	if(productType){
+        		param.productType = productType;
+        	}
+        	baseService.postForm(__ctx + '/business/material/imagePage/getdataUpload',param).then(function(data){
+        		$rootScope.$broadcast('ddjf:materialHtml',data);
+        	})
+        },
+        queryMaterialList: function(param){
+        	baseService.postForm(__ctx + '/bims/api/getMaterialList',param).then(function(data){
+        		$rootScope.$broadcast('ddjf:materialTypeKey',data);
+        	})
+        }
+        
+	}
+}])
+.service('feeHelperService',['$rootScope', 'baseService','productHelper','$filter', function ($rootScope, baseService,productHelper,$filter) {
+	var dateFilter = $filter('date');
+	this.setFeeFactorInfo = function(boData){
+		this.__boData__ = boData;
+	}
+	
+	this.getFeeFactorInfo = function(){
+		var boData = this.__boData__;
+		if(!boData){
+			//没有设置boData;
+			return ;
+		}
+		this.feeFactorInfo = {}; 
+		angular.extend(this.feeFactorInfo,{
+		       companyCode:boData.branch_id,
+			   productCode:boData.product_id,
+			   loanNodeCode:(boData.sub_biz_isr_mixed[0] || {}).tail_release_node,
+			   capitalCode:boData.partner_bank_id,
+			   insuranceCompanyCode:boData.partner_insurance_id,
+			   channelName:(function(){
+				   //渠道标签
+				  var channel =  boData.sub_biz_channel[0] || {}; 
+				  return channel.channel_tag =='commonChannel' &&  "普通渠道" || channel.channel_tag =='specificChannel' && channel.channel_name || channel.tag;
+			   }()),
+			   chargeWayCode:(boData.sub_biz_fee_summary[0] || {}).product_term_and_charge_way,
+			   franchiseeCode:'',
+			   productTerm:(boData.sub_biz_fee_summary[0] || {}).fixed_term
+		})
+		if(boData.service_type == 'JMS'){
+			this.feeFactorInfo.franchiseeCode  = "franchisee";
+		   /*
+		    * TODO 由于维度数量相同，需要给加盟商的渠道因子增加值
+		    */
+			this.feeFactorInfo.channelName  = "无";
+		 }else{
+			 this.feeFactorInfo.franchiseeCode  = "self";
+		 }
+		 this.feePlanEffectiveTime =  {
+			 '订单生成时间':boData.apply_time
+		 }
+	}
+	this.converstChargeWay = {fixedTerm:"固定期限",calculateDaily:"按天计息",fixedRate:"固定费率",fixedAmount:"固定金额",piecewiseCalculate:"区间计息"};
+			 
+	 /**
+	  * 获取指定模板
+	  */
+	this.getFeeTemplate = function(factorParams,templateInfoParams){
+		//1.获取费用因子
+		this.getFeeFactorInfo(); 
+		if(!this.feeFactorInfo || !this.feeFactorInfo.productCode){
+			console.error("获取模板之前请先设置feeFactor : feeHelperService.setFeeFactorInfo(boData)");
+			return ;
+		}
+		angular.extend(this.feeFactorInfo,factorParams);
+		var templateInfo = {};
+		if(templateInfoParams.templateType == 'feeRate'){
+			angular.extend(templateInfo,{templateType:"产品费率（公司）"})
+			if(this.feeFactorInfo.chargeWayCode){ 
+				templateInfo.templateSubType = this.converstChargeWay[this.feeFactorInfo.chargeWayCode];
+			} 
+		}
+		if(templateInfoParams.templateType == 'feeInsurance'){
+			angular.extend(templateInfo,{templateType:"保额保费费率"})
+		}
+		if(templateInfoParams.templateType == 'feeItem'){
+			angular.extend(templateInfo,{templateType:"附加费项",templateSubType:"费率登记"})
+		}
+		var requestParams = angular.extend({},{feeFactorInfo:this.feeFactorInfo},{feePlanEffectiveTime:this.feePlanEffectiveTime},{templateInfo:templateInfo});
+		var url = __ctx + '/feeRate/requestFee/requestForFeeRate';
+		return baseService.postForm(url,{requestParams:angular.toJson(requestParams)}); 
+		
+	}
+	
+	/**
+	 * 请求所有模板（费率模板和应收模板，保险类加保费模板）
+	 */
+	this.getALLFeeTemplateByProduct = function(){
+		//1.获取费用因子
+		this.getFeeFactorInfo(); 
+		if(!this.feeFactorInfo || !this.feeFactorInfo.productCode){
+			console.error("获取模板之前请先设置feeFactor : feeHelperService.setFeeFactorInfo(boData)");
+			return ;
+		}
+		var requestParams = angular.extend({},{feeFactorInfo:this.feeFactorInfo},{feePlanEffectiveTime:this.feePlanEffectiveTime});
+		var url = __ctx + '/feeRate/requestFee/requestForFeeRateByProductId';
+		return baseService.postForm(url,{requestParams:angular.toJson(requestParams)}); 
+	}
+	
+	this.getCalculateFeeValue = function(factorTemplateIdList,dataFromFrontEnd){
+		var params = {
+				factorTemplateIdList : factorTemplateIdList,
+				dataFromFrontEnd : dataFromFrontEnd,
+				billingBaseData : this.getBillingBaseData()
+		};
+		var url = __ctx + '/feeRate/requestFee/requestForReceivableDetail';
+		return baseService.postForm(url, {requestParams : angular.toJson(params)});
+	}
+	/**
+	 * 获取billingBaseData
+	 */
+	this.getBillingBaseData = function(){
+		var billingData={};
+		var boData = this.__boData__;
+		if(!boData){
+			return billingData;
+		}
+		var helper = productHelper.init(boData.product_id);
+		//现金类商业贷款金额处理,商业贷款金额
+		billingData.commercialLoanAmt =  (boData.sub_biz_new_loan[0]||{}).biz_loan_amount || 0; 
+	    //赎楼金额
+		billingData.foreclosureAmt = (boData.sub_biz_fee_summary[0]||{}).ransom_borrow_amount || 0;
+	    //借款金额   !!!!!为适应过渡方案硬编码改传参   过渡方案将商业贷款金额作为借款金额传参  后续改动!!!!!!
+		if(helper.isTransitionProduct){
+			billingData.loanAmt = billingData.commercialLoanAmt;
+		}else if(helper.isDDKDZY){
+			//房抵贷的钱真奇怪居然存在biz_isr_mixed表,还那么多值
+			billingData.loanAmt = (boData.sub_biz_isr_mixed[0]||{}).final_apply_loan_amount || (boData.sub_product_apply_info[0]||{}).apply_amount_capped || (boData.sub_product_apply_info[0]||{}).intent_apply_amount||0;
+		}else{
+			billingData.loanAmt = (boData.sub_biz_fee_summary[0]||{}).borrowing_amount ||0;
+		} 
+	    //保障金额
+		billingData.guaranteeAmt= (boData.sub_biz_fee_summary[0]||{}).guarantee_amount || 0;  
+		return billingData;
+	}
+	this.getActualDay = function(fixedTerm,borrowingDueDate,borrowingValueDate){
+		  //实际用款天数（客户）取值：若无借款回款日取用款期限，否则取 借款回款日-借款起息日 
+		   if(borrowingDueDate){
+			   var dateEnd = dateFilter(new Date(borrowingDueDate),'yyyy-MM-dd');
+			   var dateStart = dateFilter(new Date(borrowingValueDate),'yyyy-MM-dd');
+			   return FormMath.dateVal(dateStart,dateEnd,'day') 
+		   }
+		  return fixedTerm; 
+	}
+	
+	this.getOtherDataFromFrontEnd = function(){
+		var otherDataFromFrontEnd = {};
+		var boData = this.__boData__;
+		if(!boData){
+			return billingData;
+		}
+		var bizFeeSummary = boData.sub_biz_fee_summary[0]||{};
+		//定价折扣和风险系数
+		if(boData.service_type != 'JMS'){
+			var priceDiscount = bizFeeSummary.price_discount;
+			if(priceDiscount){
+				otherDataFromFrontEnd.discountCoefficient =FormMath.division(priceDiscount,100,4);
+			}else if(priceDiscount==0){
+				otherDataFromFrontEnd.discountCoefficient = 0;
+			} 
+		}
+	   if(bizFeeSummary.risk_coefficient){
+		   otherDataFromFrontEnd.riskCoefficient=FormMath.division(bizFeeSummary.risk_coefficient,100,4);
+	   }
+	   //取消最低限制 将最低收费传参为0
+	   if(boData.limitCharge == "1"){
+		   otherDataFromFrontEnd.minChargeAmtForChannel = 0;
+		   otherDataFromFrontEnd.minSettlementFee = 0;
+	   }
+	   if(bizFeeSummary){
+		   otherDataFromFrontEnd.loanTerm = bizFeeSummary.fixed_term;
+		   otherDataFromFrontEnd.actualTermForCustomer = this.getActualDay(bizFeeSummary.fixed_term,bizFeeSummary.borrowing_due_date,bizFeeSummary.borrowing_value_date);
+		   otherDataFromFrontEnd.hasBillFlag = bizFeeSummary.has_invoice;
+		   otherDataFromFrontEnd.productTerm = bizFeeSummary.product_term;
+	   }
+	   otherDataFromFrontEnd.feiYongSuanTouWei = boData.countHeadTail;
+	   return otherDataFromFrontEnd;
+	}
+	/**
+	 * 
+	 * return true:不可编辑，false 可编辑
+	 */
+	this.getFeeRateEditStatus = function(){
+		//请求发送放款指令是否已经完成 大道按揭以缴费确认为界限
+		var boData = this.__boData__;
+		if(!boData){
+			return false;
+		}
+		return boData.unEditFeeRate;
+	}
+	
+	this.validLimitFeeRate = function(){
+		var boData = this.__boData__;
+		if(!boData){
+			return true;
+		}
+		return boData.limitFeeRate!="0";
+	}
+	//根据返回结果判断费率登记应收明细是否显示 true显示false隐藏
+	this.getFeeInfoIsVisible = function(){
+		var boData = this.__boData__;
+		if(!boData){
+			return true;
+		}
+		var url = __ctx + '/bims/feeRate/feeTemplate/getIsVisibleResult';
+		return baseService.post(url,{applyNo:boData.apply_no});
+	}
+}])
+.directive('ddjfArrange',function(){
+   	 return {
+         restrict: 'AE',
+         replace: true,
+         scope:{
+        	 ddjfArrange:'='
+         },
+         link: function (scope, element, attrs) {
+        	 if(scope.ddjfArrange){
+        		  location.href = __ctx+'/business/arrange/index?apply_no='+scope.ddjfArrange.apply_no;
+        	 }
+         },
+         templateUrl: 'template/ddjfarrange.html'
+     };
+})
+.directive('ddjfAppointment',function(){
+   	 return {
+         restrict: 'AE',
+         replace: true,
+         scope:{
+        	 ddjfAppointment:'='
+         },
+         link: function (scope, element, attrs) {
+        	 if(scope.ddjfAppointment){
+        		 location.href = __ctx+'/business/appointment/index?apply_no='+scope.ddjfAppointment.apply_no;
+        	 }
+         },
+         templateUrl: 'template/ddjfappointment.html'
+     };
+})
+.directive('ddjfChanged',function(){
+	 return {
+         restrict: 'AE',
+         link: function (scope, element, attrs) {
+        	 var rule = eval('('+attrs.ddjfRule+')');
+        	 scope.$watch(attrs.ngModel,function(newValue){
+        		 if(rule[newValue] === true){
+        			 scope[attrs.ddjfChanged] = false; 
+        			 
+        		 }else if(rule[newValue] === false){
+        			 scope[attrs.ddjfChanged] = true; 
+        		 } 
+        	 });
+         } 
+     };
+}).directive('ddjfWatched',function(){
+   	 return {
+         restrict: 'AE',
+         require:'^?ngModel',
+         link: function (scope, element, attrs, ctrl) {
+        	 scope.$watch(attrs.ddjfWatched,function(newValue){
+        		 if(newValue === true){
+        			 try{
+        				 eval('('+'scope.'+attrs.ngModel+' = "")');
+        				 ctrl && ctrl.$setValidity("customValidate", true);
+        			 }catch(e){
+        				
+        			 }
+        			 
+        		 }else if(newValue === false){
+        			 if(ctrl){
+        				 ctrl.$modelValue = ctrl.$modelValue === "" ? undefined:ctrl.$modelValue;
+        			 }
+        		 }
+        	 });
+         } 
+     };
+})
+.directive('ddjfPermission',function(){
+   	 return {
+         restrict: 'AE',
+         require:'^?ngModel',
+         link: function ($scope, element, attrs, ctrl) {
+        	 if($scope.ddjfPermission==='r' || !ctrl){
+        		 return ;
+        	 }
+        	 var customValidatorList = [];
+        	 $scope.$watch(attrs.ddjfPermission,function(newValue,oldValue){
+        		 if(newValue ===oldValue){return false;}
+        		 if(newValue === 'w'){
+        			 while(ctrl.$formatters.length){
+        				 customValidatorList.push(ctrl.$formatters.shift());
+        				 ctrl.$parsers.shift();
+        			 };
+        			 eval('('+'$scope.'+attrs.ngModel+' = "")');
+    				 ctrl.$setValidity("customValidate", true);
+        		 }else if(newValue === 'b'){
+        			 while(customValidatorList.length){
+        				 var customValidator = customValidatorList.shift();
+        				 ctrl.$formatters.unshift(customValidator);
+        				 ctrl.$parsers.unshift(customValidator);
+        			 }
+        			 ctrl.$modelValue = ctrl.$modelValue === "" ? undefined:ctrl.$modelValue;
+        			 ctrl.$render();
+        		 }
+        	 });
+         } 
+     };
+})
+.directive('ddjfCustomer',['businessFactory',function(businessFactory){
+	return {
+        restrict: "EA",
+        replace: true,
+        scope:{
+          ddjfCustomer:'='
+        },
+        link: function ($scope, element, attrs) {
+        	var relationType = attrs.ddjfRelationType,
+        		customerAttr = attrs.ddjfCustomerAttr;
+        	if($scope.ddjfCustomer && $scope.ddjfCustomer.apply_no){
+        		if(attrs.ddjfOnly == 'Y'){
+        			businessFactory.queryBuyerCustomerInfo($scope.ddjfCustomer.apply_no);
+        		}
+                $scope.$on('ddjf:customerHtml',function(event,data){
+                	 var result =  data.buyerList || [];
+                	 var buyCustomer = null;
+                	 angular.forEach(result,function(customer){
+                		if(customer.relationType == relationType){
+                			buyCustomer = customer;
+                		}
+                	 });
+                	 if(buyCustomer && buyCustomer[customerAttr]){
+                		 element.html(buyCustomer[customerAttr])
+                	 }
+                	 
+                });
+        	}
+        	
+        }
+    };
+}])
+.directive('ddjfTrustCart',['businessFactory',function(businessFactory){
+	return {
+        restrict: "EA",
+        replace: true,
+        scope:{
+        	ddjfTrustCart:'='
+        },
+        link: function ($scope, element, attrs) {
+        	var cardType = attrs.ddjfCardType,
+        		trustCartAttr = attrs.trustCartAttr;
+        	if($scope.ddjfTrustCart && $scope.ddjfTrustCart.apply_no){
+        		if(attrs.ddjfOnly == 'Y'){
+        			businessFactory.queryTrustCardInfo($scope.ddjfTrustCart.apply_no,cardType);
+        		}
+                $scope.$on('ddjf:trustCardHtml',function(event,data){
+                	 var trustCart = data || {};
+                	 if(trustCart && trustCart[trustCartAttr]){
+                		 element.html(trustCart[trustCartAttr])
+                	 } 
+                });
+        	}
+        	
+        }
+    };
+}]).directive('ddjfPreRansomAmount',['businessFactory',function(businessFactory){
+	return {
+        restrict: "EA",
+        replace: true,
+        scope:{
+        	ddjfPreRansomAmount:'='
+        },
+        link: function ($scope, element, attrs) {
+        	var preRansomAttr = attrs.preRansomAttr; 
+        	if($scope.ddjfPreRansomAmount && $scope.ddjfPreRansomAmount.apply_no){
+        		if(attrs.ddjfOnly == 'Y'){
+        			businessFactory.queryPreRansomAmount($scope.ddjfPreRansomAmount.apply_no);
+        		}
+                $scope.$on('ddjf:feeHtml',function(event,data){
+                	var preRansom = data || {};
+                	if('INPUT' == element.get(0).tagName){
+                		element.val(preRansom[preRansomAttr]);
+                	}else{
+                		element.html(preRansom[preRansomAttr]);
+                	}
+                });
+        	}
+        	
+        }
+    };
+}])
+.directive('ddjfMaterial',['businessFactory',function(businessFactory){
+	return {
+        restrict: "EA",
+        replace: true,
+        scope:{
+        	ddjfMaterial:'=',
+        	materialParam:'=?materialParam'
+        },
+        link: function ($scope, element, attrs) {
+        	var typeKey = attrs.materialAttr; 
+        	var productType = attrs.materialType; 
+        	var apply_no = '';
+        	if(!$scope.ddjfMaterial){
+        		$scope.ddjfMaterial = {};
+        		apply_no = $scope.ddjfMaterial.apply_no = attrs.applyAttr || '';
+        	}else if(!$scope.ddjfMaterial.apply_no){
+        		apply_no = $scope.ddjfMaterial.apply_no = attrs.applyAttr || '';
+        	}else {
+        		apply_no = $scope.ddjfMaterial.apply_no ;
+        		if($scope.ddjfMaterial.typeKey){
+        			//另一种姿势获取资料列表
+        			typeKey = $scope.ddjfMaterial.typeKey; 
+        			attrs.materialAttr = typeKey;
+        		}
+        	}
+        	$scope.materialFilter = function(data){
+        		var filterTypeKey = true;
+				angular.forEach(($scope.ddjfMaterial.filterTypes||[]),function(result){
+					if(result == data.typeNo ){
+						filterTypeKey = false;
+					}
+				});
+				return filterTypeKey;
+        	}
+        	if(attrs.ddjfMaterial){
+        		if(typeKey){
+        			businessFactory.queryMaterials(apply_no,typeKey,productType);
+        		}else if($scope.materialParam){
+        			//查询获取需要上传哪些资料
+        			businessFactory.queryMaterialList($scope.materialParam);
+        			$scope.$on('ddjf:materialTypeKey',function(event,data){
+        				var typeKeys = '';
+        				if(angular.isArray(data)){
+        				   typeKeys = data.map(function(v){return v.typeKey}).join(',');
+        				}
+        				attrs.materialAttr = typeKeys;
+        				businessFactory.queryMaterials(apply_no,typeKeys,productType);
+                    });
+        		}
+        		
+        	}
+            $scope.$on('ddjf:materialHtml',function(event,data){
+            	$scope.materials = $scope.ddjfMaterial.materials = data;
+            });
+            
+            $scope.openWindow = function(){
+            	var applyNo = $scope.ddjfMaterial.apply_no;
+            	if(!applyNo){
+            		return false;
+            	}
+            	var typeNo = this.item && this.item.typeNo;
+    			$.openFullWindow(__ctx+'/business/material/imagePage/imagePageView?objectNo='+applyNo+'&typeNo='+typeNo);
+    		}
+            $scope.scanWindow = function(){
+            	var applyNo = $scope.ddjfMaterial.apply_no;
+            	if(!applyNo){
+            		return false;
+            	}
+            	var typeNo = this.item && this.item.typeNo;
+    			$.openFullWindow(__ctx+'/business/material/imagePage/imagePageList?objectNo='+applyNo+'&typeNo='+typeNo);
+    		}
+            
+            $scope.UploadDialog = function() {
+            	var applyNo = $scope.ddjfMaterial.apply_no;
+            	if(!applyNo){
+            		return $.topCall.alert('温馨提示','请保存后再上传资料');
+            	}
+            	var typeKey = this.item && this.item.typeNo || '99';
+        		var conf = {}
+        		var max = conf.max||50,
+        			type = conf.type||"",
+        			size = conf.size||5;
+        			title = conf.title||"附件上传";
+        		var url=__ctx + '/business/material/ddjf-uploadDialog?max=50&size=5&applyNo='+applyNo+'&typeKey='+typeKey;
+        		var dialog = null;
+        		var def = {
+        			passConf : {dialog:dialog},
+        			title : title,
+        			width : 900,
+        			height : 600,
+        			modal : false,
+        			maximizable:true,
+        			resizable : true,
+        			buttons:[{
+        				text:'确定',
+        				handler:function(e){
+        					    var win = dialog.innerWin;
+        					    var scope = win.getData();
+        					    if(!scope){
+        					    	$.topCall.error("获取已上传文件信息时出错");
+        					    	return;
+        					    }
+        					    if(scope.uploader.getNotUploadedItems().length>0){
+        					    	$.topCall.alert("提示信息","有文件尚未上传，请上传该文件或删除该文件.");
+        					    	return;
+        					    }
+        					    if(scope.uploader.queue.length==0){
+        					    	$.topCall.alert("提示信息","至少需要上传一个文件.");
+        					    	return;
+        					    }
+        					    dialog.dialog("close");
+        					    businessFactory.queryMaterials($scope.ddjfMaterial.apply_no,attrs.materialAttr);
+        				}
+        			},{
+        				text:'取消',
+        				handler:function(){dialog.dialog("close");}
+        			}]
+        		};
+        		dialog = $.topCall.dialog({
+        			src:url,
+        			base:def
+        		});
+        	}
+        	
+        	
+        }, templateUrl: 'template/ddjfmaterial.html'
+    };
+}])
+.directive('ddjfMaterialEis',['baseService','materialHelper',function(baseService,materialHelper){
+	return {
+        restrict: "EA",
+        replace: true,
+        scope:{
+        	ddjfMaterialEis:'='
+        },
+        controller:['$scope',function($scope){
+        	var ctrl = this;
+        	ctrl.getMaterialFileList = function(){
+        		var params = {applyNo:$scope.ddjfMaterialEis.applyNo,nodeId:$scope.ddjfMaterialEis.pNodeId,productId:$scope.ddjfMaterialEis.productId};
+        		if(!params.applyNo && !params.productId){
+        			return ;
+        		}
+        		baseService.postForm(__ctx+'/bims/materialFile/getMaterialListInfo',params).then(function(result){
+        			var parentTypeList = [];
+        			if(result.code != 1) {
+        				return ;
+        			}
+        			angular.forEach(result.data.material,function(material){
+            			var materialType = {
+            					typeNo:material.typeNo,
+            					name:material.name,
+            					subMaterial:material.children
+            			}
+            			parentTypeList.push(materialType);
+            		});
+        			for(var i=0;i<parentTypeList.length;i++) {
+        				var subMaterialList = [];
+        				if(parentTypeList[i].typeNo == "M01") {
+        					angular.forEach(parentTypeList[i].subMaterial,function(subMaterial){
+        						var materialDetail = {
+        	        					subName:'',
+        	        					custNo:'',
+        	        					hasRelation:subMaterial.hasRelation,
+        	        					name:subMaterial.name,
+        	        					parentTypeName:subMaterial.parentTypeName,
+        	        					parentTypeNo:subMaterial.parentTypeNo,
+        	        					productId:subMaterial.productId,
+        	        					typeNo:subMaterial.typeNo,
+        	        					count:subMaterial.count,
+        	        					modifyTime:subMaterial.modifytime,
+        	        					operateUser:subMaterial.operateUser
+        	        			}
+        	    				if(subMaterial.hasRelation == 1){
+        	    					angular.forEach(subMaterial.children,function(child){
+        	    						var subMaterialDetail = angular.copy(materialDetail);
+        	    						subMaterialDetail.subName = child.name;
+        	    						subMaterialDetail.custNo = child.custNo;
+        	    						subMaterialDetail.count = child.count;
+        	    						subMaterialDetail.modifyTime = child.modifytime;
+        	    						subMaterialDetail.operateUser = child.operateUser;
+        	    						subMaterialList.push(subMaterialDetail);
+        	    					});
+        	    				}else{
+        	    					materialDetail.subName = subMaterial.name;
+        	    					subMaterialList.push(materialDetail);
+        	    				} 
+        	    			});
+        					parentTypeList[i].subMaterial = subMaterialList;
+        				} 
+        			}
+        			$scope.parentTypeList = parentTypeList;
+        		});
+        		 
+        	}
+        }],
+        link: function ($scope, element, attrs,ctrl) {
+        	if(!$scope.ddjfMaterialEis.applyNo){
+        		$scope.ddjfMaterialEis.applyNo = $scope.ddjfMaterialEis.apply_no;
+        	}
+        	ctrl.getMaterialFileList();
+        	$scope.$on('prodcutId:update',function(event,data){
+        		$scope.ddjfMaterialEis.productId = data.productId;
+        		ctrl.getMaterialFileList();
+        	}) 
+        	$scope.$on('data:saveDraft',function(event,data){ 
+        		ctrl.getMaterialFileList();
+        	});
+            $scope.uploadImage = function() {
+        		var material = this.child || {};
+            	var options= {data:{applyNo:$scope.ddjfMaterialEis.applyNo}};  
+            	if(material.typeNo){
+            		options.data.typeNo = material.typeNo;
+            	}
+            	if(material.custNo){
+            		options.data.custNo = material.custNo;
+            	}
+            	if(!options.data.applyNo){
+            		$.messager.alert("提示信息","请先保存订单信息 ！");
+            		return ;
+            	}
+            	options.callback = function(){
+            		ctrl.getMaterialFileList();
+            	}
+            	materialHelper.uploadMaterialDialog(options);
+        	}
+            
+            $scope.downloadImage = function(){
+            	var material = this.child || {};
+            	var params = {applyNo:$scope.ddjfMaterialEis.applyNo}
+            	if(!+material.count){
+            		$.messager.alert("提示信息","没有可下载资料");
+            		return ;
+            	}
+            	if(material.typeNo){
+            		params.typeNo = material.typeNo;
+            	}
+            	if(material.custNo){
+            		params.typeNo = material.typeNo+"_"+material.custNo;
+            	}
+            	materialHelper.download(params);
+            }
+        	$scope.reviewImage = function(){
+        		var material = this.child || {};
+        		var params = {applyNo:$scope.ddjfMaterialEis.applyNo}
+            	if(!+material.count){
+            		$.topCall.alert("提示信息","没有可查看资料");
+            		return ;
+            	}
+            	if(material.typeNo){
+            		params.typeNo = material.typeNo;
+            	}
+            	if(material.custNo){
+            		params.custNo = material.custNo;
+            	}
+            	materialHelper.review(params);
+        	}
+        	
+        }, templateUrl: __ctx+'/js/platform/include/template/ddjfMaterialEis.html'
+    };
+}])
+var ddjfModel = angular.module('ddjf', ['base','ddjf.template','ddjf.business','ddjfCache','commonCache'])
+    .factory('ddjfFactory', ['$rootScope', 'baseService', function ($rootScope, baseService) {
+    	$.support.storage = ('localStorage' in window && 'sessionStorage' in window);
+        return {
+            init: function (option) { 
+            },
+            queryFormSimpleInfo: function(applyNo){
+            	baseService.post(__ctx + '/business/order/getOrderBaseInfoByApplyNo',{applyNo:applyNo}).then(function(data){
+            		$rootScope.$broadcast('ddjf:formHtml',data);
+            	})
+            }
+        };
+    }])
+    .directive('ddjfFormHeader', ['ddjfFactory', '$filter', function (ddjfFactory, $filter) {
+        return {
+            restrict: "EA",
+            replace: true,
+            scope:{
+              ddjfApplyObj:'='
+            },
+            link: function ($scope, element, attrs) {
+            	$scope.ddjf = {};
+            	$scope.ddjf.apply_order = {}
+            	ddjfFactory.queryFormSimpleInfo($scope.ddjfApplyObj.apply_no);
+                $scope.$on('ddjf:formHtml',function(event,data){
+                	if(data.orderBaseInfoBodyJson){
+                		$scope.ddjf.apply_order = data.orderBaseInfoBodyJson;
+                	}
+                });
+            },
+            templateUrl: 'template/formheader.html'
+        };
+    }])
+    .directive('ddjfFormBar', ['ddjfFactory', '$filter', function (ddjfFactory, $filter) {
+        return {
+            restrict: "EA",
+            
+            link: function ($scope, element, attrs) {
+            	$scope.middleTitle = attrs.ddjfFormBar;
+            },
+            template: '<div class="ddjf-line ddjf-top-title">{{middleTitle}}</div>'
+        };
+    }])
+    .directive('ddjfFormFooter', ['ddjfFactory','commonCacheService' ,function (ddjfFactory,commonCacheService) {
+        return {
+            restrict: "EA",
+            scope:{
+            	ddjfFormFooter:'=',
+                ddjfApplyObj:'='
+            },
+            link: function ($scope, element, attrs) {
+                var panes = $scope.panes = [];
+                if($scope.ddjfApplyObj.apply_no){
+                	var apply_no = $scope.ddjfApplyObj.apply_no,
+                		product_no = '',
+                		cityProducts = commonCacheService.getData('cityProducts');
+                	angular.forEach((cityProducts || []),function(data){
+                		if(apply_no.indexOf(data.key) === 0){
+                			product_no = data.product;
+                		}
+                	})
+                	$scope.ddjfApplyObj.product_no = product_no;
+                	
+                }
+                $scope.addSubTabTable = function (type) {
+                	$scope.$broadcast('ddjf:iframeAdd',$.extend({type:type},$scope.ddjfApplyObj));
+                }
+            },
+            template: ['<div class="ddjf-line ddjf-top-title">资料查看',
+                '</div>',
+                '<div style="padding:10px 20px;">',
+                '<a class="btn btn-primary btn-sm" ng-click="addSubTabTable(\'customer\')"><span>客户信息</span></a>',
+                '<a class="btn btn-primary btn-sm" ng-click="addSubTabTable(\'house\')"><span>房产信息</span></a>',
+                '<a class="btn btn-primary btn-sm" ng-click="addSubTabTable(\'order\')"><span>订单信息</span></a>',
+                '<a class="btn btn-primary btn-sm" ng-click="addSubTabTable(\'risk\')"><span>风控信息</span></a>',
+                '<a class="btn btn-primary btn-sm" ng-click="addSubTabTable(\'fee\')"><span>费用信息</span></a>',
+                '<a class="btn btn-primary btn-sm" ng-click="addSubTabTable(\'material\')"><span>资料管理</span></a>',
+                '</div>',
+                '<tabset>',
+                '</tabset>'].join('')
+        };
+    }])
+    .directive('tabset', function () {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+            	
+            },
+            controller: ["$scope", function ($scope) {
+               var ctrl = this,
+               	   panes = $scope.panes = [];
+                $scope.select = function (pane) {
+                    angular.forEach(panes, function (pane) {
+                        pane.selected = false;
+                    });
+                    pane.selected = true; 
+                } 
+                $scope.checkSubTables = function (type) {
+                    var isLoad = false;
+                    angular.forEach($scope.panes, function (data) {
+                        if (type === data.type) {
+                            isLoad = true;
+                            data.selected = true;
+                            var contentWindow = $('#'+data.type+'Iframe').get(0).contentWindow;
+                            if(contentWindow){
+                            	contentWindow.DDJF && contentWindow.DDJF.initFrameData && contentWindow.DDJF.initFrameData();
+                            }
+                        }else if (data.selected) {
+                            data.selected = false; 
+                        } 
+                    });
+                    return isLoad;
+                }
+                ctrl.addPane = function (pane) {
+                    if (panes.length === 0){
+                    	$scope.select(pane);
+                    }
+                    panes.push(pane);
+                }
+                
+                $scope.$on('ddjf:iframeAdd',function(event,data){
+                	var type = data.type, src = '',title = '';
+                	if(!$scope.checkSubTables(data.type)){
+                		if('customer' === type){
+                			src = __ctx + '/business/order/customerDetail?' + $.param(data) ;
+                			title = '客户信息';
+                		}else if('risk' === type){
+                			src = __ctx +  '/business/order/riskInfo?' + $.param(data) ;
+                			title = '风控信息';
+                		}else if('house' === type){
+                			src = __ctx +  '/business/order/houseDetail?' + $.param(data) ;
+                			title = '房产信息';
+                		}else if('order' === type){
+                			src = __ctx + '/business/order/orderDetail?' + $.param(data) ;
+                			title = '订单信息';
+                		}else if('fee' === type){
+                			src = __ctx + '/business/order/feeInfo?' + $.param(data) ;
+                			title = '费用信息';
+                		}else if('material' === type){
+                			src = __ctx + '/business/material/index?applyNo=' + data.apply_no ;
+                			title = '材料明细';
+                		}
+                		ctrl.addPane({selected:true,active:true,title:title,src:src,type:data.type})
+                	}
+                })
+            }],
+            template :  '<div class="tabbable">' +
+			            '<ul class="nav nav-tabs" style="display:none;">' +
+			            '<li ng-repeat="pane in panes" ng-class="{active:pane.selected}">' +
+			            '<a ng-click="select(pane)">{{pane.title}}</a>' +
+			            '</li>' +
+			            '</ul>' +
+			            '<div class="tab-content ddjf-section" style="height:100%;" ng-class="{active:pane.selected,inactive:!pane.selected}" ng-repeat="pane in panes" >' +
+			            
+			            '<iframe id="{{pane.type}}Iframe" scrolling="auto" frameborder="0"  src="{{pane.src}}" style="width:100%;height:100%;"></iframe>' +
+			           
+			            '</div>' +
+			            '</div>'
+        
+        };
+    }).
+    directive('pane', function () {
+        return {
+            require: '^tabs',
+            restrict: 'E',
+            transclude: true,
+            scope: {title: '@'},
+            link: function (scope, element, attrs, tabsCtrl) {
+                tabsCtrl.addPane(scope);
+            },
+            template: '',
+            replace: true
+        };
+    }).directive('ddjfLitigation',['baseService','dateFilter',function(baseService,dateFilter){
+    	return {
+            restrict: 'AE',
+            replace: true,
+            scope:{
+            	ddjfLitigation:'=',
+            	search:'=',
+                status:'=?status'
+            },
+            link: function ($scope, element, attrs) {
+            	if($scope.status){
+            		//只是展示；
+            		return $(element).remove();
+            	}
+            	//个人诉讼或公司诉讼
+            	var autoSearchParam = {validity:'1',getType:'auto'};
+            	var viewParam = {validity:'1',getType:'view'};
+            	var jsonObject = null;
+            	var apply_no = $scope.ddjfLitigation.apply_no || '';
+            	$scope.area = apply_no.substring(0,2).toLowerCase();
+            	var type = attrs.type;
+        		var url = '';
+        		if(type === 'person'){
+        			url = __ctx + '/bims/risk/plWithTongdun';
+        		}else if(type === 'company'){
+        			url = __ctx + '/business/riskControl/corporationLitigation';
+        		}
+            	$scope.autoSearch = function(){
+        			jsonObject = JSON.stringify($.extend({area:$scope.area,searchParam:$scope.search},autoSearchParam)); 
+     		    	baseService.postForm(url, {
+     			        jsonObject: jsonObject 
+     			    }).then(function(data) {
+     			    	data.query_time = dateFilter(new Date(),'yyyy-MM-dd HH:mm:ss');
+         		    	$scope.$emit('litigation:success',data);
+     			    });
+            	}
+            	
+            	$scope.view = function(){
+            		jsonObject = JSON.stringify($.extend({area:$scope.area,searchParam:$scope.search},viewParam)); 
+            		baseService.postForm(url, {
+         		        jsonObject: jsonObject
+         		    }).then(function(data) {
+         		    	data.query_time = dateFilter(new Date(),'yyyy-MM-dd HH:mm:ss');
+         		    	$scope.$emit('litigation:result',data);
+         		    });
+            	}
+            	
+            },
+            template:'<div style="display:inline-block;"><a class="btn btn-primary" ng-click="autoSearch()"><span>查询</span></a>&nbsp;<a class="btn btn-primary" ng-click="view()"><span>查看</span></a></div>'
+           
+    	}
+    	
+    	
+    }]).directive('ddjfQueryCredit',['$q','baseService','dateFilter',function($q,baseService,dateFilter){
+    	return {
+            restrict: 'AE',
+            replace: true,
+            scope:{
+            	ddjfQueryCredit:'=',
+            	ddjfIsexitHouseno:'=?ddjfIsexitHouseno'
+            },
+            link: function ($scope, element, attrs) {
+            	//征信解析
+            	$scope.status = attrs.status;
+            	var ddjfQueryCredit = $scope.ddjfQueryCredit;
+            	var ddjfIsexitHouseno = !!$scope.ddjfIsexitHouseno; 
+            	var limit = $scope.ddjfQueryCredit.limit;
+            	$scope.uploadAnalysisReport = function(handler){
+            		 
+            		var conf = {},
+	        			max = conf.max || 5,
+	        			type = conf.type || "",
+	        			size = conf.size || 5;
+	        	    	title = conf.title || "附件上传";
+	        	    var params = {max:max,size:size,applyNo:(ddjfIsexitHouseno?ddjfQueryCredit.customer_no:ddjfQueryCredit.apply_no),typeKey:ddjfQueryCredit.customer_no};
+	        	    if(limit){
+	        	    	//限制不允许上传图片
+	        	    	params.limitFileFormates = '*.gif,*.jpg,*.jpeg,*.png,*.GIF,*.JPG,*.JPEG,*.PNG';
+	        	    }
+	        	    var url = __ctx + '/business/material/ddjf-uploadDialog?' +$.param(params);//2017-06-26 人房分离后biz_query_credit表将不存apply_no ,为兼容老数据apply_no为后台的objectNo值取（ ddjfQueryCredit.apply_no?ddjfQueryCredit.apply_no:ddjfQueryCredit.customer_no）征信上传
+	        	    var dialog = null;
+	        	    var def = {
+	        	        passConf: {
+	        	            dialog: dialog
+	        	        },
+	        	        title: title,
+	        	        width: 800,
+	        	        height: 500,
+	        	        modal: true,
+	        	        resizable: true,
+	        	        buttons: [{
+	        	            text: '确定',
+	        	            handler: function(e) {
+	        	            	var win = dialog.innerWin;
+	        	            	var scope = win.getData();
+        					    if(!scope){
+        					     
+        					    	$.topCall.error("获取已上传文件信息时出错。");
+        					    	return;
+        					    }
+        					    if(scope.uploader.getNotUploadedItems().length>0){
+        					    	 
+        					    	$.topCall.alert("提示信息","有文件尚未上传，请上传该文件或删除该文件。");
+        					    	return;
+        					    }
+        					    if(scope.uploader.queue.length==0){
+        					    	 
+        					    	$.topCall.alert("提示信息","至少需要上传一个文件。");
+        					    	return;
+        					    }
+        						dialog.dialog("close");
+        						angular.isFunction(handler) && handler();
+	            	        }},
+	            	        {
+	            	            text: '取消',
+	            	            handler: function() {
+	            	            	dialog.dialog("close"); 
+	            	            }
+	            	        }]
+	            	    };
+	            	    dialog = $.topCall.dialog({
+	            	        src: url,
+	            	        base: def
+	            	    });
+	            	    
+	            	 
+	            	
+            	}
+            	
+            	
+            	$scope.creditAnalysis = function(){
+            		var jsonObject = {cert_no: ddjfQueryCredit.id_card_no,name:ddjfQueryCredit.customer_name,apply_no:ddjfQueryCredit.apply_no,type_no:ddjfQueryCredit.customer_no};
+            		baseService.postForm(__ctx+"/business/riskControl/creditAnalysis_biz",{
+	            		jsonObject: angular.toJson(jsonObject)
+	            	}).then(function(data){
+	            		data.parse_time = dateFilter(new Date(),'yyyy-MM-dd HH:mm:ss');
+	            		$scope.$emit('analysis:success',data);
+					},function(){
+						var data = {parse_time :dateFilter(new Date(),'yyyy-MM-dd HH:mm:ss')};
+	            		$scope.$emit('analysis:error',data);
+					});
+            	}
+            	$scope.analysis = function(){
+            		$scope.uploadAnalysisReport(function(){
+            			//$scope.creditAnalysis();
+            			var data = {};
+            			data.flag2 = true;//标记为最新版本
+            			data.parse_way = "T";
+            			data.parse_time = dateFilter(new Date(),'yyyy-MM-dd HH:mm:ss');
+            			$scope.$apply();
+            			$scope.$emit('analysis:success',data);
+            		});
+            	}
+            	
+            	$scope.getCreditAnalysisResult = function(){
+            		if(ddjfQueryCredit.parse_way == 'Y'){
+            			baseService.postForm(__ctx+"/business/riskControl/getCreditAnalysis",{jsonObject:angular.toJson({reportNo:ddjfQueryCredit.report_no,inputTime:ddjfQueryCredit.parse_time})}).then(function(data){
+            				$scope.$emit('analysis:result',data);
+            			});
+            		}else{
+            			$scope.$emit('analysis:result',null);
+            		}
+            	}
+            	
+            	//记录只保存report_no，需要通过 getCreditAnalysisResult 方法获取征信信息。
+            	$scope.$on('analysis:update',function(event,data){
+            		$scope.getCreditAnalysisResult();
+            	})
+            	
+            	$scope.downloadFile = function(){
+//            		2017-05-26把接口该成直接下载，而不是获取影像服务器地址
+            		var applyNo = ddjfQueryCredit.apply_no; 
+            		if(!ddjfQueryCredit.parse_time){
+            			return $.topCall.alert("温馨提示","请上传征信报告。");
+            		}
+    				var customerNo = ddjfQueryCredit.customer_no;
+    				var downloadUrl = __ctx+'/business/riskControl/filePath?applyNo='+(ddjfIsexitHouseno?ddjfQueryCredit.customer_no:ddjfQueryCredit.apply_no);//2017-06-26 人房分离后biz_query_credit表将不存apply_no ,为兼容老数据apply_no为后台的objectNo值取（ ddjfQueryCredit.apply_no?ddjfQueryCredit.apply_no:ddjfQueryCredit.customer_no）征信上传
+    				if(customerNo){
+    					downloadUrl = downloadUrl +"&typeKey=" + customerNo;
+    				}
+    				var frm = '<form name="download" class="content" method="post" enctype="multipart/form-data" action="'+downloadUrl+'"></form>'
+    				var $frm = $(frm);
+    				$('body').append($frm);
+    				$frm.submit();
+//            		baseService.postForm(__ctx+'/business/riskControl/filePath',{applyNo:ddjfQueryCredit.apply_no,typeKey:ddjfQueryCredit.customer_no}).then(function(data){
+//            			var url = data.replace(/"/g,'');
+//            			var frm = '<form name="download" class="content" method="post" enctype="multipart/form-data" action="'+url+'"></form>'
+//            			var $frm = $(frm);
+//            			$frm.appendTo($('body'));
+//            			$frm.submit();
+//            		})
+            	}
+            },
+            template:'<div style="display:inline-block;margin-left:20px;"><a ng-show="status==\'upload\'" class="btn btn-primary" ng-click="analysis()" ><span>上传</span></a>&nbsp;<a ng-show="status==\'view\'" class="btn btn-primary" ng-click="getCreditAnalysisResult()"><span>查看</span></a>&nbsp;<a class="btn btn-primary" ng-click="downloadFile()"><span>下载</span></a></div>'
+    	}
+    }])
+    .directive('ddjfQueryCreditUpload',['$q','baseService','dateFilter',function($q,baseService,dateFilter){
+    	return {
+            restrict: 'AE',
+            replace: true,
+            scope:{
+            	ddjfQueryCreditUpload:'='
+            },
+            link: function ($scope, element, attrs) {   
+            	$scope.uploadCreditReport = function(){ 
+            		var conf = {},
+	        			max = conf.max || 5,
+	        			type = conf.type || "",
+	        			size = conf.size || 5;
+	        	    	title = conf.title || "附件上传";
+	        	    var params = {max:max,size:size,applyNo:$scope.ddjfQueryCreditUpload.applyNo,custNo:$scope.ddjfQueryCreditUpload.customerNo,typeNo:'M01004'};
+	        	    
+	        	    var url = __ctx + '/bims/materialFile/uploadMaterialDialog?' +$.param(params);
+	        	    var dialog = null;
+	        	    var def = {
+	        	        passConf: {
+	        	            dialog: dialog
+	        	        },
+	        	        title: title,
+	        	        width: 800,
+	        	        height: 500,
+	        	        modal: true,
+	        	        resizable: true,
+	        	        buttons: [{
+	        	            text: '确定',
+	        	            handler: function(e) {
+	        	            	var win = dialog.innerWin;
+	        	            	var scope = win.getData();
+	        	            	if(!scope){ 
+        					    	$.topCall.error("获取已上传文件信息时出错。");
+        					    	return;
+        					    }
+        					    if(scope.uploader.getNotUploadedItems().length>0){ 
+        					    	$.topCall.alert("提示信息","有文件尚未上传，请上传该文件或删除该文件。");
+        					    	return;
+        					    }
+        					    if(scope.uploader.queue.length==0){ 
+        					    	$.topCall.alert("提示信息","至少需要上传一个文件。");
+        					    	return;
+        					    }
+        					    var parse_time = dateFilter(new Date(),'yyyy-MM-dd HH:mm:ss');
+        					    var data = {flag:true,parse_time:parse_time};
+        					    $scope.$emit('analysis:success',data);
+        						dialog.dialog("close");
+	            	        }},
+	            	        {
+	            	            text: '取消',
+	            	            handler: function() {
+	            	            	dialog.dialog("close"); 
+	            	            }
+	            	        }]
+	            	    };
+	            	    dialog = $.topCall.dialog({
+	            	        src: url,
+	            	        base: def
+	            	    });  
+            	}
+            	 
+            	 $scope.download = function(){ 
+            		 if(+new Date() - ($scope.downloadTime || 0)<10000){
+            			 $.topCall.alert("温馨提示","10秒内已发起下载请求");
+            			 return ; 
+            		 }
+            		 $scope.downloadTime = +new Date(); 
+            		 var _params = {applyNo:$scope.ddjfQueryCreditUpload.applyNo,custNo:$scope.ddjfQueryCreditUpload.custNo,typeNo:'M01004'}; 
+            		 url = __ctx+"/business/materialFile/download?"+$.param(_params);
+            		 var frm = '<form name="download" class="content" method="post" enctype="multipart/form-data" action="'+url+'"></form>'
+            			var $frm = $(frm);
+            			$('body').append($frm);
+            			$frm.submit();
+            	 }
+            },
+            template:'<div style="display:inline-block;margin-left:20px;"><a  class="btn btn-primary fa-upload" ng-click="uploadCreditReport()"><span>上传</span></a><a style="margin-left:20px;" class="btn btn-primary fa-download" ng-click="download()"><span>下载</span></a></div>'
+    	}
+    }])
+    .service('feeDefineService',['baseService','$timeout',function(baseService,$timeout){
+		var feeCodeOfCALList = [],dependExprIncVarMap = {},timeout = null;
+    	/**
+    	 * @describe 根据订单获取费项数组
+    	 * @param applyNo
+    	 * @param feeCodeList 
+    	 */
+		this.getOrderFeeDefs = function(applyNo,feeCodeList,weakValidate,productTerm,feeCacluateType){
+			var url = __ctx + '/bimsbase/feeQuery/getOrderFeeDefs';
+			var params = {
+				applyNo :applyNo
+			}
+			if(productTerm){
+				params.productTerm = productTerm;
+			}
+			if(feeCodeList){
+				params.feeCodeList = feeCodeList;
+			}
+			if(weakValidate){
+				params.weakValidate = weakValidate;
+			} 
+			if(feeCacluateType){
+				params.feeCacluateType = feeCacluateType;
+			}
+			return baseService.post(url, params);
+		}
+		this.addFeeCodeAndExprIncVarMap = function(feeCodeCAL,exprIncVarMap,handler){
+			var hasFeeCodeCAL = false;
+			for(var i= 0,feeCode;feeCode =feeCodeOfCALList[i++];){
+				if(feeCode ==feeCodeCAL ){
+					hasFeeCodeCAL = true;
+				}
+			}
+			if(!hasFeeCodeCAL){
+				feeCodeOfCALList.push(feeCodeCAL);
+			}
+			//后面的值优先
+			angular.extend(dependExprIncVarMap,exprIncVarMap);
+			if(timeout) $timeout.cancel(timeout);
+			timeout = $timeout(function() {
+				angular.isFunction(handler) && handler(feeCodeOfCALList,dependExprIncVarMap);
+			},200);
+		}
+		this.resetFeeCodeAndExprIncVarMap = function(){
+			feeCodeOfCALList = [];
+			dependExprIncVarMap = {};
+			timeout = null;
+		}
+		this.calculateOrderFeeDef = function(feeCodeList,feeFactor,exprIncVarMap,weakValidate){
+			var url = __ctx + '/bimsbase/feeQuery/calculateOrderFeeDef';
+			var params = {
+				feeFactor : feeFactor,
+				feeCodeList:angular.isArray(feeCodeList)?feeCodeList:[feeCodeList],
+				exprIncVarMap : exprIncVarMap
+			};
+			if(weakValidate){
+				params.weakValidate = weakValidate;
+			}
+			return baseService.post(url, params);
+		};
+	}])
+    
+    .directive('feeGroup',[function(){
+    	return {
+    		restrict : 'EA',
+    		replace : true,
+    		scope : {
+    			feeGroup : '=',
+    			feeInfo:'=?feeInfo'
+    		},
+    		controller: ["$scope","baseService","$filter","feeDefineService","commonCacheService", function ($scope,baseService,$filter,feeDefineService,commonCacheService) {
+    			var feeCtrl = this;
+				var filter = $filter('filter'); 
+				var orderBy = $filter('orderBy');
+				var extFeeDefine = commonCacheService.getLS("ExtFeeDefine"); 
+				var priceFeeCodeList = extFeeDefine.priceFeeCodeList  || ["contractPrice","channelPrice","rakeBack"]; 
+				//impawnRegisterFee  抵押登记费   stampTaxFee  印花税
+				var itemFeeCodeList = extFeeDefine.itemFeeCodeList || ["remoteTrafficFee","notarizationServiceFee","evaluationServiceFee","impawnRegisterFee","stampTaxFee"];
+				feeCtrl.getFeeDefineInfo = function(feeType){
+					//feeType : ITEM 费项登记 ,ALL :缴费确认，PRIEC 费率登记  
+					feeCtrl.feeType = feeType; 
+					feeCtrl.fillExtraFunction();
+					feeCtrl.queryOrderFeeDefs($scope.feeInfo);
+					
+				};
+				//注入函数获取值功能
+				feeCtrl.fillExtraFunction = function(){
+					if(angular.isObject($scope.$parent.extraFun)){
+						for(var i in $scope.$parent.extraFun){
+							$scope[i] = $scope.$parent.extraFun[i];
+						}
+					}
+				}
+				/**
+				 * @describe 獲取費項定義
+				 * @param orderInfo
+				 * @param feeCtrl.feeType {String} PRICE 保險類費率，PRICE_CSH 現金類費率，ITEM 費項  ALL 繳費確認
+				 *
+				 */
+				feeCtrl.queryOrderFeeDefs = function(orderInfo){ 
+					var feeType = feeCtrl.feeType;
+					var params = {applyNo:$scope.feeGroup.apply_no};
+					if(feeType=='PRICE'){
+						params.feeCodeList = $scope.feeInfo && $scope.feeInfo.feeCodeList || priceFeeCodeList;
+						params.weakValidate = true;
+					}else if(feeType=='PRICE_CSH'){
+						params.feeCodeList = $scope.feeInfo && $scope.feeInfo.feeCodeList || []; 
+						params.weakValidate = true;
+					}else if(feeType=='ITEM'){
+						params.feeCodeList = $scope.feeInfo && $scope.feeInfo.feeCodeList || itemFeeCodeList;
+						params.weakValidate = true;
+					}else{
+						//额，晕
+						params.weakValidate = true;
+					} 
+					if(orderInfo && orderInfo.productTerm){
+						params.productTerm = orderInfo.productTerm;
+					}
+					if($scope.feeInfo && $scope.feeInfo.feeCacluateType){
+						var feeCacluateType = $scope.feeInfo.feeCacluateType;
+					}
+					feeDefineService.getOrderFeeDefs(params.applyNo,params.feeCodeList,params.weakValidate,params.productTerm,feeCacluateType).then(function(data){
+						if(data.code == "0000"){ 
+							if(!data.result || !data.result.feeItemList){
+								$.topCall.alert("温馨提示","遇到未知错误...");
+							}
+							//預處理費項，自由發揮，可以刪除，或添加，或修改
+							$scope.$parent.beforeAddFeeDetailScope && $scope.$parent.beforeAddFeeDetailScope(data); 
+							var feeItemList = data.result.feeItemList;
+							
+							if($scope.feeInfo){
+								$scope.feeInfo.feeItemList = feeItemList;
+							} 
+							//接口不支持根據sortNum 排序 ，因而這裏根據類別+sortNum排序
+							feeItemList = orderBy(feeItemList,feeCtrl.orderByFeeItem);
+							//備份feeFactor
+							$scope.feeGroup.feeFactor = data.result.feeFactor;
+							if(!feeItemList.length){
+								$scope.feeDefineGroup = {};
+								return $scope.$emit('feeDefine:error',data);
+								//$.topCall.alert("温馨提示",angular.toJson(data.result.feeFactor)+"没有配置对应费用信息,请联系管理员");
+							}
+							//在scope查找或添加biz_fee_detial
+							getfeeDetailByFeeDefineNo(feeItemList);
+							//設置是否必填，最大最小值
+							setFeeDetailValidate(feeItemList);
+							//組別歸類
+	    					adjustFeeDefine(feeItemList);
+						}else{
+							$.topCall.alert("温馨提示",data.msg);
+						}
+					},function(){
+						$.topCall.alert("温馨提示","遇到未知错误");
+					})
+				}
+				 
+				//通知需要重新請求
+				$scope.$on('feeDefine:refresh',function(event,data){ 
+					event.preventDefault(); 
+					feeCtrl.queryOrderFeeDefs(data);
+				})
+				
+				//返回數字越大，排得越后
+				feeCtrl.orderByFeeItem = function(feeItem){
+					var sortNum = (extFeeDefine.sortFeeDefine || {})[feeItem.groupName] || 200;
+					return (+feeItem.sortNum || 9)+sortNum;
+				}
+				
+				feeCtrl.setDisabledItem = function(feeItem){
+					//缴费确认除了合同，返佣，渠道，其他都不可编辑，就应该自由发挥的 $scope.$parent.checkDisabledItem 这个方法
+					var disableFeeType = feeCtrl.feeType=='ALL';
+					angular.forEach(priceFeeCodeList,function(feeCode){
+						 if(feeCode === feeItem.feeCode){
+							 disableFeeType = false;
+						 }
+					 }) 
+					return feeItem.feeResultType!='INC' || (angular.isFunction($scope.$parent.checkDisabledItem) ? $scope.$parent.checkDisabledItem(feeItem.feeCode) : disableFeeType);
+				}
+				//判断是否需要前端自己算（简单的可以）
+				feeCtrl.checkSimpleCalculate = function(feeCode){
+					var caculateFeeCodeList = extFeeDefine.caculate;
+					var frontCaculate = false;
+					angular.forEach(caculateFeeCodeList,function(code){
+						if(feeCode==code){
+							frontCaculate = true;
+						}
+					})
+					return frontCaculate;
+				}
+				//判斷當前feeItem 是否為費項登記的feeItem
+				feeCtrl.checkFeeItemFlow = function(feeItem){
+					var isFeeItemFlow = false;
+					angular.forEach(itemFeeCodeList,function(code){
+						if(code == feeItem.feeCode){
+							isFeeItemFlow = true;
+						}
+					});
+					return isFeeItemFlow;
+				}
+				//前端計算
+				feeCtrl.simpleCalculateOrderFeeDef = function(feeCode,exprIncVarMap,modelName){
+					var factor = []; 
+					angular.forEach(exprIncVarMap,function(value){
+						factor.push(value);
+					}) 
+					var feeVal = FormMath.sum(factor) || 0;
+					feeVal = FormMath.toNumber(FormMath.tofixed(feeVal,4));
+					eval("($scope."+modelName+'='+feeVal+")");
+				}
+				//統一請求CAL的費項
+				feeCtrl.totalCalculateOrderFeeDefines = function(feeCodeCALList,dependExprIncVarMap){
+					feeDefineService.calculateOrderFeeDef(feeCodeCALList,$scope.feeGroup.feeFactor,dependExprIncVarMap,true).then(function(data){
+						if(data.code == "0000"){
+							if(!data.result || !data.result.feeItemList){
+								return console.error(data);
+							}
+							angular.forEach(data.result.feeItemList,function(feeItemResult){
+								var feeVal = FormMath.tofixed(feeItemResult.feeVal,4);
+								feeVal = FormMath.toNumber(feeVal);
+								$scope.$eval("feeDetails."+feeItemResult.feeCode + '.fee_value=' + feeVal);
+							});
+							feeDefineService.resetFeeCodeAndExprIncVarMap();
+						}else{
+							$.topCall.alert("温馨提示",data.msg);
+						}
+					},function(){
+						$.topCall.alert("温馨提示","遇到未知错误.");
+					})
+				}
+				//
+				feeCtrl.calculateOrderFeeDef = function(feeCode,exprIncVarMap,modelName){
+					if(feeCtrl.checkSimpleCalculate(feeCode)){
+						//前端求和簡單算法功能
+						return feeCtrl.simpleCalculateOrderFeeDef(feeCode,exprIncVarMap,modelName);
+					}
+					return feeDefineService.addFeeCodeAndExprIncVarMap(feeCode,exprIncVarMap,feeCtrl.totalCalculateOrderFeeDefines);
+					//下面的代碼已經作廢了,將多個請求合并成一個請求。
+				};
+				//这个方法是否需要改下呢?已优化？再优化?坑，没考虑字符问题
+				feeCtrl.getFeeValue = function(feeCode){  
+					var feeDetailList = $scope.feeGroup.sub_biz_fee_detial;
+					//重复的费项，先求和
+					var feeValueList = filter(feeDetailList,function(feeItem){
+						return feeCode == feeItem.fee_define_no && angular.isNumber(feeItem.fee_value);
+					}).map(function(feeItem){
+						return +feeItem.fee_value;
+					});
+					
+					return  FormMath.sum(feeValueList) || 0;
+				}
+				//填充费用值
+				feeCtrl.setFixedFeeValue = function(defList,result,extList){ 
+					var caculateFactor = extFeeDefine.caculateFactor;
+					defList = defList.map(function(item){ return item.split('.')[1];});
+					for(var i = 0,def ; def = defList[i++];){ 
+						if(caculateFactor[def]){
+							 i = i-1;
+							var ext = defList.splice(i,1);
+							extList.push(ext[0]); 
+							result[def] = $scope.$eval(caculateFactor[def]);
+						}else{
+							result[def] = feeCtrl.getFeeValue(def);
+							
+						}
+					}
+				} 
+				//組別歸類
+			 function adjustFeeDefine(data){
+					var group = [];
+					var groupItem = {};
+					var i = 0;
+					while(data.length){
+						var item = data[i]; 
+						if(!groupItem.groupName){
+							groupItem.groupName = item.groupName;
+							groupItem.item = data.splice(i,1); 
+						}else if(groupItem.groupName == item.groupName){
+							groupItem.item.push(data.splice(i,1)[0]);
+						}else{
+							i+=1;
+						}
+						if(i>data.length-1){
+							group.push(groupItem);
+							groupItem = {};
+							i=0;
+						}
+					} 
+					$scope.feeDefineGroup = group;
+					console.log($scope.feeDefineGroup);
+				}
+				
+				function getfeeDetailByFeeDefineNo(data){
+					$scope.feeDetails = {};  
+					angular.forEach(data,function(item){  
+						var temp = setFeeItemWithBo(item);
+						item.disabled = feeCtrl.setDisabledItem(item);
+						item.feeDetail = temp;
+						$scope.feeDetails[item.feeCode] = temp;
+					}); 
+				}
+				//这里就有点复杂啦，看代码算啦。
+				function setFeeItemWithBo(item){
+					var feeDetailBo = $scope.feeGroup.initData.biz_fee_detial;
+					var temp;
+					if(feeCtrl.feeType=='ITEM'){
+						//费项都是新增的,保存是最后一条数据 feeStatus为true表示保存
+						if($scope.feeInfo && $scope.feeInfo.feeStatus){ 
+							var feeDetialList = filter($scope.feeGroup.sub_biz_fee_detial,{fee_define_no:item.feeCode},true);
+							temp = feeDetialList.pop() || angular.copy(feeDetailBo);
+							if(!angular.isNumber(temp.fee_value) && (+item.feeVal>0)){
+								temp.fee_value = +item.feeVal;//
+							}
+						}else{
+							temp = angular.copy(feeDetailBo);
+							$scope.feeGroup.sub_biz_fee_detial.push(angular.extend(temp,{fee_define_no:item.feeCode,fee_name:item.feeName,fee_type: item.feeResultType}));
+							if(!angular.isNumber(temp.fee_value) && (+item.feeVal>0)){
+								temp.fee_value = +item.feeVal;
+							}
+						}
+						
+					}else{
+						var feeDetialList = filter($scope.feeGroup.sub_biz_fee_detial,{fee_define_no:item.feeCode},true);
+						if(feeCtrl.checkFeeItemFlow(item)){
+							//缴费确认的由费项录入的只作求和展示，不保存，但求和结果还是需要保存或更新的
+							temp = angular.copy(feeDetailBo);
+							angular.extend(temp,{fee_define_no:item.feeCode,fee_name:item.feeName,fee_type: item.feeResultType});
+							var actualfeeDetialList = filter(feeDetialList,function(feeDetail){ return angular.isNumber(feeDetail.fee_value);});
+							if(actualfeeDetialList.length){
+								//如果有实际录入的值才求和
+								temp.fee_value = FormMath.sum(actualfeeDetialList.map(function(f){ return +f.fee_value;}));
+							}  
+						}else{
+							if(!feeDetialList.length){
+								temp = angular.copy(feeDetailBo);
+								$scope.feeGroup.sub_biz_fee_detial.push(angular.extend(temp,{fee_define_no:item.feeCode,fee_name:item.feeName,fee_type: item.feeResultType}));
+								if(!angular.isNumber(temp.fee_value) && (+item.feeVal>0) && !$scope.feeGroup.notDefaultFeeValue){
+									temp.fee_value = +item.feeVal;
+								}
+							}else if(feeDetialList.length== 1){ 
+								temp = feeDetialList[0];
+								if(!angular.isNumber(temp.fee_value) && (+item.feeVal>0) && !$scope.feeGroup.notDefaultFeeValue){
+									temp.fee_value = +item.feeVal;
+								}
+							}else{
+								temp = feeDetialList[0];
+								if(!angular.isNumber(temp.fee_value) && (+item.feeVal>0) && !$scope.feeGroup.notDefaultFeeValue){
+									temp.fee_value = +item.feeVal;
+								}
+								console.error("当前费率数据存储问题："+item.feeCode+"、"+feeDetialList.length)
+							} 
+						} 
+					} 
+					return temp;
+				}
+
+				//设置费项的校验
+				function setFeeDetailValidate(data){
+					angular.forEach(data,function(item){
+						var validator = [];  
+						//如果是费率登记的，则必填
+						if($scope.$parent.checkRequiredItem && $scope.$parent.checkRequiredItem(item)){
+							validator.push('"required":true'); 
+						}
+						validator.push('"number":true');
+						//无需添加校验
+						if($scope.$parent.checkNotMinAndMaxValidate && $scope.$parent.checkNotMinAndMaxValidate(item)){ 
+							
+						}else{
+							if((item.minVal=+item.minVal)>0){
+								validator.push('"minvalue":'+item.minVal+'');
+								
+							}
+							if((item.maxVal=+item.maxVal)>0){ 
+								validator.push('"maxvalue":'+item.maxVal+''); 
+							} 
+						}
+						
+						if(validator.length){
+							item.validator = "{"+validator.join(',')+"}";
+							
+						}else{
+							item.validator = "{}";
+						}
+						item.model = 'feeDetails.'+item.feeCode+'.fee_value';
+						item.vars = filter(item.exprIncVars,function(it){
+							
+							return true;
+						}).map(function(c){
+							return 'feeDetails.'+c+'.fee_value';
+						}).join(',');
+						return item;
+					})
+				}
+    					// 监控
+    		}],
+    		link:function($scope,element,attrs,ctrl){ 
+    			ctrl.getFeeDefineInfo(attrs.feeType);
+    		},
+    		templateUrl : function(){
+    			return __ctx + '/js/platform/bims/templates/flows/feedefinegroup.html';
+    		} 
+    	}
+    }]).directive('ddjfFuncexp',['$timeout',function($timeout){
+    	return {
+    		restrict : 'EA',
+    		replace : true,  
+    		require:['^?ngModel','^?feeGroup'],
+    		link : function($scope,element, attrs,ctrls) {
+    			if(ctrls.length<2) return ;
+    			if(!attrs.ddjfFuncVars){
+    				return ;
+    			}
+    			var inputCtrl = ctrls[0];
+    			var feeCtrl = ctrls[1];
+    			$scope.exprIncVarMap = {};
+    			var modelName = attrs.model; 
+    			var funcexp = attrs.ddjfFuncexp;
+    			var funcVars = attrs.ddjfFuncVars;
+    			var watchField = getWatchField(funcVars);
+    			var watchArr = [];
+    			$scope.extField = []; 
+    			//设置从表数据获取的值
+    			feeCtrl.setFixedFeeValue(watchField,$scope.exprIncVarMap,$scope.extField);
+				
+    			for(var i=0,f;f=watchField[i++];){
+    				watch(f);
+    			}
+    			if($scope.extField.length){
+    				//额外字段计算函数
+    				$scope.extCalculateOrderFeeDef = (function(){
+    					var timeout = null;
+    					return function(){
+    						if(timeout) $timeout.cancel(timeout);
+    						timeout = $timeout(function() { 
+    							var feeItemKey = modelName.split('.')[1]; 
+    							feeCtrl.calculateOrderFeeDef(feeItemKey,$scope.exprIncVarMap,modelName);
+	        	            }, 800);
+    					}
+    					
+    				}())
+    				//接收通知需要重新计算
+    				$scope.$on('feeDefine:caculate',function(event,data){ 
+    					event.preventDefault(); 
+    					for(var i =0 ,ext;ext = $scope.extField[i++];){
+    						if(angular.isDefined(data[ext])){
+    							angular.extend($scope.exprIncVarMap,data);
+    							$scope.extCalculateOrderFeeDef();
+    							//只处理一个的变化
+    							break;
+    						}
+    						
+    					}
+    				}) 
+    			}
+    			
+    			//所有公式先算一遍
+				var feeItemKey = modelName.split('.')[1]; 
+				feeCtrl.calculateOrderFeeDef(feeItemKey,$scope.exprIncVarMap,modelName);
+    			 
+    			function getWatchField(funcVars){
+    				var fields = funcVars.split(',');
+    				angular.forEach(fields,function(item){
+    					var key = item.split('.')[1];
+    					$scope.exprIncVarMap[key] = $scope.$eval(item);
+    				})
+    				return fields;
+    				console.log(fields);
+    			} 
+    			function watch(path){
+    			
+    				var timeout = null;
+					var watch = $scope.$watch(path,function(newValue,oldValue,scope) {
+		        		if(newValue!=oldValue){ 
+	        			  	if(timeout) $timeout.cancel(timeout);
+	        			  	if(newValue === undefined){  
+								return ;//验证不通过，则不需要再调接口
+							}
+	        	            timeout = $timeout(function() { 
+	        	            	var feeItemKey = modelName.split('.')[1]; 
+	        	            	var feeChangeItemKey = path.split('.')[1];
+	        	            	$scope.exprIncVarMap[feeChangeItemKey] = newValue; 
+	        	            	feeCtrl.calculateOrderFeeDef(feeItemKey,$scope.exprIncVarMap,modelName);
+	        	            }, 800);
+		        		}
+		        	});
+					watchArr.push(watch);
+				}
+    		}
+    	}
+    }]).directive('ddjfBusinessCreditInfo',['baseService','dateFilter',function(baseService,dateFilter){
+    	return {
+            restrict: 'AE',
+            replace: true,
+            scope:{
+            	ddjfBusinessCreditInfo:'=',
+            	search:'='
+            },
+            link: function ($scope, element, attrs) {
+            	//工商信息
+            	var ddjfBusinessCreditInfo = $scope.ddjfBusinessCreditInfo;
+            	var search = $scope.search;
+                //方法
+            	$scope.autoSearch = function() {
+            		var jsonObject = JSON.stringify({searchParam:search,getType:'auto',apply_no:ddjfBusinessCreditInfo.apply_no,customer_no:ddjfBusinessCreditInfo.customer_no});
+            	    baseService.postForm(__ctx + '/bims/risk/businessInfo', {
+            	        jsonObject: jsonObject 
+            	    }).then(function(data) {
+            	    	data.query_time = dateFilter(new Date(),'yyyy-MM-dd HH:mm:ss');
+            	    	$scope.$emit('businessCredit:success',data);
+            	    },function(){
+            	    	var data = {query_time : dateFilter(new Date(),'yyyy-MM-dd HH:mm:ss')};
+            	    	$scope.$emit('businessCredit:error',data);
+            	    });
+            	}
+            	
+            },
+            template:'<div style="display:inline-block;">&nbsp;<a class="btn btn-primary" ng-click="autoSearch()"><span>查询</span></a>&nbsp;</div>'
+           
+    	}
+    }])
+    .directive('ddjfBankBranch',['baseService','permissionUtil',function(baseService,permissionUtil){
+    	return {
+            restrict: 'AE',
+            replace: true,
+            scope:{
+            	ddjfBankBranch:'='
+            },
+            link: function ($scope, element, attrs) {
+            	//支持根据城市选择银行分行
+            	var getPermission = permissionUtil.getPermission;
+            	var conf = attrs.ddjfBankAttrs;
+            	try{
+            		conf = eval('('+conf+')');
+            	}catch(e){
+            		console.log(e);
+            		return false;
+            	}
+            	if(getPermission("permission.fields."+conf.permission,$scope) == "r"){
+            		$(element).hide();
+            		return ;
+            	}
+            	var dialog = null;
+            	$(element).on('click',function(){ 
+            		 var param = {city_code:$scope.ddjfBankBranch.city_code,company_code:$scope.ddjfBankBranch.company_code};
+            		 if($scope.ddjfBankBranch.v_company_code){
+                         param.v_company_code = $scope.ddjfBankBranch.v_company_code;
+					 }
+            		 var url = __ctx + "/form/customDialog/citysCustomDialog?"+$.param(param);
+            		 var def = {
+            			      title : '银行分行',
+            			      width :  800,
+            			      height :  600,
+            			      modal : true,
+            			      resizable : true,
+            			      buttons : [ {
+            			        text : '确定',
+            			        handler : function(e) {
+            			          var win = dialog.innerWin;// 获取自定义对话框
+            			          var data = win.getResult();// 调用对话框的jsp里面的方法获取结果
+            			          $scope.dialogOk(data,dialog);
+            			          
+            			        }
+            			      }, {
+            			        text : '关闭',
+            			        handler : function() {
+            			        	if(dialog)dialog.dialog('close');
+            			        }
+            			      } ]
+            			    };   
+            		    dialog = $.topCall.dialog({
+            		      src : url,
+            		      base : def
+            		    });
+            	});
+            	
+            	$scope.dialogOk = function(returnData,dialog){
+            		if(dialog){
+            			dialog.dialog('close');
+            		}
+		        	$scope.pushDataToForm(returnData,conf.mappingConf);
+            	};
+            	
+            	$scope.pushDataToForm = function(returnData,mappingConf){
+            		if(!returnData)returnData=[];
+            		if(!$.isArray(returnData)){
+            			returnData= [returnData];
+            		}
+            		for (var i = 0; i < returnData.length; i++) {
+            			for (var int = 0,mapping;mapping= mappingConf[int++];){ 
+    						if(!mapping.from){
+    							continue;
+    						}
+    						var value = returnData[i][mapping.from] || returnData[i][mapping.from.toLowerCase()] ||"";
+    						var targets =mapping.target;
+    						for (var j = 0,target;target= targets[j++];){
+    							var targetArray =target.split(".");
+    							if(targetArray.length===2){
+    								$scope.$parent.data[targetArray[0]][targetArray[1]]=value;
+    							}else if(targetArray.length===3){
+    								if($scope.$parent.item){
+    									$scope.$parent.item[targetArray[2]]=value;
+    								}else{
+    									try{ 
+    										$scope.$parent.$eval(target+'="'+value+'"');
+    									}catch(e){
+    										console.error(e);
+    									}
+    								}
+    							
+    							}
+    							
+    						}
+            			}
+            		}
+            		$scope.$apply();
+            	};
+            } 
+    	};
+    }])
+    .directive('ddjfGetOrderInfo',['baseService',function(baseService){
+    		return {
+    			 restrict: 'EA',
+    			 replace:true,
+    			 scope:{
+    				 ddjfGetOrderInfo:'='
+    			 },
+    			 link: function ($scope, element, attrs) {
+    				 baseService.post(__ctx + '/bims/api/getCityNo',{applyNo:$scope.ddjfGetOrderInfo.apply_no}).then(
+    							function(data,status){  
+    								window.getCityNo=function(){
+    									return data.id;
+    								}
+    							}
+    						); 
+    			}
+    		}
+    		 
+    	}]).directive('ddjfLoanCash',[ 'baseService',function( baseService){
+    		 
+    		 function getLoanInfo(scope,applyNo,houseNo){
+    			 	var url ="";
+    				if(houseNo){
+    					url = __ctx + '/bims/loan/getLoanInfoByHouseNo';
+    				}else{
+    					url = __ctx + '/bims/loan/getLoanInfo';
+    				}
+					var rtn = baseService.post(url,{applyNo:applyNo,houseNo:houseNo});
+					rtn.then(function(data,status){   
+						scope.data = data; 
+					});	  
+    				  
+    		 }	
+	    	function getBtnPermission($scope){
+	    		return $scope.bizBtnPermission
+	    		 ||$scope.$parent.bizBtnPermission
+				 ||($scope.$parent.$parent && $scope.$parent.$parent.bizBtnPermission)
+				 ||($scope.$parent.$parent.$parent && $scope.$parent.$parent.$parent.bizBtnPermission)
+				 ||$scope.bizCashBtnPermission
+				 ||$scope.$parent.bizCashBtnPermission
+				 ||($scope.$parent.$parent&&$scope.$parent.$parent.bizCashBtnPermission)
+				 ||($scope.$parent.$parent.$parent&&$scope.$parent.$parent.$parentbizCashBtnPermission)
+				 ||$scope.btnMortgagePermission
+				 ||$scope.$parent.btnMortgagePermission
+				 ||($scope.$parent.$parent&&$scope.$parent.$parent.btnMortgagePermission)
+				 ||($scope.$parent.$parent.$parent&&$scope.$parent.$parent.$parent.btnMortgagePermission)
+				 ||$scope.btnMfbPermission
+				 ||$scope.$parent.btnMfbPermission
+				 ||($scope.$parent.$parent&&$scope.$parent.$parent.btnMfbPermission)
+				 ||($scope.$parent.$parent.$parent&&$scope.$parent.$parent.$parent.btnMfbPermission);
+	    	}
+    		return {
+    			 restrict: 'EA',
+    			 replace:true,
+    			 scope:{
+    				 ddjfLoanCash:'='
+    			 },
+    			 templateUrl: function(){
+    			    return	 __ctx +'/js/platform/bims/V2/templates/directive/loanInformation.html';
+    			 }, 
+    			 
+    			 link: function($scope, element, attrs) { 
+    				 var ddjfLoan = $scope.ddjfLoanCash;
+    				 var loanInfo = ddjfLoan.loanInfo;
+    				 var loan_type = ddjfLoan.loan_type; 
+    				 var applyNo = loanInfo && loanInfo.apply_no || ddjfLoan.apply_no; 
+    				 var houseNo= loanInfo && loanInfo.house_no || ddjfLoan.house_no;  
+    				 var cityNo = loanInfo && loanInfo.city_no || ddjfLoan.city_no; 
+    				 var companyCode = loanInfo && loanInfo.branch_id || ''; 
+    				 var formStatus = ($scope.$parent && $scope.$parent.$parent && $scope.$parent.$parent.formStatus);
+    				 getLoanInfo($scope,applyNo,houseNo); 
+    				  
+    				 $scope.reload = function(){
+    					 $scope.$emit('order:refresh',null);
+    					 location.reload();
+    				 }
+    				 $scope.permission = getBtnPermission($scope);
+    				 $scope.accountFilter = function(account){ 
+    					 if(!houseNo){
+    						 //1.0的都展示
+    						 return true;
+    					 }
+    					 if(loan_type === 'ori'){
+    						 return account.type=='GLK';
+    					 }
+    					 if(loan_type === 'ransom'){
+    						 return account.type=='SLDKSKK';
+    					 }
+    					 return account.type!='GLK' && account.type!='SLDKSKK';
+    				 }
+    				 $scope.addSupervision=function(readonly){
+	    					//先进行表单的保存操作
+							if($scope.$parent && angular.isFunction($scope.$parent.save)){
+								$scope.$parent.save(true);
+							}
+								
+    						var id = this.item && this.item.id || ''; 
+    						var formKey = 'bizSupervisionCash';
+    						if(houseNo){
+    							formKey = 'supervisionInfo_v2';
+    						}else{
+    							//1.0的cityNo需要window.getCityNo 获取
+    							cityNo = cityNo || (window.getCityNo && window.getCityNo())
+    						}
+    						var param = {
+    								formKey:formKey, 
+    								applyNo:applyNo,
+    								houseNo:houseNo,
+    								id:id,
+    								cityNo:cityNo,
+    								readonly:readonly,
+    								companyCode:companyCode
+    							};
+    						//添加外控权限
+    						if($scope.ddjfLoanCash.v2_form_permission){
+    							param.v2_form_permission = $scope.ddjfLoanCash.v2_form_permission;
+    						}
+    						angular.extend(param,formStatus); 
+    						CustomDialog.openCustomDialogBimsForm({
+    							title:'监管信息',
+    							maximizable:true,
+    							params:param,
+    							readonly:readonly,
+    							beforeSave: function(data){ 
+    								
+    							},
+    							success:function(data,rtn){
+    								if (data.result == '1') {
+    									$.topCall.success("操作成功",function(){ 
+    										 location.reload();
+    									});
+    								} else {   
+    									$.topCall.success(data.message);
+    								}
+    							},error: function(data){
+    								$.topCall.success(data.message);
+    							}
+    						})
+    					};
+    					
+    					$scope.removeSupervision=function(){
+    						var id = this.item && this.item.id || '';
+    						$.topCall.confirm("监管信息删除","确认删除?",function(r){
+    							if(!r){ return ;}
+    							baseService.post(__ctx + "/bims/loan/removeSupervision",{supervisionId:id}).then(
+    								function(data,status){
+    									$.topCall.success("删除成功",function(){
+    										 location.reload();
+    									});
+    								},function(code){
+    									$.topCall.error("删除失败！error:"+code);
+    								}		
+    							);
+    						});
+    						
+    					};
+    					
+    					$scope.addAccount=function(readOnly){
+    						//先进行表单的保存操作 
+  							if(!readOnly && $scope.$parent && angular.isFunction($scope.$parent.save)){
+  								$scope.$parent.save(true);
+  							}
+  							
+    						var id = this.item && this.item.id || ''; 
+    						var formKey = 'bizAccountCash';
+    						if(houseNo){
+    							//1.5用新的业务表单
+    							formKey = 'bizAccountCash_v2';
+    						}else{
+    							//1.0的cityNo需要window.getCityNo 获取
+    							cityNo = cityNo || (window.getCityNo && window.getCityNo())
+    						}
+    						var param = {
+    								formKey:formKey, 
+    								applyNo:applyNo,  
+    								houseNo:houseNo,
+    								id:id,
+    								cityNo:cityNo,
+    								companyCode:companyCode,
+    								loan_type:loan_type
+    							};
+    						//添加外控权限
+    						if($scope.ddjfLoanCash.v2_form_permission){
+    							param.v2_form_permission = $scope.ddjfLoanCash.v2_form_permission;
+    						}
+    						if(readOnly){
+    							param.readonly = readOnly;
+    						}
+    						angular.extend(param,formStatus);
+    						CustomDialog.openCustomDialogBimsForm({
+    							title:'账户信息',
+    							maximizable:true,
+    							params:param,
+    							beforeSave: function(data){ 
+    							},
+    							success:function(data,rtn){
+    								if (data.result == '1') {
+    									$.topCall.success("操作成功",function(){ 
+    										 location.reload();
+    									});
+    								} else {   
+    									$.topCall.error(data.message);
+    								}
+    							},error: function(data){
+    								$.topCall.error(data.message);
+    							}
+    						})
+    						
+    					};
+    					
+    					$scope.removeAccount=function(){
+    						var id = this.item && this.item.id || '';
+    						$.topCall.confirm("账户信息删除","确认删除?",function(r){
+    							if(!r){ return ;}
+    							baseService.post(__ctx + "/bims/loan/removeAccount",{accountId:id}).then(
+    								function(data,status){
+    									$.topCall.success("删除成功",function(){
+    										// 刷 新当前页面  不用请求接口
+    										 location.reload();
+    									});
+    								},function(code){
+    									$.topCall.error("删除失败！error:"+code);
+    								}		
+    							);
+    						});
+    						
+    					};
+    		    
+    			 }
+    		};
+}]).directive('ddjfIdentifyCert',[ 'baseService','dateFilter',function( baseService,dateFilter){
+	return {
+		 restrict: 'EA',
+		 replace:true,
+		 scope:{
+			 ddjfIdentifyCert:'=',
+			 customer:'='
+		 },
+		 template:'<a class="btn btn-primary" style="margin-left: 100px;" ng-click="toIdentifyCertPage()">身份证解析</a>',
+		 link: function ($scope, element, attrs) { 
+			 $scope.setIdentityCertInfo = function(data){
+				 var diff = [];
+				 if(!$scope.customer.name && data.name){
+					 $scope.customer.name = data.name; 
+				 }else if($scope.customer.name && data.name && $scope.customer.name != data.name){
+					 diff.push("客户姓名  ")
+				 } 
+				 if(!$scope.customer.id_card_no && data.idCardNo){
+					 $scope.customer.id_card_no = data.idCardNo; 
+					 $scope.customer.id_card_type = data.idCardType; 
+				 }else if($scope.customer.id_card_no && data.idCardNo && $scope.customer.id_card_no != data.idCardNo){
+					 diff.push("证件号码  ")
+				 }
+				 if(!$scope.customer.id_card_validity && data.idCardValidity){
+					 $scope.customer.id_card_validity = dateFilter(data.idCardValidity,'yyyy-MM-dd'); 
+				 }else if($scope.customer.id_card_validity && data.idCardValidity && $scope.customer.id_card_validity!=data.idCardValidity){
+					 diff.push("证件有效期  ")
+				 } 
+				 if(!$scope.customer.address && data.address){
+					 $scope.customer.address = data.address; 
+				 }else if($scope.customer.address && data.address && $scope.customer.address!=data.address){
+					  diff.push("家庭地址  ")
+				 }
+				 if(diff.length){
+					 diff.unshift("解析的");
+					 diff.push("与填入字段不一致，请核对后修改。");
+				 }
+				 var message =   diff.join("")+ "识别结果：<br/>";
+				 if(data.name){
+					 message+="姓名："+data.name+"<br/>";
+				 }
+				 if(data.idCardNo){
+					 message+="证件号码："+data.idCardNo+"<br/>";
+				 }
+				 if(data.idCardValidity){
+					 message+="证件有效期："+dateFilter(data.idCardValidity,'yyyy-MM-dd')+"<br/>";
+				 }
+				 if(data.address){
+					 message+="地址："+data.address+"<br/>";
+				 }
+				 return $.topCall.alert("识别证件照片成功",message);
+			 }
+			 
+			 $scope.parseIdentityCert = function(images){
+				 var url = __ctx+"/bims/ai/parseIdentityCard";
+				 var filePathJson = angular.toJson(images.map(function(i){ return i.url;}));
+				 var params = {filePathJson:filePathJson};
+				 return baseService.postForm(url,params);
+			 }
+			 $scope.toIdentifyCertPage = function(){ 
+				 var params = {applyNo:$scope.ddjfIdentifyCert.apply_no,customerNo:$scope.ddjfIdentifyCert.customer_no};
+				 var dialog;
+				 var url = __ctx + "/bims/utils/identifyCert?"+$.param(params);
+				 var def = { 
+					      title : '身份证识别',
+					      width : 550,
+					      height :  600,
+					      modal :  false,
+					      left: 1050,
+					      resizable : true,
+					      maximizable :true,
+					      buttons : [ {
+						        text : '马上识别',
+						        handler : function(e) { 
+						        	var win = dialog.innerWin;// 获取自定义对话框
+						        	if(angular.isFunction(win.getResult)){
+						        		var images = win.getResult();
+						        		if(!images.length){
+						        			return $.topCall.error("无识别证件照片");
+						        		}
+						        		 $scope.parseIdentityCert(images).then(function(data){
+						        			 if(!data.success){
+						        				 return $.topCall.error("识别证件照片失败");
+						        			 }
+						        			 $scope.setIdentityCertInfo(data.result); 
+						        		 })
+						        	}
+						        }
+						    },{
+					        text : '选择证件照',
+					        handler : function(e) {  
+					        	$scope.addCertImage(); 
+					        }
+					      }, {
+					        text : '关闭',
+					        handler : function() {
+					        	dialog.dialog('close'); 
+					        }
+					      } ]
+					    };  
+
+				    dialog = $.topCall.dialog({
+				      src : url,
+				      base : def
+				    });
+				    $scope.getIdentifyCertDialog = function(){
+				    	return dialog;
+				    }
+			 } 
+			 
+			 $scope.addCertImage = function() {  
+				 var params = {applyNo:$scope.ddjfIdentifyCert.apply_no,custNo:$scope.ddjfIdentifyCert.customer_no,typeNo:'M01001',max:2};
+				 var dialog;
+				 var url = __ctx + "/bims/materialFile/imagePage/imagePageSelect?"+$.param(params);
+				 var def = { 
+					      title : '资料选择',
+					      width : 800,
+					      height :  600,
+					      modal :  false,
+					      left: 450,
+					      resizable : true,
+					      maximizable :true,
+					      buttons : [ {
+					        text : '确定',
+					        handler : function(e) {  
+					        	var win = dialog.innerWin;// 获取自定义对话框
+					        	if(angular.isFunction(win.getResult)){
+					        		var images = win.getResult();
+					        		 var preWin = $scope.getIdentifyCertDialog().innerWin;
+					        		 if(preWin && angular.isFunction(preWin.setResult)){
+					        			 preWin.setResult(images)
+					        		 }
+					        	}
+					        	dialog.dialog('close');
+					        }
+					      }, {
+					        text : '关闭',
+					        handler : function() { 
+					        	dialog.dialog('close'); 
+					        }
+					      } ]
+					    };  
+	
+				    dialog = $.topCall.dialog({
+				      src : url,
+				      base : def
+				    });  
+			 } 
+			 
+			 
+			 $scope.setBeforeSaveForm = function(){ 
+				 if(angular.isFunction($scope.$parent.beforeSaveForm)){
+					 var beforeSave = $scope.$parent.beforeSaveForm;
+					 $scope.$parent.beforeSaveForm = function(){
+						 if(false === beforeSave()){
+							 return false;
+						 }
+						 return $scope.beforeSaveForm();
+					 }
+				 }else{
+					 return $scope.beforeSaveForm();
+				 }
+			 }
+			 
+			 $scope.beforeSaveForm = function(){ 
+				 var dialog =  $scope.getIdentifyCertDialog && $scope.getIdentifyCertDialog();
+				 //dialog不存在，隐藏
+				 if(!dialog || dialog.closest(".panel.window").is(":hidden") || !dialog.innerWin || !dialog.innerWin.getResult){
+					 $scope.ddjfIdentifyCert.fileIds = undefined;
+					 return true;
+				 }
+				 var fileList = dialog.innerWin.getResult();
+				 if(!fileList.length){
+					 $scope.ddjfIdentifyCert.fileIds = undefined;
+					 return true;
+				 }
+				 $scope.ddjfIdentifyCert.fileIds = fileList.map(function(f){return f.fileId}).join("|"); 
+				 dialog && dialog.dialog('close'); 
+			 }
+			 $scope.setBeforeSaveForm();
+		 }
+	}
+	
+}]).directive('ddjfBankCard',[ 'baseService',function( baseService){
+	return {
+		 restrict: 'EA',
+		 replace:true,
+		 scope:{
+			 ddjfBankCard:'='
+		 },
+		 template:'<a class="btn btn-primary" ng-click="toBankCardPage()">银行卡解析</a>',
+		 link: function ($scope, element, attrs) {
+
+			 $scope.toBankCardPage = function(){
+				 var params = {applyNo:$scope.ddjfBankCard.apply_no, 'typeNo': $scope.ddjfBankCard.type_no};
+				 var dialog;
+				 var url = __ctx + "/bims/utils/bankCard?"+$.param(params);
+				 var def = {
+					      title : '银行卡解析',
+					      width : 550,
+					      height :  600,
+					      modal :  false,
+					      left: 1050,
+					      resizable : true,
+					      maximizable :true,
+					      buttons : [ {
+						        text : '马上识别',
+						        handler : function(e) {
+                                    var win = dialog.innerWin;// 获取自定义对话框
+									if (win.getResult) {
+										var url = win.getResult();
+										baseService.postForm(__ctx + "/bims/bankcard/parse", {fileUrl: url}).then(function (data) {
+                                            if (data) {
+                                                $.topCall.success("解析成功",function(){
+                                                    // console.log(data);
+                                                    $.extend($scope.ddjfBankCard, data);
+                                                    $scope.$apply();
+                                                    // dialog.dialog('close');
+                                                });
+                                            } else {
+                                                $.topCall.success("解析失败");
+                                            }
+										})
+                                	}
+                                }
+						    },{
+					        text : '选择图片',
+					        handler : function(e) {
+					        	$scope.addBankCardImage();
+					        }
+					      }, {
+					        text : '关闭',
+					        handler : function() {
+					        	dialog.dialog('close');
+					        }
+					      } ]
+					    };
+
+				    dialog = $.topCall.dialog({
+				      src : url,
+				      base : def
+				    });
+
+				    $scope.dialog = dialog;
+			 }
+
+			 $scope.addBankCardImage = function() {
+				 var params = {applyNo:$scope.ddjfBankCard.apply_no, 'typeNo': $scope.ddjfBankCard.type_no};
+				 var dialog;
+				 var url = __ctx + "/bims/materialFile/imagePage/imagePageSelect?"+$.param(params);
+				 var def = {
+					      title : '资料选择',
+					      width : 800,
+					      height :  600,
+					      modal :  false,
+					      left: 450,
+					      resizable : true,
+					      maximizable :true,
+					      buttons : [ {
+					        text : '确定',
+					        handler : function(e,v) {
+
+                                var win = dialog.innerWin;// 获取自定义对话框
+                                if(angular.isFunction(win.getResult)){
+                                    var images = win.getFullResult();
+                                    var preWin = $scope.dialog.innerWin;
+                                    if(preWin && angular.isFunction(preWin.setResult)){
+                                        preWin.setResult(images)
+                                    }
+                                }
+					        	dialog.dialog('close');
+					        }
+					      }, {
+					        text : '关闭',
+					        handler : function() {
+					        	dialog.dialog('close');
+					        }
+					      } ]
+					    };
+
+				    dialog = $.topCall.dialog({
+				      src : url,
+				      base : def
+				    });
+			 }
+		 }
+	}
+
+}]) 
+.directive('ddjfGetCustNos',[ 'baseService',function( baseService){
+	return {
+		 restrict: 'EA',
+		 replace:true,
+		 scope:{
+			 ddjfGetCustNos:'='
+		 },
+		 link: function ($scope, element, attrs) { 
+			 var url = __ctx + '/bims/applyOrderInfo/getRelatedCustNos';
+			 baseService.postForm(url,{applyNo:$scope.ddjfGetCustNos.apply_no}).then(function(data) { 
+				 $scope.getCustNos = '';
+				 $scope.getCustData = data;
+				 var customerNos = [];
+				 for(var key in data){  
+					  //不可以修改的时候选择自己
+					  //if($scope.ddjfGetCustNos.customer_no != key){
+						  customerNos.push(key);
+//					  }
+			     } 
+				 $scope.ddjfGetCustNos.cust_nos = $scope.getCustNos = customerNos.join(',');
+				 window.getCustNos=function(){
+					return  $scope.getCustNos;
+				}
+				window.getCustData = function(){
+					return  $scope.getCustData;
+				}
+			 });
+		}
+	}
+	
+}])
+
+//费率登记
+.directive('costMark',['$filter',function($filter){
+	return {
+		restrict : 'EA',
+		replace : true,
+		scope : {
+			costMark : '=',
+			feeInfo:'=?feeInfo'
+		},
+	   controller:["$scope","baseService","commonCacheService","productHelper","$window","$timeout","feeHelperService", function ($scope,baseService,commonCacheService,productHelper,$window,$timeout,feeHelperService) { 
+		   
+		  //通过service注入boData
+		   feeHelperService.setFeeFactorInfo($scope.costMark);
+		   var filter = $filter('filter'); 
+		   $scope.costMark.productHelper = productHelper.init($scope.costMark.product_id);
+		   var costCtrl = this;
+		   var applyNo = $scope.costMark.apply_no; 
+		   var helper = $scope.costMark.productHelper;
+		   var factorTemplateIdList = [];
+		   var feeTemplate = [];
+		   var itemTemplate = [];
+		   var insuranceFeeTemplate = [];
+		   var dataFromFrontEnd = {};
+		   var insuranceFee,productFee,itemFee;
+		   var isFirstRequest;//兼容处理数据，如果是第一次请求为true不清除bo中biz_fee_detail，否则就清空处理
+		   var isVisibleFeeInfo = true;
+		   var hasOnlyCharge = $scope.costMark.productHelper.isJYB || $scope.costMark.productHelper.isTFB || $scope.costMark.productHelper.isDMFB ||$scope.costMark.productHelper.isIMFB || $scope.costMark.productHelper.isZYB || $scope.costMark.productHelper.isDZYB|| $scope.costMark.productHelper.isPMB;
+		   $scope.costMarkList = [];//费率登记
+		   $scope.costItemMarkList = [];//费项登记
+		   $scope.feeDetailList = [];//应收明细
+		   $scope.resultList = [];
+		   $scope.resultListTemp =[];
+		   $scope.feeItemList = []; 
+		   
+		   costCtrl.getfeeDetailByFeeDefineNo = function(data){
+				$scope.feeDetails = {};  
+				angular.forEach(data,function(item){
+					var temp = setFeeItemWithBo(item);
+					item.feeDetail = temp;
+					$scope.feeDetails[item.feeMetadataCode] = temp;
+				}); 
+			}
+		  
+		   //biz_fee_detial表初始化并显示数据
+		   function setFeeItemWithBo(item) {
+			   var feeDetailBo = $scope.costMark.initData.biz_fee_detial;
+			   var temp;
+			   var feeDetialList = filter($scope.costMark.sub_biz_fee_detial,{fee_define_no:item.feeMetadataCode},true);
+			   if(!feeDetialList.length){
+					temp = angular.copy(feeDetailBo);
+					if(item.belongGroupCode == 'fillInFeeItem'){
+						 $scope.feeItemList.push(angular.extend(temp,{fee_define_no:item.feeMetadataCode,fee_name:item.nameShowOnPage,fee_type:(item.feeMetadataType=="计算获取"?'CAL':'INC')}));
+					}else{
+						$scope.costMark.sub_biz_fee_detial.push(angular.extend(temp,{fee_define_no:item.feeMetadataCode,fee_name:item.nameShowOnPage,fee_type:(item.feeMetadataType=="计算获取"?'CAL':'INC')}));
+					}
+					if(!angular.isNumber(temp.fee_value) && (+item.value>=0) ){
+						temp.fee_value = +item.value;
+					}
+				}else if(feeDetialList.length==1){
+					temp = feeDetialList[0];
+					if(!angular.isNumber(temp.fee_value) && (+item.value>=0)){
+						temp.fee_value = +item.value;
+					}
+				}else{
+					console.error("费率异常",feeDetialList);
+				} 
+			   if(temp){
+				   temp.rate_min = item.minValue; 
+				   temp.rate_max = item.maxValue; 
+			   }
+			   return temp;
+		   } 
+		 //对数据进行控制：是否显示默认值，是否可编辑，最大最小值限制
+		   costCtrl.setFeeValueByRule = function(data) { 
+			   angular.forEach(data,function(item){
+				   var validator = [];
+				   //可编辑控制
+				   if(item.isEditable == '0') {
+					   item.disabled = true;
+				   }else{
+					   item.disabled = false; 
+				   }
+				   if(item.belongGroupCode=="fillInFeeRate" && item.isEditable == '1'){
+					   validator.push('"required":true'); 
+				   }
+				   validator.push('"number":true');
+				   //最大值最小值控制
+				   if(!feeHelperService.validLimitFeeRate()){
+					   if(item.minValue ||item.maxValue || item.minValue == '0' || item.maxValue == '0') {
+						   if((item.minValue=+item.minValue)>=0){
+								validator.push('"minvalue":'+item.minValue+'');	
+							}
+							if((item.maxValue=+item.maxValue)>=0){ 
+								validator.push('"maxvalue":'+item.maxValue+''); 
+							} 
+					   } 
+				   }
+				   if(validator.length){
+						item.validator = "{"+validator.join(',')+"}";
+						
+					}else{
+						item.validator = "{}";
+					}
+					item.model = 'feeDetails.'+item.feeMetadataCode+'.fee_value';
+					return item;
+			   })
+		   } 
+		    
+		    
+		   //请求费率模板数据
+		   costCtrl.getCostMarkFeeTemplate = function(){
+			  return feeHelperService.getALLFeeTemplateByProduct();
+		   }
+		   //请求计算接口
+		   costCtrl.getCalculateFeeValue = function(factorTemplateIdList,dataFromFrontEnd){
+			  return feeHelperService.getCalculateFeeValue(factorTemplateIdList,dataFromFrontEnd); 
+		   }
+		   
+		   costCtrl.getFirstRequest = function(orderInfo) {
+			   isFirstRequest = true;
+			   costCtrl.getTemplateInfo(orderInfo);
+		   }
+		   
+		   costCtrl.getTemplateInfo = function(result) {
+			   var feeItemArray = ["remoteTrafficFee","evaluationServiceFee","stampTaxFee","impawnRegisterFee","notarizationServiceFee","otherServiceFee"];
+			   if(!isFirstRequest){ 
+				   $scope.costMark.sub_biz_fee_detial = []; 
+		       }
+			   costCtrl.cancelFeeItem = function(){
+				   $scope.costMarkList = [];
+				   $scope.feeDetailList = [];
+				   $scope.costItemMarkList = [];
+			   }
+			   costCtrl.getCostMarkFeeTemplate().then(function(data){
+				   console.log(data);
+				   if(!data.isSuccess) {
+					   costCtrl.cancelFeeItem();
+					   if(hasOnlyCharge){
+						   isFirstRequest = false;
+					   }
+					   if(isFirstRequest==false){
+						   $.topCall.alert("提示信息",data.msg);
+					   }
+					   return ;
+				   }
+				   
+				   if(data.result.productFee){
+					   feeTemplate = [];
+					   productFee = {feeFactorId:data.result.productFee.feeFactorId,feeTemplateId:data.result.productFee.feeTemplateId,judgmentTimeStr:data.result.productFee.judgmentTimeStr};
+					   feeTemplate=feeTemplate.concat(data.result.productFee.feeAttributeVoList); 
+				   }
+				  
+				   if(data.result.itemFee){
+					   itemTemplate = [];
+					   itemFee = {feeFactorId:data.result.itemFee.feeFactorId,feeTemplateId:data.result.itemFee.feeTemplateId,judgmentTimeStr:data.result.itemFee.judgmentTimeStr};
+					   itemTemplate= itemTemplate.concat(data.result.itemFee.feeAttributeVoList);
+					     
+				   } 
+				  
+				   if(data.result.insuranceFee){
+					   insuranceFeeTemplate = [];
+					   insuranceFee = {feeFactorId:data.result.insuranceFee.feeFactorId,feeTemplateId:data.result.insuranceFee.feeTemplateId,judgmentTimeStr:data.result.insuranceFee.judgmentTimeStr};
+					   angular.forEach(data.result.insuranceFee.feeAttributeVoList,function(fee,index){
+						   if(fee.feeMetadataType == '后台配置'){
+							   data.result.insuranceFee.feeAttributeVoList.splice(index,1);
+						   }
+					   })
+					   insuranceFeeTemplate=insuranceFeeTemplate.concat(data.result.insuranceFee.feeAttributeVoList);
+				   }
+				    
+				   $scope.getAllFeeTemplate();
+			   })
+		   }
+		   $scope.timeInterval = 500;
+			//通知需要重新請求模板
+		    $scope.$on('feeTemplate:refresh',function(event,data){
+		    	if(costCtrl.caculateTimeId){
+		    		$timeout.cancel(costCtrl.caculateTimeId)
+		    	}
+		    	$scope.timeHandler = setTimeout(function() {
+		    		isFirstRequest = false;
+				}, $scope.timeInterval);
+		    	costCtrl.getTemplateInfo(data);
+			})
+			
+			//通知重新请求计算
+			$scope.$on('feeCalculate:refresh',function(event,data){
+				costCtrl.caculateFeeResult(data);
+			})
+			
+			//封装请求计算的数据
+		   $scope.getCalculateParams = function(result) {
+			   factorTemplateIdList=[];
+			   $scope.dataList = [];
+			   var feeItem = ["remoteTrafficFee","evaluationServiceFee","stampTaxFee","impawnRegisterFee","notarizationServiceFee","otherServiceFee","channelServiceFee"];
+			   if(insuranceFee){
+				   factorTemplateIdList.push(insuranceFee);
+			   }
+			   if(productFee){
+				   factorTemplateIdList.push(productFee);
+			   } 
+			   if(itemFee){
+				   factorTemplateIdList.push(itemFee);
+			   }
+			   angular.forEach(feeItem,function(item){
+				   dataFromFrontEnd[item]=0;
+			   })
+			   //将非计算获取数据去除 费项数据也要另外处理
+			   angular.forEach($scope.resultList,function(item){
+				   if(item.feeMetadataType == '计算获取'){
+					   return ;
+				   }
+				   if(item.belongGroupCode=='fillInFeeItem'){
+					   return ;
+				   }
+				   if(item.feeDetail.fee_value && (item.unit=='%')){
+					   dataFromFrontEnd[item.feeMetadataCode]=FormMath.division(item.feeDetail.fee_value,100,8);
+				   }else{
+					   dataFromFrontEnd[item.feeMetadataCode]=item.feeDetail.fee_value;
+				   }
+			   })
+			   //费项数据勾选就进行计算
+			   var itemList= [];
+			   angular.forEach($scope.resultList,function(item){
+				  if(item.belongGroupCode!='fillInFeeItem'){
+					  return ;
+				  }
+				  angular.forEach($scope.costMark.sub_biz_fee_detial,function(a){
+					  if(a.fee_define_no == item.feeMetadataCode){
+						  itemList.push(a);
+					  }
+				  })
+			   })
+			   angular.forEach(itemList,function(item){
+				  dataFromFrontEnd[item.fee_define_no] = item.fee_value;
+			   })
+			   if(result){
+				   	angular.extend(dataFromFrontEnd,result);
+			   }
+			   var otherDataFromFrontEnd = feeHelperService.getOtherDataFromFrontEnd();
+			   
+			   angular.extend(dataFromFrontEnd,otherDataFromFrontEnd);
+			   
+		   }
+		   //判断费项信息的保存
+		    $scope.checkFeeItem = function($event) {
+		    	 var feeDetail = this.item.feeDetail;
+		    	 if($event.target.checked){
+		    		 if(!feeDetail.fee_value  && feeDetail.fee_value!==0){
+		    			 $.topCall.alert("提示信息","费项数据不在收费标准内，请输入正确的值");
+		    			 $event.target.checked = false;
+		    			 return ;
+		    		 }
+		    		 $scope.costMark.sub_biz_fee_detial.push(feeDetail);
+		    	 }else{
+		    		 angular.forEach($scope.costMark.sub_biz_fee_detial,function(item,index){
+			    		 if(item===feeDetail){
+			    			 $scope.costMark.sub_biz_fee_detial.splice(index,1);
+			    		 }
+			    	 })
+		    	 } 
+		    }
+		    
+		   //整合调用不同模板数据
+		   $scope.getAllFeeTemplate = function() {
+			   $scope.resultListTemp =[];
+			   $scope.resultListTemp = $scope.resultListTemp.concat(feeTemplate,itemTemplate,insuranceFeeTemplate);
+			  		   
+			   $scope.resultList=[];
+//			   if(!isFirstRequest){
+//				   $scope.costMark.sub_biz_fee_detial = [];
+//			   }
+			   costCtrl.getfeeDetailByFeeDefineNo($scope.resultListTemp);
+			   angular.forEach($scope.resultListTemp,function(item,index){
+				   if(item.isVisible == '1') {
+					   $scope.resultList.push(item);
+				   }
+			   })
+			   //判断当前是否已经办理过发送放款指令，若已经办理过需将费率登记的各个字段变为不可编辑状态
+			   //费项登记各字段仍旧按照之前的处理
+			   if(feeHelperService.getFeeRateEditStatus()){
+				   for(var i=0,j=$scope.resultList.length;i<j;i++){
+					   if($scope.resultList[i].belongGroupCode =='fillInFeeRate' && $scope.resultList[i].isEditable != '0'){
+						   $scope.resultList[i].isEditable = '0';
+					   }
+				   }
+			   } 
+			   //对数据进行控制：是否显示默认值，是否可编辑
+			   costCtrl.setFeeValueByRule($scope.resultList);  
+			   
+			   $scope.costMarkList=[];
+			   $scope.costItemMarkList=[];
+			   $scope.feeDetailList=[];
+			   //取消最低收费限制时存入数据库的数据也是0
+			   angular.forEach($scope.costMark.sub_biz_fee_detial,function(item){
+				   if($scope.costMark.limitCharge == '1' && (item.fee_define_no == 'minSettlementFee' || item.fee_define_no == 'minChargeAmtForChannel')){
+					   item.fee_value = 0;
+					   console.log("--------最低收费---------",item.fee_define_no);
+				   }	   
+			   })	
+			   if($scope.costMark.service_type == 'JMS'){
+				   feeHelperService.getFeeInfoIsVisible().then(function(data){
+					   if(!data.isSuccess){
+						   isVisibleFeeInfo = true;
+						}
+					   isVisibleFeeInfo = data.result.costMark==='1'?true:false;
+					   angular.forEach($scope.resultList,function(result){
+						  //费率登记
+						  if(result.belongGroupCode == 'fillInFeeRate' && isVisibleFeeInfo){
+							  $scope.costMarkList.push(result);
+						  }
+						  //费项登记
+						  if(result.belongGroupCode == 'fillInFeeItem'){
+							  result.checked = angular.isDefined(result.feeDetail.id); 
+							  $scope.costItemMarkList.push(result);
+						  }
+						  //应收明细
+						  if(result.belongGroupCode == 'receivablesDetailOfCustomer' && isVisibleFeeInfo){
+							  $scope.feeDetailList.push(result); 
+						  }
+					})  
+				   })  
+			   }else{
+				   angular.forEach($scope.resultList,function(result){
+					   //费率登记
+					   if(result.belongGroupCode == 'fillInFeeRate'){
+						   $scope.costMarkList.push(result);
+					   }
+					   //费项登记
+					   if(result.belongGroupCode == 'fillInFeeItem'){
+						   result.checked = angular.isDefined(result.feeDetail.id); 
+						   $scope.costItemMarkList.push(result);
+					   }
+					   //应收明细
+					   if(result.belongGroupCode == 'receivablesDetailOfCustomer'){
+						   $scope.feeDetailList.push(result); 
+					   }
+					})  
+			   }
+			
+			  costCtrl.caculateFeeResult();
+		   }
+		   
+		   costCtrl.caculateFeeResult = (function(){ 
+			   return function(data){
+				   if(costCtrl.caculateTimeId){$timeout.cancel(costCtrl.caculateTimeId)} 
+				   costCtrl.caculateTimeId=$timeout(function(){
+					   $scope.getCalculateParams(data);
+					   $scope.getCalculateResult();
+				   },1000);
+			   }
+		   }())
+		   
+		   //获取计算结果
+		   $scope.getCalculateResult = function(){
+			   if(!factorTemplateIdList.length){
+				   return ;
+			   }
+			   costCtrl.getCalculateFeeValue(factorTemplateIdList,dataFromFrontEnd).then(function(data){
+					 console.log(data);
+					 if(!data.isSuccess){
+						 return;
+					 }
+					 var list = data.result.feeAttributeVoList;
+					 console.log(list);
+//					 costCtrl.getfeeDetailByFeeDefineNo(list);
+					 angular.forEach($scope.costMarkList,function(fee){
+						 angular.forEach(list,function(item){
+							 if(fee.feeMetadataCode == item.feeMetadataCode){
+								 if(item.roundType=="四舍五入" && item.value){
+									 fee.feeDetail.fee_value = +FormMath.tofixed(item.value,4);
+								 }else{
+									 fee.feeDetail.fee_value = item.value;
+								 }
+							 }
+						 })
+					 })
+					 angular.forEach($scope.feeDetailList,function(fee){
+						 angular.forEach(list,function(item){
+							 if(fee.feeMetadataCode == item.feeMetadataCode){
+								 if(item.roundType=="四舍五入" && item.value){
+									 fee.feeDetail.fee_value = +FormMath.tofixed(item.value,4);;
+								 }else{
+									 fee.feeDetail.fee_value = item.value;
+								 }
+							 }
+						 })
+					 })
+					 
+				 	 angular.forEach(list,function(fee){
+						 angular.forEach($scope.costMark.sub_biz_fee_detial,function(item){
+							 if(fee.feeMetadataCode == item.fee_define_no){
+								 item.fee_value = fee.value;
+							 } 
+						 })
+					 })
+				})
+		   }
+		    
+		   
+	   }],
+	   link: function ($scope, element, attrs,ctrl) {
+		   var filter = $filter('filter'); 
+		   ctrl.getFirstRequest($scope.feeInfo); 
+		   $scope.$on('selectQuery:doQuery',function(event,data){
+				event.preventDefault();
+				if(data.alias == 'landProductTermsForFixedTerm' && !data.result.length){
+					$.topCall.alert("温馨提示","该产品项下没有配置固定期限收费方式，请选择其他收费方式");
+					ctrl.cancelFeeItem();
+				}
+			})
+			
+			$scope.$watch("costMark.sub_biz_fee_detial",function(newValue,oldValue){ 
+				   if(newValue){
+					   if(filter(newValue,function(detail){ 
+						   if(detail.fee_type=='CAL'){
+							   //计算结果的费率值发生变化不需要计算
+							   return false;
+						   }
+						   var oldFeeDetail = filter(oldValue,{fee_define_no:newValue.fee_define_no},true)[0] || {};
+						   if(detail.fee_value!=oldFeeDetail.fee_value){
+							  return true;
+						   }
+						   return false;
+					   }).length){
+						   ctrl.caculateFeeResult();
+					   } 
+				   }
+			   },true) 
+	   },
+	   templateUrl : function(){
+			return __ctx + '/js/platform/bims/templates/flows/costMark.html';
+		} 
+	}
+	
+}])
+.directive('costItemMark',['baseService','commonCacheService','$filter','$timeout','feeHelperService',function(baseService,commonCacheService,$filter,$timeout,feeHelperService){
+	return {
+		restrict : 'EA',
+		replace : true,
+		scope : {
+			costItemMark : '=',
+			feeInfo:'=?feeInfo'
+		},
+		link:function($scope,element,attrs,ctrl) {
+			// 通过service注入boData
+			 $scope.itemDetail = {}; 
+			feeHelperService.setFeeFactorInfo($scope.costItemMark);
+			var filter = $filter('filter'); 
+		   
+		    
+		    var feeItemFactor;
+		    var factorTemplateIdList = [];
+		    var dataFromFrontEnd = {};
+		    $scope.costItemList = [];
+		   
+			$scope.getFeeTemplate = function(orderInfo,templateType,templateSubType){
+				return feeHelperService.getFeeTemplate(orderInfo,{templateType:'feeItem'});
+		   }
+			$scope.getfeeDetailByFeeDefineNo = function(data){
+				$scope.feeDetails = {};  
+				angular.forEach(data,function(item){
+					var temp = setFeeItemWithBo(item);
+					item.feeDetail = temp;
+					$scope.feeDetails[item.feeMetadataCode] = temp;
+				}); 
+			}
+		   // biz_fee_detial表初始化并显示数据
+		   function setFeeItemWithBo(item) {
+			   var feeDetailBo = $scope.costItemMark.initData.biz_fee_detial;
+			   var temp;
+			   var feeDetialList = filter($scope.costItemMark.sub_biz_fee_detial,{fee_define_no:item.feeMetadataCode},true);
+			   if(!feeDetialList.length){
+					temp = angular.copy(feeDetailBo);
+					if(item.belongGroupCode && item.belongGroupCode == 'fillInFeeItem'){
+						$scope.costItemList.push(angular.extend(temp,{fee_define_no:item.feeMetadataCode,fee_name:item.nameShowOnPage,fee_type:(item.feeMetadataType=="计算获取"?'CAL':'INC')}));
+					}else{
+						$scope.costItemMark.sub_biz_fee_detial.push(angular.extend(temp,{fee_define_no:item.feeMetadataCode,fee_name:item.nameShowOnPage}));
+					}
+					if(!angular.isNumber(temp.fee_value) && (+item.value>0) ){
+						temp.fee_value = +item.value;
+					}
+				}else if(feeDetialList.length==1){
+					temp = feeDetialList[0];
+					if(!angular.isNumber(temp.fee_value) && (+item.value>0)){
+						temp.fee_value = +item.value;
+					}
+				}else{
+					console.error("费率异常",feeDetialList);
+				} 
+			   return temp;
+		   }
+		   // 判断费项信息的保存
+		    $scope.checkFeeItem = function($event) {
+		    	 var feeDetail = this.item.feeDetail;
+		    	 if($event.target.checked){
+		    		 if(!feeDetail.fee_value  && feeDetail.fee_value!==0){
+		    			 $.topCall.alert("提示信息","费项数据不在收费标准内，请输入正确的值");
+		    			 $event.target.checked = false;
+		    			 return ;
+		    		 }
+		    		 $scope.costItemMark.sub_biz_fee_detial.push(feeDetail);
+		    	 }else{
+		    		 angular.forEach($scope.costItemMark.sub_biz_fee_detial,function(item,index){
+			    		 if(item===feeDetail){
+			    			 $scope.costItemMark.sub_biz_fee_detial.splice(index,1);
+			    		 }
+			    	 })
+		    	 } 
+		    }
+		 // 对数据进行控制：是否显示默认值，是否可编辑，最大最小值限制
+		   $scope.setFeeValueByRule = function(data) { 
+			   angular.forEach(data,function(item){
+				   var validator = [];
+				   // 可编辑控制
+				   if(item.isEditable == '0') {
+					   item.disabled = true;
+				   }else{
+					   item.disabled = false; 
+				   }
+				   validator.push('"number":true');
+				   // 最大值最小值控制
+				   if(item.minValue ||item.maxValue || item.minValue == '0' || item.maxValue == '0') {
+					   if((item.minValue=+item.minValue)>=0){
+							validator.push('"minvalue":'+item.minValue+'');	
+						}
+						if((item.maxValue=+item.maxValue)>=0){ 
+							validator.push('"maxvalue":'+item.maxValue+''); 
+						} 
+				   }
+				   if(validator.length){
+						item.validator = "{"+validator.join(',')+"}";
+						
+					}else{
+						item.validator = "{}";
+					}
+					item.model = 'feeDetails.'+item.feeMetadataCode+'.fee_value';
+					return item;
+			   })
+		   } 
+			$scope.getItemTemplateInfo = function(result) {
+			     $scope.getFeeTemplate(result,"附加费项","费率登记").then(function(data){
+			    	  console.log(data);
+					  if(!data.isSuccess) {
+						   return ;
+					  }
+					  feeItemFactor = {feeFactorId:data.result.feeFactorId,feeTemplateId:data.result.feeTemplateId,judgmentTimeStr:data.result.judgmentTimeStr};
+					  $scope.resultListTemp = data.result.feeAttributeVoList;
+					 // 初始化bo
+					  $scope.getfeeDetailByFeeDefineNo($scope.resultListTemp);
+					   // 对数据进行控制：是否显示默认值，是否可编辑
+					  $scope.setFeeValueByRule($scope.resultListTemp);
+					  $scope.costItemMarkList = [];
+					  angular.forEach($scope.resultListTemp,function(item,index){
+						  item.checked = angular.isDefined(item.feeDetail.id);
+						  if(item.isVisible == '1') {
+							  $scope.costItemMarkList.push(item);
+						   }
+					   })
+					   setFeeDetailSummary($scope);
+			      })
+			   }
+			 $scope.getItemTemplateInfo($scope.feeInfo);
+			  // 不调用计算接口，前端计算
+			 function setFeeDetailSummary($scope){ 
+				var itemDetail = {};
+				accessorialServiceFeeCount = {feeMetadataCode:'accessorialServiceFeeCount',value:'0',nameShowOnPage:'附加服务费合计（元）'};
+				substituteFeeCount = {feeMetadataCode:'substituteFeeCount',value:'0',nameShowOnPage:'代收代付费用合计（元）'};
+				setFeeItemWithBo(accessorialServiceFeeCount);
+				setFeeItemWithBo(substituteFeeCount);
+				var feeItem = ["remoteTrafficFee","evaluationServiceFee","stampTaxFee","impawnRegisterFee","notarizationServiceFee","otherServiceFee"];
+				angular.forEach(feeItem,function(item){
+					   dataFromFrontEnd[item]=0;
+				 })
+				 var itemList =[];
+				 angular.forEach($scope.costItemMarkList,function(item){
+					 angular.forEach($scope.costItemMark.sub_biz_fee_detial,function(a){
+						  if(a.fee_define_no == item.feeMetadataCode){
+							  itemList.push(a);
+						  }
+					  })
+				 })
+				 angular.forEach(itemList,function(item){
+					 dataFromFrontEnd[item.fee_define_no] = item.fee_value;
+				 })
+				 console.log(dataFromFrontEnd.remoteTrafficFee);
+				angular.forEach($scope.costItemMark.sub_biz_fee_detial,function(item){
+					if(item.fee_define_no == 'accessorialServiceFeeCount'){
+						item.fee_value = itemDetail['accessorialServiceFeeCount'] = FormMath.sum([+dataFromFrontEnd.remoteTrafficFee,+dataFromFrontEnd.notarizationServiceFee,+dataFromFrontEnd.evaluationServiceFee,+dataFromFrontEnd.otherServiceFee]);
+					}
+					if(item.fee_define_no == 'substituteFeeCount'){
+						item.fee_value = itemDetail['substituteFeeCount'] = FormMath.sum([+dataFromFrontEnd.impawnRegisterFee,+dataFromFrontEnd.stampTaxFee]);
+					}
+				})
+				$scope.itemDetail = itemDetail;	
+				}
+			   var timeout;
+			   $scope.$watch("costItemMark.sub_biz_fee_detial",function(newValue,oldValue){
+				   if(timeout){$timeout.cancel(timeout)}
+				   if(newValue){
+					   timeout=$timeout(function(){
+						   setFeeDetailSummary($scope);
+					    },500)
+				   }
+			   },true)
+		 
+		},
+		templateUrl : function(){
+				return __ctx + '/js/platform/bims/templates/flows/costItemMark.html';
+			} 
+		}
+}])
+.directive('feeInfoDetail',['baseService','commonCacheService','$filter','$timeout','productHelper','feeHelperService',function(baseService,commonCacheService,$filter,$timeout,productHelper,feeHelperService){
+	return {
+		restrict : 'EA',
+		replace : true,
+		scope : {
+			feeInfoDetail : '=',
+		},
+		link:function($scope,element,attrs,ctrl) {
+			var filter = $filter('filter'); 
+			//通过service注入boData
+			feeHelperService.setFeeFactorInfo($scope.feeInfoDetail); 
+			
+		    var feeItemFactor;
+		    var factorTemplateIdList = [];
+		    $scope.feeItemDetailList = []; 
+		    var feeTemplate=[],itemTemplate=[],insuranceFeeTemplate = [];
+		    var insuranceFee,productFee,itemFee;		     
+		 
+		   $scope.getTemplateDetail = function() {	 
+			 //请求费率模板数据
+			   return feeHelperService.getALLFeeTemplateByProduct().then(function(data){ 
+				   if(!data.isSuccess) { 
+					   return ;
+				   }
+				   
+				   if(data.result.productFee){
+					   feeTemplate = [];
+					   productFee = {feeFactorId:data.result.productFee.feeFactorId,feeTemplateId:data.result.productFee.feeTemplateId,judgmentTimeStr:data.result.productFee.judgmentTimeStr};
+					   feeTemplate=feeTemplate.concat(data.result.productFee.feeAttributeVoList); 
+				   }
+				  
+				   if(data.result.itemFee){
+					   itemTemplate = [];
+					   itemFee = {feeFactorId:data.result.itemFee.feeFactorId,feeTemplateId:data.result.itemFee.feeTemplateId,judgmentTimeStr:data.result.itemFee.judgmentTimeStr};
+					   itemTemplate= itemTemplate.concat(data.result.itemFee.feeAttributeVoList);
+					     
+				   } 
+				  
+				   if(data.result.insuranceFee){
+					   insuranceFeeTemplate = [];
+					   insuranceFee = {feeFactorId:data.result.insuranceFee.feeFactorId,feeTemplateId:data.result.insuranceFee.feeTemplateId,judgmentTimeStr:data.result.insuranceFee.judgmentTimeStr};
+					   insuranceFeeTemplate=insuranceFeeTemplate.concat(data.result.insuranceFee.feeAttributeVoList);
+				   }
+				    
+				   $scope.mergeAllFeeTempalte();
+			   })
+			  
+		   } 
+		   $scope.getFeeDetail = function(data){
+			   $scope.feeDetails = {};  
+				angular.forEach(data,function(item){
+					var temp = $scope.getFeeItemFromBo(item);
+					item.feeDetail = temp;
+					$scope.feeDetails[item.feeMetadataCode] = temp;
+				}); 
+		   }
+		   $scope.getFeeItemFromBo = function(item){
+			   var feeDetailBo = $scope.feeInfoDetail.initData.biz_fee_detial;
+			   var temp;
+			   var feeDetialList = filter($scope.feeInfoDetail.sub_biz_fee_detial,{fee_define_no:item.feeMetadataCode},true);
+			   if(feeDetialList.length==1){
+					temp = feeDetialList[0];
+					if(!angular.isNumber(temp.fee_value) && (+item.value>0)){
+						temp.fee_value = +item.value;
+					}
+				 }else if(feeDetialList.length==0){
+					temp = angular.copy(feeDetailBo);
+					if(item.belongGroupCode == 'fillInFeeItem'){
+						$scope.feeItemDetailList.push(angular.extend(temp,{fee_define_no:item.feeMetadataCode,fee_name:item.nameShowOnPage,fee_value:item.value}));
+					}else{
+						$scope.feeInfoDetail.sub_biz_fee_detial.push(angular.extend(temp,{fee_define_no:item.feeMetadataCode,fee_name:item.nameShowOnPage}));
+					}
+//					if(!angular.isNumber(temp.fee_value) && (+item.value>0) ){
+//							temp.fee_value = +item.value;
+//					}
+				 }else{
+					 console.error("费率异常",feeDetialList);
+				 } 
+			   return temp;
+		   }
+		   $scope.mergeAllFeeTempalte = function(){
+			   $scope.resultListTemp =[];
+			   $scope.resultListTemp = $scope.resultListTemp.concat(feeTemplate,itemTemplate,insuranceFeeTemplate);
+			   console.log($scope.resultListTemp);			   
+			   $scope.resultList=[];
+			   angular.forEach($scope.resultListTemp,function(item,index){
+				   if(item.isVisible == '1') {
+					   $scope.resultList.push(item);
+				   }
+			   })
+			   //初始化bo
+			   $scope.getFeeDetail($scope.resultList);
+			   $scope.costMarkList=[];
+			   $scope.costItemMarkList=[];
+			   $scope.feeDetailList=[];
+			   angular.forEach($scope.resultList,function(result){
+				   //费率登记
+				   if(result.belongGroupCode == 'fillInFeeRate'){
+					   $scope.costMarkList.push(result);
+				   }
+				   //费项登记
+				   if(result.belongGroupCode == 'fillInFeeItem'){
+					   result.checked = angular.isDefined(result.feeDetail.id); 
+					   $scope.costItemMarkList.push(result);
+				   }
+				   //应收明细
+				   if(result.belongGroupCode == 'receivablesDetailOfCustomer'){
+					   $scope.feeDetailList.push(result);
+				   }
+		      }) 
+		   }
+		   $scope.getTemplateDetail();
+		},
+		templateUrl : function(){
+			return __ctx + '/js/platform/bims/templates/flows/feeInfoDetail.html';
+			} 
+		}
+}]).directive('ddjfDataMaterial', [function() {
+	return {
+		restrict : 'EA',
+		replace : true,
+		scope : {
+			ddjfDataMaterial:'='
+		},
+		link : function($scope, element, attrs) { 
+			var $iframe = $('<iframe style="width:95%;height:100%;min-height:500px;max-height:660px;border:none;margin-left:20px;"></iframe>');
+			 var _params = {applyNo:$scope.ddjfDataMaterial.applyNo,nodeId:$scope.ddjfDataMaterial.pNodeId};
+			 if($scope.ddjfDataMaterial.apply_no){
+				 _params.applyNo = $scope.ddjfDataMaterial.apply_no;
+			 } 
+			 if($scope.ddjfDataMaterial.eventType){
+				 _params.eventType = $scope.ddjfDataMaterial.eventType;
+			 } 
+			$iframe.attr('src', __ctx + "/bims/materialFile/materialImage?" + $.param(_params));
+			$(element).append($iframe);
+			function setIframeHeight(iframe){ 
+				if(iframe){
+					try{
+			    		var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+				        if(iframeWin.document.body){ 
+				        	var top  = $(element).offset().top;
+				        	var height =  $(element).closest('body').height();
+//				            iframe.height = (iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight);
+				        	console.log(height-top)
+				            $(iframe).css({"height":(height-top)+"px"})
+				            $left = $(element).closest('body').find('.li1');
+				        	setTimeout(function(){
+					        	if($left.length){ 
+					        		$left.css({"height":(height-top)+"px",display:"inlink-block","min-height":"500px"}).closest("#wrap").css({"height":(height-top)+"px"})
+					        	}
+				        	},1000);
+				        }
+			    	}catch(e){
+			    		
+			    	}
+			    }
+				
+			}
+			 
+			setIframeHeight($iframe.get(0));
+			 
+		}
+	};
+} ]).directive('ddjfCityArea', ['$filter',function($filter) {
+        return {
+            restrict : 'EA',
+            replace : true,
+            priority:2000,
+            scope : {
+                ddjfCityArea:'=',
+				provinceCode:'=?provinceCode',
+                provinceName:'=?provinceName',
+                cityCode:'=?cityCode',
+                cityName:'=?cityName',
+                areaCode:'=?areaCode',
+                areaName:'=?areaName'
+            },
+			template:'<ul ><li style="display: inline-block;padding: 3px 5px 0 5px; margin-top: 10px;"><span>省份:</span> <select ht-select-query="{\'alias\':\'provinceCitizenSelector\',\'valueBind\':\'province_code\',\'labelBind\':\'province_name\'}" ng-model="country.province_code" ng-change="provinceChange()"></select></li><li style="display: inline-block;padding: 3px 5px 0 5px; margin-top: 10px;"> <span>城市:</span><select ht-select-query="{\'alias\':\'cityCitizenSelector\',\'valueBind\':\'district_code\',\'labelBind\':\'district_name\',\'bind\':{\'province_code\':\'country.province_code\'}}" ng-model="country.city_code" ng-change="cityChange()"></select></li><li style="display: inline-block;padding: 3px 5px 0 5px;margin-top: 10px;"> <span>地区:</span><select ht-select-query="{\'alias\':\'areaCitizenSelector\',\'valueBind\':\'district_code\',\'labelBind\':\'district_name\',\'bind\':{\'city_code\':\'country.city_code\'}}" ng-model="country.district_code" ng-change="districtChange()"></select></li></ul>',
+            compile:function compile(tElement,tAttrs,transclude){
+                return{
+                    pre:function preLink($scope,element,attrs,ctrl){
+                        $scope.countryChange = angular.isFunction($scope.$parent.countryChange) ? $scope.$parent.countryChange :function(){}
+                        var filter = $filter('filter');
+                        var country ={province_code: $scope.provinceCode,city_code:$scope.cityCode,district_code:$scope.areaCode};
+                        if($scope.ddjfCityArea && $scope.ddjfCityArea.country){
+                            $scope.country = $scope.ddjfCityArea.country;
+                        }else if($scope.ddjfCityArea){
+                            $scope.country = $scope.ddjfCityArea.country = country;
+                        }else{
+                            $scope.country = country;
+                        }
+                    },
+                    post:function postLink($scope,element,attrs,ctrl){
+                        $scope.$on('selectQuery:doQuery', function(event, data) {
+                            if (data.alias == 'provinceCitizenSelector') {
+                                $scope.provinceList = data.result;
+                            }
+                            if (data.alias == 'cityCitizenSelector') {
+                                $scope.cityList = data.result;
+                            }
+                            if (data.alias == 'areaCitizenSelector') {
+                                $scope.areaList = data.result;
+                            }
+                        });
+                        $scope.provinceChange = function(){
+                            for(var i = 0,province;province = $scope.provinceList[i++];){
+                                if(province.province_code == $scope.country.province_code){
+                                    $scope.provinceName = $scope.country.province_name = province.province_name;
+                                    $scope.provinceCode = $scope.country.province_code;
+                                    $scope.cityCode =$scope.country.city_code =  $scope.cityName  = $scope.country.city_name = undefined;
+                                    $scope.areaCode =$scope.country.district_code =  $scope.areaName  = $scope.country.district_name = undefined;
+                                    break;
+                                }
+                            }
+                            $scope.countryChange($scope.country.province_name,$scope.country.city_name,$scope.country.district_name,$scope.country);
+                        }
+                        $scope.cityChange = function(){
+                            for(var i = 0,city;city = $scope.cityList[i++];){
+                                if(city.district_code == $scope.country.city_code){
+                                    $scope.cityName  = $scope.country.city_name = city.district_name;
+                                    $scope.cityCode =$scope.country.city_code;
+                                    $scope.areaCode =$scope.country.district_code =  $scope.areaName  = $scope.country.district_name = undefined
+                                    break;
+                                }
+                            }
+                            $scope.countryChange($scope.country.province_name,$scope.country.city_name,$scope.country.district_name,$scope.country);
+                        }
+                        $scope.districtChange = function () {
+                            for(var i = 0,area;area = $scope.areaList[i++];){
+                                if(area.district_code == $scope.country.district_code){
+                                    $scope.areaName = $scope.country.district_name = area.district_name;
+                                    $scope.areaCode = $scope.country.district_code;
+                                    break;
+                                }
+                            }
+                            $scope.countryChange($scope.country.province_name,$scope.country.city_name,$scope.country.district_name,$scope.country);
+                        }
+                    }
+                }
+            },
+            link : function($scope, element, attrs) {
+
+              console.log($scope,"link")
+
+            }
+        };
+    } ]).directive('uploadImgRecord',['$q','baseService','$filter','productHelper','$sce',function($q,baseService,$filter,productHelper,$sce){
+        return {
+            restrict : 'EA',
+            template:'<div id="uploadRecord" class="collapse"><div class="block-title"><span class="form-title">补件记录</span></div><div class="panel panel-default" ng-repeat="item in matterInfo.missNodeList"><div class="panel-body"><table class="table-form table-center column-3"><thead><tr class="firstRow"><th style="width: 10%;">补件类型</th><th style="width: 10%;">补件发起时间</th><th style="width: 10%;">补件发起人</th><th style="width: 10%;">补件完成时间</th><th style="width: 10%;">补件人</th><th style="width: 15%;">补件备注</th></tr></thead><tbody><tr><td ng-bind="item.nodeName"></td><td ng-bind="item.createTime | date:&#39;yyyy-MM-dd HH:mm:ss&#39;"></td><td ng-bind="item.createUserName"></td><td ng-bind="item.updateTime | date:&#39;yyyy-MM-dd HH:mm:ss&#39;"></td><td ng-bind="item.handleUserName"></td><td ng-bind="item.feedback"></td></tr></tbody></table><div class="div-form"><table class="table-form table-center column-2"><thead><tr class="firstRow"><th style="width:25%;"><div>资料上传意见</div></th><td colspan="2"><div style="text-align : left" ng-bind-html ="item.remark"></div></td></tr><tr><th style="width:25%;">资料名称</th><th style="width:25%;">资料分类</th><th style="width:50%;">备注信息</th></tr></thead><tbody><tr ng-repeat="material in item.missingMaterialsList"><td ng-bind="material.materialName"></td><td ng-bind="material.materialTypeName"></td><td ng-bind="material.remark"></td></tr></tbody></table></div></div></div><div class="panel-body"><div class="alert" ng-if="!matterInfo.missNodeList || matterInfo.missNodeList.length == 0"><span>无补件记录</span></div></div></div>',
+            scope:{
+                uploadImgRecord:'='
+            },
+            replace : true,
+            link : function($scope, element, attrs) {
+                var nodeName = {"InputInfo":"录入","Investigate":"审查"};
+                $scope.getEisMissMaterialInfo = function() {
+                    $scope.matterInfo = {};
+                    var url = __ctx + "/bims/commentMaterialUpload/getMissingMaterialHistory";
+                    baseService.postForm(url, {'applyNo':$scope.uploadImgRecord.applyNo}).then(function(data) {
+                        if("0000"!=data.code){
+                            console.log(data.msg);
+                            return ;
+                        }
+                        $scope.matterInfo.missNodeList = {};
+                        data.result = data.result.filter(function (value) {
+                            var node = value.node.split("_")[0];
+                            var show = false;
+                            if ($scope.uploadImgRecord.node){
+                            	//过滤展示节点
+                            	show = $scope.uploadImgRecord.node.indexOf(node) > -1;
+							}else {
+                            	//展示
+								show = true;
+                            }
+                            if (show){
+                                value.nodeName = nodeName[node];
+                                value.missingMaterialsList = value.missingMaterialsList.filter(function (m) {
+                                    return m.materialCode !== '000000';
+                                })
+							}
+							return show;
+                        })
+                        
+                        angular.forEach(data.result,function(item){
+                        	var i=1;
+                        	var remarkHtml = item.remark.split("|").map(function(r){
+                        		r = (i++) + '、' + r;
+                        		return r;
+                        	}).join("<br/>"); 
+                        	item.remark = $sce.trustAsHtml(remarkHtml);
+                        })
+                        $scope.matterInfo.missNodeList = data.result;
+                        console.log($scope.matterInfo.missNodeList)
+
+                    });
+                }
+                $scope.getEisMissMaterialInfo();
+            }
+        };
+    }]).directive('uploadMissingImg',['$q','baseService','$filter','productHelper','$sce',function($q,baseService,$filter,productHelper,$sce){
+        return {
+            restrict : 'EA',
+            template:'<div class="div-form" ng-repeat="miss in matterInfo.miss"><div  ng-if = "miss.missingMaterialsList && miss.missingMaterialsList.length >0"><div class="block-title"><span class="form-title">{{miss.nodeName}}待补件</span></div><table class="table-form table-center column-2"><tr><th><div>反馈时间</div></th><td><div ng-bind="miss.createTime | date:&#39;yyyy-MM-dd&#39;"></div></td><th style="width:25%;"><div>反馈人</div></th><td><div ng-bind="miss.createUserName"></div></td></tr><tr><th><div>资料上传意见</div></th><td colspan="3"><div ng-bind-html="miss.remark"></div></td></tr></table><table class="table-form table-center column-2"><tr class="firstRow"><td colspan="3" class="form-title">补件清单</td></tr><tbody><tr ng-repeat="item in miss.missingMaterialsList"><td ng-bind="item.name"></td><td ng-bind="item.parentName"></td><td ng-bind="item.remark"></td></tr></tbody></table></div></div>',
+            scope:{
+                uploadMissingImg:'='
+            },
+            replace : true,
+            link : function($scope, element, attrs) {
+                var nodeName = {"InputInfo":"录入","Investigate":"审查"};
+                var filter = $filter('filter');
+                $scope.matterInfo = {missNodeId:'InputInfo'};
+                $scope.getMissMaterialInfo = function() {
+                    var url = __ctx + "/bims/commentMaterialUpload/getEisMissMaterialInfo";
+                    baseService.postForm(url, {'applyNo':$scope.uploadMissingImg.applyNo}).then(function(data) {
+                        if("0000"!=data.code){
+                            return ;
+                        }
+                        angular.forEach(data.result,function (value,key) {
+                            value.nodeName = nodeName[key];
+                            var remark = value.remark || '';
+							if(key == 'Investigate'){
+								remark = remark.split("|").map(function(r){
+									var rList = r.split("-");
+									return "<div>"+(rList[0]||"")+ (rList.length == 3? "--":"") +(rList[2]||"")+"</div>";
+								}).join('');
+							}
+                            value.remark=$sce.trustAsHtml(remark);
+                        })
+                        $scope.matterInfo.miss = data.result;
+                        $scope.matterInfo.imageList = $scope.matterInfo.miss.imageList;
+                        delete $scope.matterInfo.miss.imageList;
+                        $scope.uploadMissingImg.matterInfo = $scope.matterInfo;
+                    });
+                }
+                $scope.getMissMaterialInfo();
+            }
+        };
+    } ])
+.service('houseHelperService',['$rootScope',function ($rootScope) {
+	this.addPropertyCompany = function (scope,company) {
+        $.topCall.prompt('添加公司', '请输入产权所属公司的名字', function(value) {
+        	if (value || value === '') {//点击确定，且有值 || 点击确定，且无值
+        		scope.$apply(function(){
+                    company.type = "PUBLIC";
+                    company.name = value;
+                    company.customer_no = undefined;
+    			 })
+        	} else {//点击取消
+        		console.log('点击取消');
+        	}
+        })
+    }
+}])

@@ -1,0 +1,3 @@
+AngularUtil.getChildScope()
+-. . -..- - / . -. - .-. -.--
+AngularUtil.getChildScope().data

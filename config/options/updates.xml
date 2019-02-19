@@ -1,6 +1,8 @@
 <application>
   <component name="UpdatesConfigurable">
-    <option name="LAST_BUILD_CHECKED" value="DB-182.4129.19" />
-    <option name="LAST_TIME_CHECKED" value="1535869046358" />
+    <option name="LAST_BUILD_CHECKED" value="IU-183.5912.2" />
+    <option name="LAST_TIME_CHECKED" value="1550567048298" />
+    <option name="THIRD_PARTY_PLUGINS_ALLOWED" value="true" />
+    <option name="UPDATE_CHANNEL_TYPE" value="eap" />
   </component>
 </application>

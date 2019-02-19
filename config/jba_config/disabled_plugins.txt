@@ -32,4 +32,13 @@ org.jetbrains.plugins.javaFX
 org.jetbrains.plugins.sass
 org.jetbrains.plugins.stylus
 spy-js
-com.intellij.bigdecimal-folding
+Pythonid
+Key promoter
+com.vladsch.idea.multimarkdown
+com.ccnode.codegenerator.MyBatisCodeHelperPro
+com.seventh7.plugin.mybatis
+Geronimo
+CloudFoundry
+PerforceDirectPlugin
+JBoss
+com.intellij.uiDesigner

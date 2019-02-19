@@ -1,0 +1,928 @@
+﻿/*******************************************************************************
+ * EasyUI的常用方法封装
+ *
+ * <pre>
+ * 作者：loxw
+ * 邮箱:
+ * 日期:2015-5-8
+ * 版权：广州宏天软件有限公司版权所有
+ * </pre>
+ *
+ ******************************************************************************/
+var ui = __ctx;
+// EasyUI的封装通用工具类
+var HT = function () { }
+// EasyUI共性配置
+var $defaultPageSize=10;
+var $defaultPageList=[5,10, 15, 20, 30, 40, 50, 100];
+var $defaultOptions={
+    fit: true,
+    fitColumns: true,
+    pagination: true,
+    autoRowHeight: false,
+    toolbar: '#gridSearch',
+    pageSize: $defaultPageSize,
+    pageList: $defaultPageList,
+    rownumbers: true,
+    striped : false,
+    onLoadSuccess: function () {
+    	handGridLoadSuccess();
+    }
+}
+
+var $defaultOptionsNoPage={
+	    fit: true,
+	    fitColumns: true,
+	    autoRowHeight: false,
+	    toolbar: '#gridSearch',
+	    rownumbers: true,
+	    striped : false,
+	    onLoadSuccess: function () {
+	    	handGridLoadSuccess();
+	    }
+	}
+
+/** ********************窗口相关操作的封装************************* */
+
+// 窗口相关操作
+HT.window = {
+    openEdit: ht_openEdit,
+    openTopEdit: ht_openTopEdit,
+    closeEdit: ht_closeEdit,
+    closeTopEdit: ht_closeTopEdit,
+    close: ht_close,
+    closeBlankWindow: ht_closeBlankWindow,
+    getParentWinNumber: ht_getParentWinNumber,
+    getTopParentWin: ht_getTopParentWin,
+    showMsg: ht_showMsg,
+    showTopMsg: ht_showTopMsg,
+    showWarnMsg: ht_showWarnMsg,
+    showLeftBelowMsg: ht_showLeftBelowMsg,
+    confirm: ht_confirm,
+    topConfirm: ht_topConfirm,
+
+    refreshParentGrid: ht_refreshParentGrid,
+    refreshTargetGrid: refreshTargetGrid,
+    refreshParent: ht_refreshParent,
+    refreshTargetTree: ht_refreshTargetTree,
+    removeParentGridHeadCheckbox: ht_removeParentGridHeadCheckbox,
+    removeTargetGridHeadCheckbox: removeGridHeadCheckbox
+
+}
+
+HT.grid = {
+    deleteList: ht_DeleteList,
+    removeTargetGridHeadCheckbox: removeGridHeadCheckbox,
+    refreshTargetGrid: refreshTargetGrid,
+    getGridSelectedField: ht_GetGridSelectedField,
+    resetSearch: ht_ResetSearch
+
+}
+
+HT.form = {
+    submitForm: ht_submitForm,
+    bindDataToForm: ht_bindDataToForm,
+    dataFormatter: dataFormatter,
+    loadFormSpantext: loadFormSpantext,
+    loadFormData: loadFormData,
+    validateForm: validateForm,
+    setReadOnly: ht_setReadOnly,
+    dateboxSetValue: ht_DateboxSetValue,
+    dateboxGetValue: ht_DateboxGetValue,
+    setComboboxValues: ht_ComboboxSetValues,
+    setComboboxValue: ht_ComboboxSetValue
+
+}
+HT.formAction = {
+    Add: "add",
+    Edit: "edit",
+    View: "View",
+    Unknown: "Unknown",
+
+}
+
+HT.method = {
+    // 根据SQL获取Json数据，返回数据格式[{Value:"",Text:""}]，参数sql:XXX
+    getTextValueDataJsonBySql: "GetTextValueDataJsonBySql",
+    // 根据SqlKey获取Json数据，返回数据格式[{Value:"",Text:""}]，参数sql:XXX
+    getTextValueDataJsonBySqlKey: "GetTextValueDataJsonBySqlKey",
+    // 默认列表数据源请求的方法
+    listJsonMethod: "listJson.ht"
+}
+HT.handlers = {
+    dataGridController: ui + "/platform/system/sysDatagrid/"
+
+}
+
+// 通用数据源
+HT.data = {
+    dataTypeEditor: {
+        type: "combobox",
+        options: {
+            valueField: 'value',
+            textField: 'text',
+            data: [{
+                "text": "整型[int]",
+                "value": "int"
+            }, {
+                "text": "浮点型[float]",
+                "value": "float"
+            }, {
+                "text": "浮点型[decimal]",
+                "value": "decimal"
+            }, {
+                "text": "字节型[nvarchar]",
+                "value": "nvarchar"
+            }, {
+                "text": "字符型[varchar]",
+                "value": "varchar"
+            }, {
+                "text": "定长字符[char]",
+                "value": "char"
+            }, {
+                "text": "GUID",
+                "value": "uniqueidentifier"
+            }, {
+                "text": "布尔[bit、bool]",
+                "value": "bit"
+            }, {
+                "text": "时间[datetime]",
+                "value": "datetime"
+            }, {
+                "text": "日期[date]",
+                "value": "date"
+            }]
+        }
+    },
+    searchParamaterEditor: {
+        type: "combobox",
+        options: {
+            valueField: 'value',
+            textField: 'text',
+            data: [{
+                "text": "字符串 精准匹配[S]",
+                "value": "S"
+            }, {
+                "text": "字符串 模糊查询[SL]",
+                "value": "SL"
+            }, {
+                "text": "字符串 左模糊查询[SLL]",
+                "value": "SLL"
+            }]
+        }
+    },
+    alignEditor: {
+        type: "combobox",
+        options: {
+            valueField: 'value',
+            textField: 'text',
+            data: [{
+                "text": "left",
+                "value": "left"
+            }, {
+                "text": "center",
+                "value": "center"
+            }, {
+                "text": "right",
+                "value": "right"
+            }]
+        }
+    },
+    sourceTypeEditor: {
+        type: "combobox",
+        options: {
+            valueField: 'value',
+            textField: 'text',
+            data: [{
+                "text": "url[url地址]",
+                "value": "url"
+            }, {
+                "text": "sql[sql语句]",
+                "value": "sql"
+            }, {
+                "text": "mapkey[MyBatis配置key]",
+                "value": "mapkey"
+            }, {
+                "text": "table[数据库表]",
+                "value": "table"
+            }, {
+                "text": "viewtable[数据库视图]",
+                "value": "viewtable"
+            }]
+        }
+    },
+    editorTypeEditor: {
+        type: "combobox",
+        options: {
+            valueField: 'value',
+            textField: 'text',
+            data: [{
+                'text': '',
+                'value': ''
+            }, {
+                'text': '数据字典',
+                'value': 'dic'
+            }, {
+                'text': 'sql对象',
+                'value': 'sql'
+            }, {
+                'text': 'js对象',
+                'value': 'object'
+            }]
+
+        }
+
+    },
+    configTypeData: [],
+    createrComboboxEditor: _createrComboboxEditor
+}
+
+var dataTypeEditor = HT.data.dataTypeEditor;
+var searchParamaterEditor = HT.data.searchParamaterEditor;
+var alignEditor = HT.data.alignEditor;
+var sourceTypeEditor = HT.data.sourceTypeEditor;
+var editorTypeEditor = HT.data.editorTypeEditor;
+
+$configTypeData = []; 
++ function ($) {
+    // ConfigType数据源格式[{configType:"aaa",data:[{text:"",value:"",Flag:"",ConfigKey:"",ParentConfigKey:"",OrderNo:""}]}]
+//    var url = HT.Handlers.dataGridController;
+//    $ConfigTypeData = Object.toAjaxJson(url, "getDataDict", null);
+//    HT.data.ConfigTypeData = $ConfigTypeData;
+
+}(window.jQuery);
+
+HT.string = {
+    // Grig工具栏分隔符
+    btn_separator: "<span class='datagrid_btn_separator'></span>"
+}
+
+// 创建下框列表编辑器对象 arrData传入数据格式，必传,如：[{ "text": "整型[int]", "value": "int" }, {
+// "text": "浮点型[float]", "value": "float" }]
+// 默认:valueField：Value，textField：Text
+function _createrComboboxEditor(arrData, valueField, textField) {
+    valueField = valueField || 'value';
+    textField = textField || 'text';
+    var editor = {
+        type: "combobox",
+        options: {
+            valueField: valueField,
+            textField: textField,
+            data: arrData
+        }
+    }
+    return editor;
+}
+// 私有通用打开窗口
+function _openEdit(url, title, mainTable, formAction, keyId, parentGridId, width, height, options) {
+    if (width) {
+        if (!isNaN(width))
+            width = width + "px";
+    }
+    if (height) {
+        if (!isNaN(height))
+            height = height + "px";
+    }
+    parentGridId = parentGridId || "";
+    var theWidth = width || "640px";
+    var theHeight = height || "350px";
+    var theUrl = url;
+    if (formAction) {
+        theUrl = url + "";
+
+        if (theUrl.indexOf("?") > -1) {
+            theUrl = theUrl + "&parentGridId=" + parentGridId;// + "&formAction=" + formAction;
+        } else {
+            theUrl = theUrl + "?parentGridId=" + parentGridId;// + "&formAction=" + formAction;
+        }
+        if (keyId != null && keyId != undefined && url.indexOf("keyId") == -1)
+            theUrl = theUrl + "&keyId=" + keyId;
+        if (mainTable && mainTable != "")
+            theUrl = theUrl + "&mainTable=" + mainTable;
+
+    }
+    if ($("#editWindow")[0])
+        $("#editWindow").remove();
+    var iframe;
+    iframe = $('<iframe src="' + theUrl + '" frameborder="0" style="border:0;width:100%;height:96%; "></iframe>');
+    var div = $("#editWindow")[0] ? $("#editWindow") : $('<div id="editWindow"     style="width:' + theWidth + ';height:' + theHeight + '"  ></div>');
+    var default_options = {
+        title: title,
+        border: false,
+        fit: false,
+        resizable: true,
+        content: iframe,
+        maximizable: true,
+        minimizable: false,
+        collapsible: false,
+        modal: true,
+        cache: false
+
+    }
+    div.window($.extend(default_options, options));
+
+}
+
+// 打开窗口
+// url地址 title标题 formAction窗口动作：Add新增，Edit修改，View查看；
+// parentGridId 列表的Grid列表ID值,没有时传null,主要为了让编辑窗口关闭时自动刷新父页面的Grid列表
+// （width：宽度，默认400px）（height：高度，默认350px）
+// options EasyUI的窗口options参数格式为Json格式，默认已初始
+// mainTable 自动保存的主表名
+// keyId 主键值
+// isFitWindow 是否为固定的最大化窗口
+function ht_openEdit(url, title, formAction, parentGridId, width, height, options, mainTable, keyIdValue, isFitWindow) {
+    mainTable = mainTable || null;
+    keyId = keyIdValue || null;
+    isFitWindow = isFitWindow || false;
+    if (isFitWindow != false) {
+        if (options)
+            options.fit = isFitWindow;
+        else
+            options = {
+                fit: isFitWindow
+            }
+    }
+    _openEdit(url, title, mainTable, formAction, keyId, parentGridId, width, height, options);
+}
+
+function ht_openTopEdit(url, title, formAction, parentGridId, width, height, options, mainTable, keyIdValue, isFitWindow) {
+    mainTable = mainTable || null;
+    keyId = keyIdValue || null;
+    parentGridId = parentGridId || "";
+    var theWidth = width || 640;
+    var theHeight = height || 350;
+    var theUrl = url;
+    if (formAction) {
+        theUrl = url + "";
+        if (theUrl.indexOf("?") > -1) {
+            theUrl = theUrl + "&parentGridId=" + parentGridId; //+ "&formAction=" + formAction;
+        } else {
+            theUrl = theUrl + "?parentGridId=" + parentGridId; //+ "&formAction=" + formAction;
+        }
+        if (keyId != null && keyId != undefined && url.indexOf("keyId") == -1)
+            theUrl = theUrl + "&keyId=" + keyId;
+        if (mainTable && mainTable != "")
+            theUrl = theUrl + "&mainTable=" + mainTable;
+
+    }
+    var dialog = window.parent.$("#window");
+    if (dialog.length == 0 || (dialog.length == 1 && dialog.dialog.options.parentWindow == window)) {
+        var winId = "window"; // ht_getParentWinNumber(window);
+        var dialog = $.topCall.dialog({
+            src: theUrl,
+            base: {
+                width: theWidth,
+                // 此ID非常重要，需要根据当前窗口加上有几级上级父窗口去得到对应的ID，解决多层弹出窗口问题
+                id: winId,
+                height: theHeight,
+                title: title,
+                modal: true
+            }
+        });
+    } else {
+        ht_openEdit(url, title, formAction, parentGridId, width, height, options, mainTable, keyIdValue, isFitWindow);
+    }
+
+}
+
+// 获取父级窗口数
+var topN = 0;
+
+function ht_getParentWinNumber(currentWin) {
+    topN = 0;
+    return $_getParentWinNumber(currentWin);
+}
+
+function $_getParentWinNumber(currentWin) {
+    var win = currentWin ? currentWin : window;
+    if (win.parent != win) // 找到最顶层窗口
+    {
+        topN++
+        return $_getParentWinNumber(win.parent);
+    }
+    return topN;
+}
+
+// 获取最顶级窗口对象
+// currentWin：当前窗口对象
+function ht_getTopParentWin(currentWin) {
+    var win = currentWin ? currentWin : window;
+    if (win.parent != win) // 找到最顶层窗口
+        return ht_getTopParentWin(win.parent);
+    return win;
+}
+
+// 关闭窗口：isRefreshParentGrid是否刷新父页面的Grid 默认否，Grid的ID，默认grid
+function ht_closeEdit(isRefreshParentGrid, parentGridId) {
+    isRefreshParentGrid = isRefreshParentGrid || false;
+    if (isRefreshParentGrid == true) {
+        parentGridId = parentGridId || "grid";
+        ht_refreshParentGrid(parentGridId);
+    }
+    if (window.parent && window.parent.$("#editWindow").length > 0) {
+        window.parent.$("#editWindow").window('close');
+    } else {
+        //当在独立页面打开时
+
+    }
+
+}
+// 关闭Top窗口：isRefreshParentGrid是否刷新父页面的Grid 默认否，Grid的ID，默认grid
+function ht_closeTopEdit(isRefreshParentGrid, parentGridId) {
+    var dialog = window.parent.$("#window");
+
+    isRefreshParentGrid = isRefreshParentGrid || false;
+
+    if (dialog && dialog.length != 0) {
+        if (isRefreshParentGrid == true) {
+            parentGridId = parentGridId || "grid";
+            try {
+                dialog.dialog.options.parentWindow.refreshTargetGrid(parentGridId);
+            } catch (err) { }
+        }
+        dialog.dialog('close');
+        dialog.remove();
+    } else {
+        ht_closeEdit(isRefreshParentGrid, parentGridId)
+    }
+
+}
+
+// window.close()关闭窗口，isRefreshParent：是否调用
+// window.opener.window.refreshTargetGrid("grid");
+function ht_closeBlankWindow(isRefreshParent, grid) {
+    isRefreshParent = isRefreshParent || false;
+    if (isRefreshParent == true) {
+        if (window.opener != null) {
+            try {
+                window.opener.window.refreshTargetGrid(grid);
+            } catch (err) { }
+        }
+        window.close();
+
+    }
+}
+// window.close()关闭窗口，isRefreshParent：是否调用parent.location.reload()
+function ht_close(isRefreshParent) {
+    isRefreshParent = isRefreshParent || false;
+    if (isRefreshParent == true) {
+        ht_refreshParent();
+    }
+    window.close();
+
+}
+// 弹左下角消息框 注释看Easyui相关API showType显示效果："show"、"slide"、"fade" 默认slide
+function ht_showWarnMsg(msg, title, showType, timeout) {
+    $.topCall.warn(msg, null, title);
+}
+// 弹左下角消息框 注释看Easyui相关API showType显示效果："show"、"slide"、"fade" 默认slide
+function ht_showLeftBelowMsg(msg, title, showType, timeout) {
+    $.messager.show({
+        title: title || "温馨提示",
+        msg: msg,
+        timeout: timeout || 1500,
+        showType: showType || 'slide'
+    });
+}
+// 弹对话消息框
+// title标题：默认温馨提示
+// msg:消息内容
+// icon:info,error,warning,question问号
+// fn:点击确认后触发函数
+function ht_showMsg(msg, title, icon, fn) {
+    $.messager.alert(title || "温馨提示", msg, icon || "info", function () {
+        if (fn && typeof (fn) == "function") {
+            fn();
+        }
+
+    });
+}
+
+function ht_showTopMsg(msg, title, icon, fn) {
+    $.topCall.alert(title || "温馨提示", msg, icon || "info", fn);
+
+}
+
+// 确认对话框 msg：消息；title标题； asyncFun回调函数（非必填）
+function ht_topConfirm(msg, title, asyncFun) {
+    $.topCall.confirm(title, msg, asyncFun);
+}
+
+// 确认对话框 msg：消息；title标题； asyncFun回调函数（非必填）
+function ht_confirm(msg, title, asyncFun) {
+    $.messager.confirm(title || "温馨提示", msg, function (r) {
+
+        if (typeof (asyncFun) == "function") {
+            asyncFun.call(this, r);
+        }
+
+    });
+}
+
+// 刷新父页面指定ID的Grid
+function ht_refreshParentGrid(gridId) {
+    gridId = gridId || "grid";
+    window.parent.refreshTargetGrid(gridId);
+}
+// 去除父页面指定ID的Grid的头部全选
+function ht_removeParentGridHeadCheckbox(gridId) {
+    gridId = gridId || "grid";
+    window.parent.removeGridHeadCheckbox(gridId);
+}
+
+// 调用parent.location.reload()
+function ht_refreshParent() {
+    parent.location.reload();
+}
+// 刷新树
+function ht_refreshTargetTree(treeId) {
+    $('#' + treeId).tree('reload');
+}
+/** ********************窗口相关操作的封装结束************************* */
+
+/** ********************Grid相关操作的封装************************* */
+function ht_ResetSearch(grid) {
+    var inputs = $(".cont-list-form").find("input");
+    $(inputs).each(function (i, k) {
+        k.value = "";
+    });
+    $('#' + grid).datagrid('load');
+}
+
+// 收集Grid选中的行键值
+// Gird 指定的grid
+// 要收集的字段名
+function ht_GetGridSelectedField(grid, fieldName) {
+    var rows = $('#' + grid).datagrid('getSelections');
+    if (!rows || rows.length == 0) {
+        $.messager.alert('提示', '请选择要删除的数据');
+        return;
+    }
+    var parm;
+    $.each(rows, function (i, n) {
+
+        if (i == 0) {
+            parm = n[fieldName]
+        } else {
+            parm += "," + n[fieldName];
+        }
+    });
+    return parm;
+}
+
+/** ********************Grid相关操作的封装结束************************* */
+
+/** ********************Form 表单相关操作的封装开始************************* */
+// 表单提交
+// formAction Add，Edit操作类型
+// keyId 主键ID值，非必填时可传null
+// 提交按钮的Jq对象，methodName自定义方法名
+// targetFormId目标From 不为null时提交指定的form，
+// clearEmptyValue移除（不提交）空值, callBack回调函数
+// dataJsonParm:{aa:bb}或[{name:"a",value:"bbbb"},{}]参数
+function ht_submitForm(url, method, formAction, keyId, parentGridId, mainTable, dataJsonParm, targetFormId, clearEmptyValue, callBack) {
+    var theData = [];
+    try {
+        if (dataJsonParm) {
+            if (typeof (dataJsonParm) == 'object') {
+                for (var properyName in dataJsonParm) {
+                    theData.push({
+                        name: properyName,
+                        value: dataJsonParm[properyName]
+                    });
+                }
+            } else if (!Object.toIsArray(dataJsonParm)) {
+                // Json参数形式
+                theData = dataJsonParm;
+
+            } else {
+                // 数组参数形式
+                theData = dataJsonParm;
+            }
+        }
+        var item = {
+            name: "formAction",
+            value: formAction
+        };
+        var itemkeyId = {
+            name: "keyId",
+            value: keyId
+        };
+        var itemMainTable = {
+            name: "mainTable",
+            value: mainTable
+        };
+        var $targetForm;
+        if (targetFormId) {
+            $targetForm = $("#" + targetFormId);
+        } else {
+            $targetForm = $("form:eq(0)");
+        }
+
+        if ($targetForm.form("validate")) {
+            var formData = $targetForm.find("[name]:input").serializeArray();
+            for (var i in formData) {
+                if (formData[i].value == '请选择' || (clearEmptyValue && formData[i].value == '')) {
+                    delete formData[i];
+                }
+            }
+            if (formAction)
+                formData.push(item);
+            if (keyId)
+                formData.push(itemkeyId);
+            if (mainTable)
+                formData.push(itemMainTable);
+
+            if (theData.length > 0) {
+                for (var theItemIndex in theData) {
+                    formData.push(theData[theItemIndex]);
+                }
+            }
+
+            var obj = _ajaxJson(url, method, formData, null, null, callBack);
+            if (callBack) {
+                // 在_ajaxJson里面已调用
+            } else {
+                if (obj.success != undefined && obj.success) {
+                    obj.msg = obj.msg || "操作成功！";
+                    // if (ty.Page.that.self) {
+                    // ty.Page.that.self.datagrid('reload');
+                    // }
+                }
+                HT.Window.showMsg(obj.msg, null, null, function () {
+                    if (obj.success) {
+                        HT.window.closeEdit(true, parentGridId); // 关闭当前窗口，而（可能）不是父窗口。
+                    }
+                });
+
+            }
+        } else {
+            HT.Window.showMsg("请必填写或选择（*）项");
+        }
+    } catch (err) {
+        HT.Window.showMsg("提单业务表单异常出错" + err);
+
+    }
+}
+// 绑定表单数据
+// Url请求地址
+// method请求方法名
+// keyId业务键ID
+// dataJsonParm其它参数，Jaon格式或数组格式
+// callBack回调函数，如果callBack不为空则会把Json结果付给callBack并且不进行Form的绑定
+// targetFormId指定表单Id，默认为页面上第一个form
+// mainTable主表, idField主键字段名
+function ht_bindDataToForm(url, method, keyId, dataJsonParm, mainTable, callBack, targetFormId) {
+    try {
+        var theData = [];
+        keyId = keyId || "";
+        dataJsonParm = dataJsonParm || [];
+        var item = {
+            name: "keyId",
+            value: keyId
+        };
+        var itemMainTable = {
+            name: "mainTable",
+            value: mainTable
+        };
+        if (!Object.toIsArray(dataJsonParm)) {
+            // Json参数形式
+            theData = dataJsonParm;
+            if (keyId || itemMainTable) {
+                var arr = Object.toJsonToArr(dataJsonParm);
+                theData = arr;
+                if (keyId)
+                    theData.push(item);
+                if (mainTable)
+                    theData.push(itemMainTable);
+            }
+        } else {
+            // 数组参数形式
+            theData = dataJsonParm;
+            if (keyId)
+                theData.push(item);
+            if (mainTable)
+                theData.push(itemMainTable);
+        }
+
+        var obj = _ajaxJson(url, method, theData, null, null, callBack);
+
+        if (obj.success != undefined && !obj.success) {
+            obj.msg = obj.msg || "获取数据失败！";
+            HT.Window.showMsg(obj.msg);
+        } else {
+            obj = dataFormatter(obj);
+            loadFormSpantext(obj, targetFormId);
+            if (targetFormId) {
+                $("#" + targetFormId).form("load", obj);
+            } else {
+                $("form:eq(0)").form("load", obj);
+            }
+            return obj;
+        }
+
+    } catch (err) {
+        HT.Window.showMsg("绑定业务表单异常出错" + err);
+
+    }
+}
+
+function validateForm(targetFormId) {
+    var $targetForm;
+    if (targetFormId) {
+        $targetForm = $("#" + targetFormId);
+    } else {
+        $targetForm = $("form:eq(0)");
+    }
+
+    return $targetForm.form("validate");
+}
+
+function loadFormData(data, targetFormId) {
+    $targetForm = $("form:eq(0) span[name]");
+    if (targetFormId) {
+        $("#" + targetFormId).form("load", data);
+    } else {
+        $("form:eq(0)").form("load", data);
+    }
+}
+// 加载表单显示文本的标签
+function loadFormSpantext(data, targetFormId) {
+    $targetForm = $("form:eq(0) span[name]");
+    if (targetFormId) {
+        $targetForm = $("#" + targetFormId + " span[name]");
+    }
+    $targetForm.each(function () {
+        var name = $(this).attr("name");
+        if (data[name] != undefined) {
+            var value = data[name];
+            $(this).html(value);
+        }
+    });
+}
+// 加载编辑表单前对数据处理
+function dataFormatter(data) {
+    $.each(data, function (key, value) {
+        if (typeof value == "string" && value.indexOf("/Date(") > -1) {
+            value = eval("new " + value.substr(1, value.length - 2));
+            var strDate = Object.toDateObjectFormat(value, "yyyy-MM-dd hh:mm:ss");
+            data[key] = strDate;
+        }
+    });
+    return data;
+}
+// 删除
+// keyIds 业务主键,多个使用英文逗号隔开的格式
+// parentGridId 需要刷新的Grid
+// confirmMsg 确认删除询问消息
+// dataJsonParm 其它参数格式{aa:"a",b:"bb"}
+function ht_DeleteList(url, method, keyIds, parentGridId, confirmMsg, dataJsonParm, callBack) {
+
+    var theData = [];
+    keyIds = keyIds || "";
+    dataJsonParm = dataJsonParm || [];
+    var item = {
+        name: "keyId",
+        value: keyIds
+    };
+    if (!Object.toIsArray(dataJsonParm)) {
+        // Json参数形式
+        theData = dataJsonParm;
+        if (keyId) {
+            var arr = Object.toJsonToArr(dataJsonParm);
+            theData = arr;
+            theData.push(item);
+        }
+    } else {
+        // 数组参数形式
+        theData = dataJsonParm;
+        if (keyIds)
+            theData.push(item);
+
+    }
+    $.messager.confirm("温馨提示", confirmMsg || "您确定要删除吗？", function (r) {
+        if (r) {
+            var obj = _ajaxJson(url, method, theData, null, null, callBack);
+            if (callBack) {
+                callBack(obj);
+            } else {
+                if (obj.success != undefined && !obj.success) {
+                    obj.msg = obj.msg || "删除失败！";
+                }
+                HT.Window.showLeftBelowMsg(obj.msg);
+                if (obj.success) {
+
+                    HT.Window.refreshTargetGrid(parentGridId); // 关闭当前窗口，而（可能）不是父窗口。
+                    HT.Window.removeParentGridHeadCheckbox(parentGridId);
+                }
+
+            }
+        }
+    });
+}
+
+// 设置指定元素为只读
+function ht_setReadOnly(inputId) {
+    return $("#" + inputId).attr('readonly', true).css('opacity', 0.7);
+}
+
+// 设置Combobox的值，以逗号隔开的值，多选
+function ht_ComboboxSetValues(comboboxId, values) {
+    values = values || "";
+    if (values == "") {
+        $("#" + comboboxId).combobox("clear");
+        return false;
+    }
+    var arr = values.split(",");
+    $("#" + comboboxId).combobox("setValues", arr);
+
+}
+// 设置Combobox的值，单选
+function ht_ComboboxSetValue(comboboxId, value) {
+    $("#" + comboboxId).combobox("setValue", value);
+
+}
+/** ********************Form 表单相关操作的封装结束************************* */
+
+/** ********************EasyUI 控件相关 ************************* */
+function ht_DateboxSetValue(inputId, value, isDateTime) {
+    $('#' + inputId).datebox('setValue', value);
+}
+
+function ht_DateboxGetValue(inputId) {
+    return $('#' + inputId).datebox('getValue');
+}
+/** ********************EasyUI 控件相关 结束************************* */
+
+/** ********************当前页面通用方法************************* */
+// 刷新指定的Grid
+function refreshTargetGrid(gridId) {
+    if (!gridId || gridId == "")
+        return false;
+    $('#' + gridId).datagrid("reload");
+}
+// 刷新树
+function refreshTargetTree(treeId) {
+    if (!treeId || treeId == "")
+        return false;
+    $('#' + treeId).tree('reload');
+}
+
+// 去除Grid头部的GridCheckbox全选的选中状态
+function removeGridHeadCheckbox(gridId) {
+    if (!gridId || gridId == "")
+        return false;
+    if ($('#' + gridId).parent().find("div .datagrid-header-check").children("input[type='checkbox']").eq(0) != undefined)
+        $('#' + gridId).parent().find("div .datagrid-header-check").children("input[type='checkbox']").eq(0).prop("checked", false);
+}
+
+
+
+
+var dateTimeFormatter=function(value, row, index) {
+    if (value == null || value == "")
+        return "";
+    var result = value;
+
+    if (!Object.toIsDateStr(value)) {
+        if (value.toString().indexOf("/Date") > -1) {
+            result = eval("new " + value.substr(1, value.length - 2)).toDateFormat("yyyy-MM-dd hh:mm:ss");
+        } else {
+            result = new Date(value).toDateFormat("yyyy-MM-dd hh:mm:ss");
+        }
+
+    }
+    return result;
+
+};
+
+var dateFormatter=function(value, row, index) {
+    if (value == null || value == "")
+        return "";
+    var result = value;
+    if (!Object.toIsDateStr(value)) {
+        if (value.toString().indexOf("/Date") > -1) {
+            result = eval("new " + value.substr(1, value.length - 2)).toDateFormat("yyyy-MM-dd");
+        } else {
+            result = new Date(value).toDateFormat("yyyy-MM-dd");
+        }
+    }
+    else {
+        result = new Date(value).toDateFormat("yyyy-MM-dd");
+    }
+
+    return result;
+}
+
+var boolFormatter=function(value, row, index) {
+    if (value == "true" || value == 1 || value == true)
+        return "是";
+    return "否";
+}
+
+var boolCheckBoxFormatter =function(value, row, index) {
+    if (value == "true" || value == 1 || value == true)
+        return "<input type=\"checkbox\" disabled=\"disabled\"  checked=\"checked\"/>";
+    return "<input type=\"checkbox\" disabled=\"disabled\"/>";
+}

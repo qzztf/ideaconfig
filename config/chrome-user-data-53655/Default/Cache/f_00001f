@@ -1,0 +1,1298 @@
+var flowModel = angular.module('flowModel', [ 'base', 'ddjfCache'])
+.factory('ddjfFlowFactory',['$rootScope','$q','baseService',function($rootScope,$q,baseService){
+	var ddjfFlowFactory = {};
+	ddjfFlowFactory.queryOrderBaseInfo = function(applyNo) {
+		var deferred = $q.defer();
+		baseService.postForm(__ctx + '/bims/applyOrderInfo/getApplyOrderInfo', {
+			applyNo : applyNo
+		}).then(function(data) {
+			deferred.resolve(data); 
+			$rootScope.$broadcast('getApplyOrderInfo:after', data);
+            //要用这个广播事件，上面那个不要用。
+            $rootScope.$broadcast('headInfo:init', data);
+		}, function(code) {
+			deferred.reject(code);
+		});
+		return deferred.promise;
+	};
+	return ddjfFlowFactory;
+}])
+.service('flowTablesService',['baseService','$filter','$q',function(baseService,$filter,$q){
+	var filter = $filter('filter');
+	// 2017-06-21 修改流程Bo的流程节点使用数据的时候，调用的是 initFlowBoData 方法 ,该方法为初始化方法
+	/**
+	 * @describe 修改流程Bo的流程节点使用数据的时候，调用的是 initFlowBoData 方法 ,该方法为初始化方法
+	 * @return {Object} 返回当前service
+	 */
+	this.initFlowBoData = function(){ 
+		var boData = this.boData = AngularUtil.getScope() && AngularUtil.getScope().data;
+		var data = null, hasMainTable = false; 
+		for(var i in boData){
+			if(!hasMainTable && angular.isString(i) && angular.isObject(boData[i])){
+				if(/^biz.*?/.test(i)){
+					// 暂时不考虑多个bo，如果是多个bo，取biz前缀的
+					this.bODataKey = i; 
+					data = angular.copy(boData[i]);
+					hasMainTable = true;
+				} 
+			}
+		}
+		if(!hasMainTable){
+			this.data = {};
+			console.log('当前流程没有配置Bo对象,不要在非流程用流程的指令');
+			return false;
+		}
+		var biz_apply_order = [];
+		var applyOrder = {};
+		this.data = {};
+		for(var i in data){
+			if(angular.isString(data[i])){
+				applyOrder[i] = data[i]; // 统一主表与子表的格式
+			}else if(angular.isArray(data[i]) && /^sub_\S+/.test(i)){
+				this.data[i] = data[i];
+			}else if('initData' === i){
+				this.initData = data[i];
+			}
+		} 
+		biz_apply_order.push(applyOrder);
+		this.data['sub_biz_apply_order'] = biz_apply_order;
+		return this;
+	}
+	
+	this.setFlowTable = function(key,table){
+		if(angular.isArray(table) && this.data['sub_'+key]){
+			this.data['sub_'+key] = table;
+		}
+	}
+	
+	/**
+	 * @describe 获取流程bo的指定表的数据
+	 * @param {String}
+	 *            key 表名
+	 * @param {Number|Function}
+	 *            option 过滤数据函数 当是number类型，返回的是Object，如果是函数则是数组
+	 * @return {Object|Array}
+	 */
+	this.getFlowTable = function(key,option){ 
+		var tableKey = 'sub_'+key;
+		var tables = this.data[tableKey] || [];  
+		return angular.isNumber(option) ?  (tables[option] || {}) :(angular.isFunction(option) ? filter(tables,option) : tables);
+	}
+	/**
+	 * @describe 初始化并且获取某子表数据
+	 * @param {String}
+	 *            tableName 为子表名字不加sub_
+	 * @return {Object|Array} 如果返回所有字表则为true，默认不写返回第一条数据
+	 */
+	this.initAndGetSubData = function(tableName,isReturnArray){ 
+		 	var subTableName = 'sub_'+tableName;
+		    if(!this.boData[this.bODataKey][subTableName].length){
+		    	this.boData[this.bODataKey][subTableName].push(angular.copy(this.initData[tableName]));
+		    }
+		    // 返回数组
+		    if(isReturnArray){
+		    	return this.boData[this.bODataKey][subTableName];
+		    }
+		    // 返回子表单条数据
+		    return this.boData[this.bODataKey][subTableName][0];
+	}
+	
+	// 初始化子表数据
+	this.initTableByName = function(tableName,data){
+		var subTableName = 'sub_'+tableName;
+		var subTableData = angular.copy(this.initData[tableName]);
+		var subTable = this.boData[this.bODataKey][subTableName];
+		subTable.push(subTableData);
+		// this.data 的数据不会影响提交的数据
+		this.data[subTableName].push(angular.extend(angular.copy(this.initData[tableName]),data));
+		return angular.extend(subTableData,data);
+	}
+	
+	// 用该方法只赋值最多一条数据
+	// 返回的数据是引用数据，修改返回的数据与scope的数据是一样的
+	this.getScopeTable = function(tableName,data,dataFilter){
+		if(angular.isFunction(data)){
+			dataFilter = data;
+			data = undefined;
+		}
+		 
+		var targetTable = this.boData[this.bODataKey]['sub_'+tableName];
+		var result = null;
+		if(angular.isDefined(dataFilter)){
+			result = filter(targetTable,dataFilter);
+			if(!result.length){
+				result = this.initTableByName(tableName,data);
+				//返回的数据必须是数组
+				result = [result];
+			} 
+		}else{
+			if(!targetTable.length){
+				// 为什么不需要将返回结果赋值给result ？ 因为这个方法用的是push
+				this.initTableByName(tableName,data);
+			}
+		}
+		
+		return result ? result : targetTable;
+		 
+	}
+	/**
+	 * @description 将对象的key值转换成下划线形式
+	 * @param {Object}
+	 *            obj 对象
+	 * @return {Object}
+	 */
+	this.formatCamelToUnderline = function(obj){
+		var temp = {};
+		for(var j in obj){
+			var key =  j.replace(/([A-Z])/g,function(s,i,a){ 
+				return '_'+s.substring(0).toLowerCase();
+			});
+			temp[key]=obj[j];
+		}
+		return temp;
+	}
+	/**
+	 * @description 将对象的key值转换成驼峰形式
+	 * @param {Object}
+	 *            obj 对象
+	 * @return {Object}
+	 */
+	this.formatUnderlineToCamel = function(obj){
+		var temp = {};
+		for(var j in obj){
+			var key =  j.replace(/(_[a-zA-Z])/g,function(s,i,a){ 
+				return s.substring(1).toUpperCase();
+			});
+			temp[key]=obj[j];
+		}
+		return temp;
+	}
+	/**
+	 * @description 根据defs返回2张表数据
+	 * @param {String}
+	 *            firstTable 主表的名称
+	 * @param {String}
+	 *            secondTable 次表的名称
+	 * @param {Object}
+	 *            defs 主表和次表的依赖关系
+	 * @param {Object}
+	 *            returnObj 返回数组里的对象格式
+	 * @param {Boolean}
+	 *            isCamel 是否需要转换成驼峰形式 默认true
+	 * @return {Array} e.g
+	 *         this.queryDefTable('biz_customer_rel','biz_customer',{customer_no:'cust_no'},null,false);
+	 */
+	this.queryDefTable = function(firstTableName,secondTableName,defs,returnObj,isCamel){
+		var that = this;
+		var firstTable = this.getFlowTable(firstTableName);
+		var secondTable = this.getFlowTable(secondTableName);
+		isCamel =  isCamel === false ? isCamel : true;// 默认驼峰形式
+		var returnResult = []; 
+		angular.forEach(firstTable,function(itemF){
+			angular.forEach(secondTable,function(itemS){
+				var hasRalation;
+				for(var def in defs){
+					if(hasRalation === false){
+						// 多条件，只要一个条件不满足，则都不满足
+						return;
+					}
+					if(!Object.hasOwnProperty.call(defs,def)){
+						return ;
+					}
+					var targetDef = defs[def];
+					if(itemF[def] == itemS[targetDef]){
+						hasRalation = true;
+					}else if(itemF[def] != itemS[def]){
+						hasRalation = false; 
+					}
+					 
+				} 
+				if(hasRalation){
+					returnResult.push(angular.extend({},that.prefixTableData(itemF,firstTableName),that.prefixTableData(itemS,secondTableName)));
+				}
+			});
+		}); 
+		if(angular.isArray(returnObj)){
+			return returnResult.map(function(item){
+				var temp = {},k = '';
+				angular.forEach(returnObj,function(j){
+					if(/\./.test(j)){
+						k = j.split(/\./)[1];
+					}
+					var key = isCamel ? k.replace(/(_[a-zA-Z])/g,function(s,i,a){ 
+						return s.substring(1).toUpperCase();
+					}) :k; 
+					temp[key]=item[j];
+				})
+				return temp;
+			});
+		}else if(angular.isObject(returnObj)){  
+			return returnResult.map(function(item){
+				var temp = {},k = '';
+				for(var j in returnObj){ 
+					k = /\./.test(j) ? j.split(/\./)[1]: j; 
+					var key = isCamel ? k.replace(/(_[a-zA-Z])/g,function(s,i,a){ 
+						return s.substring(1).toUpperCase();
+					}) :k; 
+					temp[key]= angular.isDefined(item[firstTableName+'.'+k]) ? item[firstTableName+'.'+k] : (angular.isDefined(item[secondTableName+'.'+k]) ? item[secondTableName+'.'+k]:'');
+				}
+				return temp;
+			});
+		}else if(!returnObj){
+			return returnResult.map(function(item){
+				var temp = {},k = '';
+				for(var j in item){ 
+					if(!Object.hasOwnProperty.call(item,j)){
+						return ;
+					}
+					k = /\./.test(j) ? j.split(/\./)[1]: j; 
+					var key = isCamel ? k.replace(/(_[a-zA-Z])/g,function(s,i,a){ 
+						return s.substring(1).toUpperCase();
+					}) :k; 
+					temp[key]= item[j];
+				}
+				return temp;
+			});
+		}
+		return returnResult;
+		 
+	}; 
+	this.prefixTableData = function(obj,tableKey){
+		var target = {};
+		for(var i in obj){
+			if(Object.hasOwnProperty.call(obj,i)){
+				target[tableKey+'.'+i] = obj[i];
+			}
+		}
+		return target;
+	}
+	/**
+	 * @description 通过客户获取指定关系的客户 e.g.
+	 *              flowTablesService.cacheAllCustomer().then(function(){ var
+	 *              mCustomer =
+	 *              flowTablesService.getCustomerByOptions(function(item){ //
+	 *              if(item.is_proposer=='Y'){ return true; } if(item.role =
+	 *              'OWN'){ return true; } return false; });
+	 *              console.log(mCustomer); })
+	 * 
+	 */
+	this.getCustomerByOptions = function(options){
+		var customer = this.queryDefTable('biz_customer_rel','biz_customer',{customer_no:'cust_no'},null,false);
+		return filter(customer,options);
+	}
+	// 为方便获取客户信息，写个具体方法
+	this.getCustomerByType = function(type){
+		type = type=="BUY"?"BUY":"OWN";
+		return this.getCustomerByOptions(function(item,idx){
+			if(item.role == type){
+	          	return true;
+	         }
+			return false;
+		});
+	}
+	/**
+	 * @description 如果页面有需求要用到客户信息。则子Control层初始化时先调用下
+	 * @param {String}
+	 *            applyNo 订单编号
+	 */
+	this.cacheOtherPreApplyBo = function(){ 
+		var that = this;
+		if(angular.isArray(this.data['sub_biz_sub_biz_customer'])){
+			return $q.when().then(function(){
+				AngularUtil.getScope().$root.$broadcast('boData:update',that.data);
+			});
+		}
+		var applyNo = applyNo || this.boData[this.bODataKey].apply_no;
+		return baseService.postForm(__ctx + "/bims/applyOrderInfo/getOtherPreApplyBo",{applyNo:applyNo}).then(function(data){
+			 var accountTestList = (data.accountTestList || []).map(function(item){
+					return that.formatCamelToUnderline(item);
+				});
+				// that.boData[that.bODataKey]['sub_biz_test_record'] =
+				// accountTestList;
+			 that.data['sub_biz_test_record'] = angular.copy(accountTestList);
+				  
+			 var customerList = (data.customerList || []).map(function(item){
+					return that.formatCamelToUnderline(item);
+				});
+			// that.boData[that.bODataKey]['sub_biz_customer'] = customerList;
+			 that.data['sub_biz_customer'] = angular.copy(customerList);
+			  
+			 var icrReportList = data.icrReportList || [];
+			 var reportList = [];
+			 angular.forEach(icrReportList,function(report){
+				 angular.forEach(data.customerList,function(customer){
+					 if(customer.custNo === report.customerNo){ 
+						 var workUnits = report.workUnits.split(';');
+						 var hasEmployer = false;
+						 if(customer.employer){
+							 reportList.push({customerNo:customer.custNo,customerName:customer.name,workUnit:customer.employer});
+							 hasEmployer = true;
+						 }
+						 for(var i = 0,wu;wu = workUnits[i++];){
+							 if(hasEmployer && wu==customer.employer){ 
+								 continue;
+							 }
+							 reportList.push({customerNo:customer.custNo,customerName:customer.name,workUnit:wu});
+						 }
+					 }
+				 })
+				 
+			 })
+			 var businessInfoList = (that.data['sub_biz_business_info'] || []).map(function(item){
+				 for(var i = 0,report;report = reportList[i++];){
+					 if(report.customerNo == item.customer_no && report.workUnit == item.work_unit){
+						// 删除重复的数据
+						 reportList.splice(i-1,1);
+						 break;
+					 }
+				 }
+				 return that.formatCamelToUnderline(item);
+			 });
+			 businessInfoList = businessInfoList.concat(reportList.map(function(report){
+				 return that.formatCamelToUnderline(report);
+			 })); 
+			 that.data['sub_biz_business_info'] = angular.copy(businessInfoList);
+		}).then(function(){
+			AngularUtil.getScope().$root.$broadcast('boData:update',that.data);
+		});
+			
+		 
+	}
+	/**
+	 * @description 获取征信相关表信息
+	 *              由于征信表信息与客户信息关联，取消与订单编号关联，目前（2017-06-24）流程bo不能获取征信，个人诉讼，公司诉讼，工商信息,客户信息
+	 * @param {String}
+	 *            订单编号
+	 * 
+	 */
+	this.cacheOtherApplyBo = function(applyNo,force){
+		// 获取征信数据
+		var that = this;
+		// 加把钥匙
+		if(that.havedObtainCache){
+			return $q.when();
+		}
+		that.havedObtainCache = true;
+		
+		var applyNo = applyNo || this.boData[this.bODataKey].apply_no;
+		if(angular.isArray(this.data['sub_biz_personal_litigation_s']) && !force){
+			return this.cacheOtherPreApplyBo();
+		}
+		return baseService.postForm(__ctx + "/bims/applyOrderInfo/getOtherApplyBo", {applyNo:applyNo}).then(function(data){
+			that.__data__ = data;
+			that.setCacheDateV2(!force);
+		}).then(function(){
+			AngularUtil.getScope().$root.$broadcast('boData:update',that.data);
+			return $q.when();
+		});
+	}
+	this.cancleLock = function(){
+		this.havedObtainCache = false;
+		return this;
+	}
+	this.resetBoData = function(){
+		return this.initFlowBoData();
+	}
+	this.setCacheDateV2 = function(reload){
+		var that = this;
+		if(!reload){
+			return ;
+		}
+		 
+		data = that.__data__ || data;
+		var queryCreditList =  (data.queryCreditList || []).map(function(item){
+			return that.formatCamelToUnderline(item);
+		});
+		// that.boData[that.bODataKey]['sub_biz_query_credit'] =
+		// queryCreditList;
+		that.data['sub_biz_query_credit'] = angular.copy(queryCreditList);
+		var personalLitigationList = (data.personalLitigationList || []).map(function(item){
+			return that.formatCamelToUnderline(item);
+		});
+		// that.boData[that.bODataKey]['sub_biz_personal_litigation_s'] =
+		// personalLitigationList;
+		that.data['sub_biz_personal_litigation_s'] = angular.copy(personalLitigationList);
+		
+		var companyLitigationList = (data.companyLitigationList || []).map(function(item){
+			return that.formatCamelToUnderline(item);
+		});
+		// that.boData[that.bODataKey]['sub_biz_company_litigation_s'] =
+		// companyLitigationList;
+		 that.data['sub_biz_company_litigation_s'] = angular.copy(companyLitigationList);
+		 
+		 var accountTestList = (data.accountTestList || []).map(function(item){
+				return that.formatCamelToUnderline(item);
+			});
+			// that.boData[that.bODataKey]['sub_biz_test_record'] =
+			// accountTestList;
+		 that.data['sub_biz_test_record'] = angular.copy(accountTestList);
+			  
+		 var customerList = (data.customerList || []).map(function(item){
+				return that.formatCamelToUnderline(item);
+			});
+		// that.boData[that.bODataKey]['sub_biz_customer'] = customerList;
+		 that.data['sub_biz_customer'] = angular.copy(customerList);
+		 
+		 // 工商信息根据征信结果查询
+		 
+		 var icrReportList = data.icrReportList || [];
+		 var reportList = [];
+		 angular.forEach(icrReportList,function(report){
+			 angular.forEach(data.customerList,function(customer){
+				 if(customer.custNo === report.customerNo){ 
+					 var workUnits = report.workUnits.split(';');
+					 var hasEmployer = false;
+					 if(customer.employer){
+						 reportList.push({customerNo:customer.custNo,customerName:customer.name,workUnit:customer.employer})
+						 hasEmployer = true;
+					 }
+					 for(var i = 0,wu;wu = workUnits[i++];){
+						 if(hasEmployer && wu==customer.employer){
+							 continue;
+						 }
+						 reportList.push({customerNo:customer.custNo,customerName:customer.name,workUnit:wu});
+					 }
+				 }
+			 })
+			 
+		 })
+		 
+		 var businessInfoList = (data.businessInfoList || []).map(function(item){
+			 for(var i = 0,report;report = reportList[i++];){
+				 // 删除重复的数据
+				 if(report.customerNo == item.customerNo && report.workUnit == item.workUnit){
+					 reportList.splice(i-1,1);
+					 break;
+				 }
+			 }
+			 return that.formatCamelToUnderline(item);
+		 });
+		 businessInfoList = businessInfoList.concat(reportList.map(function(report){
+			 return that.formatCamelToUnderline(report);
+		 })); 
+		 that.data['sub_biz_business_info'] = angular.copy(businessInfoList);
+	}
+	this.initFlowBoData();
+	return this;
+}])
+//事项操作界面按钮服务
+.service('matterButtonService',['baseService', function (baseService) {  
+	this.buttons = [];
+	this.initLockButton = function(scope){ 
+		var result  = "";
+		var taskId = $.getParameter('taskId');
+		var param ={};
+		var url = __ctx + '/flow/task/getLockStatus?taskId=' + taskId;
+		baseService.postForm(url,param).then(function(rtn){
+			result = parseInt(rtn);
+			if(result === 1){
+				var lockBtn = {name:'锁定',event:'lockFinanceFile',action:'lock'};
+				scope.buttons.push(lockBtn);
+			}
+			//解锁按钮暂时屏蔽
+/*			else if(result === 3){
+				var lockBtn = {name:'解锁',event:'lockUnlock',action:'lock'};
+				scope.buttons.push(lockBtn);
+			}*/
+		});
+	}
+}])
+
+.directive('headCommon', ['ddjfFlowFactory','productHelper', function(ddjfFlowFactory,productHelper) {
+	//head-common
+	//2.0流程里面才有
+	return {
+		restrict : 'EA',
+		replace : true,
+		scope : {
+			headCommon : '='
+		},
+		transclude : true,
+		compile : function(element, attrs) {
+			return {
+				pre : function($scope, element, attrs) { 
+					
+				},
+				post : function($scope, element, attrs) { 
+					var apply_no = $scope.headCommon && $scope.headCommon.apply_no; 
+					setTimeout(function() {
+						ddjfFlowFactory.queryOrderBaseInfo(apply_no);
+					}, 0);
+					$scope.$on('headInfo:init', function(event, data) {
+						var ddjfOrderInfo = angular.copy(data);
+						//计算尾款金额（商业贷款金额-赎楼金额）
+						var bizLoanAmount ;
+						if(!ddjfOrderInfo.newLoan || !angular.isNumber(ddjfOrderInfo.newLoan.bizLoanAmount)){
+							bizLoanAmount = 0;
+						}else{
+							bizLoanAmount = ddjfOrderInfo.newLoan.bizLoanAmount;
+						}
+						ddjfOrderInfo.balancePayment = bizLoanAmount
+								- (angular.isNumber(ddjfOrderInfo.ransomBorrowAmount)===true ?  ddjfOrderInfo.ransomBorrowAmount:0);
+						
+						ddjfOrderInfo.productHelper = productHelper.init(ddjfOrderInfo.productId); 
+						$scope.ddjfOrderInfo = ddjfOrderInfo;
+					});
+				}
+			};
+		},
+		templateUrl : function(){
+			return __ctx + '/js/platform/bims/templates/flows/headcommon.html';
+		}
+	}
+} ])
+.directive('ddjfCustomerInformation', [ 'orderConstant', 'ddjfBusinessFactory','flowTablesService','$filter','productHelper','materialHelper','baseService', function(orderConstant, ddjfBusinessFactory,flowTablesService,$filter,productHelper,materialHelper,baseService) {
+	//ddjf-customer-info
+	return {
+		restrict : 'EA',
+		templateUrl : function() {
+			// 客户信息指令
+			return orderConstant.baseTemplateUrl + 'flows/customerInterview.html';
+		},
+		replace : true,
+		link : function($scope, element, attrs) {
+			
+			console.log("ddjfCustomerInformation");
+			var filter = $filter("filter");
+			$scope.applyType = (orderConstant.applyNo||"").substring(2,5);// 2017-05-26
+																			// 新定义的判断产品方法，不要再用productType来判断啦。
+			$scope.enableEditCustomer = $scope.enableEditCustomer === true ? $scope.enableEditCustomer: false;
+			$scope.$on('boData:update',function(event,data){
+				$scope.productHelper = productHelper.init(flowTablesService.getFlowTable('biz_apply_order')[0].product_id);
+				var credits = flowTablesService.getFlowTable('biz_query_credit');
+				if(!$scope.ddjfCustomer){
+					var pCustomerList = flowTablesService.getFlowTable('biz_customer');
+					var pCustomerRel = flowTablesService.getFlowTable('biz_customer_rel');
+					//客户信息不调接口啦
+					var Seller = filter(pCustomerRel,{role:'OWN'}).map(function(item){ 
+						angular.forEach(pCustomerList,function(customer){  
+							if(customer.cust_no == item.customer_no){ 
+								angular.forEach(credits,function(credit){
+									if(customer.cust_no == credit.customer_no && customer.credit_channel == 'onlinequery'){
+										customer.credit_query_result = credit.parse_way;
+										customer.credit_result_remark = credit.remark;
+									}
+								})
+								item.customer = flowTablesService.formatUnderlineToCamel(customer);
+							}
+						})
+						return flowTablesService.formatUnderlineToCamel(item);
+					})
+					var Buyer = filter(pCustomerRel,{role:'BUY'}).map(function(item){  
+						angular.forEach(pCustomerList,function(customer){
+							if(customer.cust_no == item.customer_no){
+								angular.forEach(credits,function(credit){
+									if(customer.cust_no == credit.customer_no && customer.credit_channel == 'onlinequery'){
+										customer.credit_query_result = credit.parse_way;
+										customer.credit_result_remark = credit.remark;
+									}
+								})
+								item.customer = flowTablesService.formatUnderlineToCamel(customer);
+							}
+						})
+						return flowTablesService.formatUnderlineToCamel(item);
+					})
+					
+					$scope.ddjfCustomer = {Seller:Seller,Buyer:Buyer};
+				}
+				
+			});
+			$scope.queryCredit = function(){
+				var item = this.item;
+				if(!item.customer.creditQueryResult == "QUERYING"){
+    				$.topCall.alert('征信查询', "查询中不能再次查询");
+    				return;
+    			}
+				if(item.customer.creditQueryResult == "Y"){
+					$.topCall.confirm('征信查询','已解析成功，确定需要重新解析征信吗？',function(r){
+						if(r){	
+							$scope.creditAnalysisRouter(item);
+						}
+					})
+				}else{
+					$scope.creditAnalysisRouter(item);
+				}
+			};
+			
+			$scope.creditAnalysisRouter= function(item){
+				var jsonObject = {	idCard_no: item.customer.idCardNo,
+						name:item.customer.name,
+						apply_no:item.applyNo,
+						customer_no:item.customerNo
+					};
+				console.log(jsonObject);
+				if(!jsonObject.name){
+					$.topCall.alert('征信查询', "请填写客户姓名");
+					return;
+				}
+				if(!jsonObject.idCard_no){
+					$.topCall.alert('征信查询', "请填写客户证件号码");
+					return;
+				}
+                if(!item.customer.creditChannel){
+                    $.topCall.alert('征信查询', "请填写客户征信获取来源");
+                    return;
+                }
+				baseService.postFormData(__ctx+"/business/riskControl/callZldCreditAnalysis",{
+					jsonObject: angular.toJson(jsonObject)
+				}).then(function(data){
+					if(data.code == "0"){
+						$.topCall.success(data.msg, function() {
+							$scope.$apply(function () {
+								item.customer.creditQueryResult = data.data.parseWay;
+								item.customer.creditResultRemark = data.data.remark;
+							});
+						});
+					}else{
+						$.topCall.alert('征信解析', data.msg);
+					}
+				},function(){
+					$.topCall.alert('征信解析', data.msg);
+				});
+			}
+			
+			$scope.viewBuyerCustormer = function() {
+				var applyNo = this.item && this.item.applyNo || '';
+				var customerNo = this.item && this.item.customerNo || '';
+				var formKey =  $scope.productHelper.isISR ? 'bizBuyCustomerInfo':'isrBuyCustomerInfo';
+				var param = {
+						formKey : formKey,
+						apply_no : applyNo,
+						readonly : !$scope.enableEditCustomer
+					};
+				if($scope.productHelper && $scope.productHelper.isLast){
+					param.formKey =  $scope.productHelper.isISR ? 'customerISR' : 'customerCSH';
+					param.roleType = $scope.productHelper.isJY ? 'BUY':'LENDER';
+				}
+				if($scope.productHelper && $scope.productHelper.isAJFW){
+					param.formKey =  'customerInfo_mortgage_V2';
+					param.roleType = 'BUY';
+				}
+				if($scope.enableEditCustomer){
+					param.v2_form_permission = 'permission_edit';
+				}
+				
+				if (customerNo) {
+					param.customer_no = customerNo;
+				}
+				var updatedCustomer = null;
+				CustomDialog.openCustomDialogBimsForm({
+					title : '客户基本信息',
+					maximizable : true,
+					params : param,
+					beforeSave: function(data){
+						var result = data.data,
+						currentCustomer = result[data.boCode],
+						relation  = currentCustomer.relation, 
+					    isExistRelation = false; 
+						updatedCustomer = flowTablesService.formatUnderlineToCamel(angular.copy(currentCustomer));
+						updatedCustomer.customer = flowTablesService.formatUnderlineToCamel(currentCustomer.sub_biz_customer[0]);
+						console.log(updatedCustomer);
+						// 只允许添加一个买方人,买方配偶
+						if((relation === 'BUY' || relation === 'BMATE')){
+							angular.forEach($scope.ddjfCustomer.Buyer,function(customer){
+								if(customerNo !== customer.customerNo && customer.relation === relation){
+									isExistRelation = true;
+								}
+							});
+							
+						}
+						 
+						if(isExistRelation){
+							$.topCall.error('重复添加关系人类型');
+							return false;
+						 }
+						if(!currentCustomer.customer_no){
+							return true;
+						}
+						var isExistCustomer = false;
+						var allCustomer = [].concat($scope.ddjfCustomer.Buyer || []).concat($scope.ddjfCustomer.Seller || []);
+						angular.forEach(allCustomer,function(customer){ 
+							if(!currentCustomer.id && currentCustomer.sub_biz_customer[0].cust_no == customer.customerNo){
+								isExistCustomer = true;
+							}
+						})
+						if(isExistCustomer){
+							$.topCall.error('重复添加用户');
+							return false;
+						}
+						
+					},
+					success:function(data,rtn){ 
+						if (data.result == '1') {
+//							materialHelper.reloadMaterialPage();
+							window.location.reload();//自从可以添加新客户的功能后只能这么粗暴了
+							$scope.$apply(function(){
+								var allCustomer = [].concat($scope.ddjfCustomer.Buyer || []).concat($scope.ddjfCustomer.Seller || []);
+								angular.forEach(allCustomer,function(customer){ 
+									if(updatedCustomer.id == customer.id){
+										 angular.extend(customer,updatedCustomer);
+									}
+								})
+							}) 
+							$.topCall.success("操作成功",function(){
+							});
+						} else {
+							$.topCall.success(data.message);
+						}
+						
+					},error: function(data){
+						$.topCall.success(data.message);
+					}
+				});
+			};
+
+			$scope.viewSellerCustormer = function(formKey) {
+				var applyNo = this.item && this.item.applyNo || '';
+				var customerNo = this.item && this.item.customerNo || '';
+				var formKey = (function(isISR,isJY){
+					if(isISR){
+						return isJY ? 'bizLenderCustomerInfo' : 'bizSellCustomerInfo';
+					}
+					return isJY ? 'isrLenderCustomerInfo' : 'isrSellCustomerInfo';
+				}($scope.productHelper.isISR,$scope.productHelper.isJY));
+				var param = {
+					formKey : formKey,
+					apply_no : applyNo,
+					readonly : !$scope.enableEditCustomer
+				};
+				if($scope.productHelper && $scope.productHelper.isLast){
+					param.formKey =  $scope.productHelper.isISR ? 'customerISR' : 'customerCSH';
+					param.roleType = $scope.productHelper.isJY ? 'OWN':'LENDER';
+				} 
+				if($scope.productHelper && $scope.productHelper.isAJFW){
+					param.formKey =  'customerInfo_mortgage_V2';
+					param.roleType = 'OWN';
+				}
+				if($scope.enableEditCustomer){
+					param.v2_form_permission = 'permission_edit';
+				}
+				if (customerNo) {
+					param.customer_no = customerNo;
+				}
+				var updatedCustomer = null;
+				CustomDialog.openCustomDialogBimsForm({
+					title : '客户基本信息',
+					maximizable : true,
+					params : param,
+					beforeSave: function(data){
+						var result = data.data,
+						currentCustomer = result[data.boCode],
+						relation  = currentCustomer.relation, 
+						isProposer = currentCustomer.is_proposer,
+					    isExistRelation = false,
+					    has_proposer = false; 
+						updatedCustomer = flowTablesService.formatUnderlineToCamel(angular.copy(currentCustomer));
+						updatedCustomer.customer = flowTablesService.formatUnderlineToCamel(currentCustomer.sub_biz_customer[0]);
+						// 交易保 只允许添加一个卖方人,卖方配偶
+						if(($scope.productHelper.isJY) && (relation === 'OWN' ||  relation === 'OMATE')){
+							angular.forEach($scope.ddjfCustomer.Seller,function(customer){
+								if(customerNo !== customer.customerNo && customer.relation === relation){
+									isExistRelation = true;
+								}
+							});
+						}
+						if(isExistRelation){
+							$.topCall.error('重复添加关系人类型');
+							return false;
+						 }
+						if(!currentCustomer.sub_biz_customer[0].cust_no){
+							return true;
+						} 
+						var isExistCustomer = false;
+						var allCustomer = [].concat($scope.ddjfCustomer.Buyer || []).concat($scope.ddjfCustomer.Seller || []);
+						angular.forEach(allCustomer,function(customer){ 
+							if(!currentCustomer.id && currentCustomer.sub_biz_customer[0].cust_no == customer.customerNo){
+								isExistCustomer = true;
+							}
+						})
+						if(isExistCustomer){
+							$.topCall.error('重复添加用户');
+							return false;
+						}
+						angular.forEach($scope.ddjfCustomer.Seller,function(customer){
+							if(customerNo !== customer.customerNo && customer.isProposer === 'Y'){
+								has_proposer = true;
+							}
+						});
+//						if(!has_proposer && isProposer != 'Y'){
+//							$.topCall.error('至少有一个申请人！'); 
+//							return false;
+//						 }
+						
+					},
+					success:function(data,rtn){
+						if (data.result == '1') {
+//							materialHelper.reloadMaterialPage();
+							window.location.reload();//自从可以添加新客户的功能后只能这么粗暴了
+							$scope.$apply(function(){
+								var allCustomer = [].concat($scope.ddjfCustomer.Buyer || []).concat($scope.ddjfCustomer.Seller || []);
+								angular.forEach(allCustomer,function(customer){ 
+									if(updatedCustomer.id == customer.id){
+										 angular.extend(customer,updatedCustomer);
+									}
+								})
+							}) 
+							$.topCall.success("操作成功",function(){
+								 
+							});
+						} else {
+							$.topCall.success(data.message);
+						}
+						
+					},error: function(data){
+						$.topCall.success(data.message);
+					}
+				});
+			};
+			
+			// 添加联系人并确定联系人关系（卖方）
+			$scope.addOrUpdateSellerCustormer = function(formKey){ 
+				var applyNo = $scope.data.bizApply.apply_no;
+				var customerNo = this.item && this.item.customerNo || '';
+				var apply_no = this.item && this.item.applyNo || '';
+				var id = this.item && this.item.id || '';
+				var applyStatus = $scope.data.bizApply.apply_status;
+				var param = {
+						formKey:'customerCSH',
+						applyNo:applyNo,
+						apply_no:apply_no,
+						id:id,
+						roleType: $scope.productHelper.isJY ?'OWN': 'LENDER',
+						orderStatus:applyStatus
+					}
+				if(customerNo){
+					param.customer_no = customerNo;
+				}
+				if($scope.enableEditCustomer){
+					param.v2_form_permission = 'permission_edit';
+				}
+				if($scope.productHelper && $scope.productHelper.isLast){
+					param.formKey =  $scope.productHelper.isISR ? 'customerISR' : 'customerCSH';
+					param.roleType = $scope.productHelper.isJY ? 'OWN':'LENDER';
+				} 
+				CustomDialog.openCustomDialogBimsForm({ 
+					maximizable:true,
+					title:'客户基本信息',
+					params:param,
+					beforeSave: function(data){   
+						var result = data.data,
+						currentCustomer = result[data.boCode],
+						relation  = currentCustomer.relation, 
+						isProposer = currentCustomer.is_proposer,
+					    has_customer = false,
+					    has_proposer = false;   
+						// 只允许添加一个卖方人,卖方配偶
+						if((relation === 'OWN' ||  relation === 'OMATE')){
+							angular.forEach($scope.ddjfCustomer.Seller,function(customer){
+								if(customerNo !== customer.customerNo && customer.relation === relation){
+									has_customer = true;
+								}
+							});
+						}
+						if(has_customer){
+							$.topCall.error('重复添加关系人类型');
+							return false;
+						 }
+						var isExistCustomer = false;
+						var allCustomer = [].concat($scope.ddjfCustomer.Buyer || []).concat($scope.ddjfCustomer.Seller || []);
+						angular.forEach(allCustomer,function(customer){ 
+							if(!currentCustomer.id && currentCustomer.sub_biz_customer[0].cust_no == customer.customerNo){
+								isExistCustomer = true;
+							}
+						})
+						if(isExistCustomer){
+							$.topCall.error('重复添加用户');
+							return false;
+						}
+						angular.forEach($scope.ddjfCustomer.Seller,function(customer){
+							if(customerNo !== customer.customerNo && customer.isProposer === 'Y'){
+								has_proposer = true;
+							}
+						});
+//						if(!has_proposer && isProposer != 'Y'){
+//							$.topCall.error('至少有一个申请人！');
+//							return false;
+//						 }
+					},
+					success:function(data,rtn){
+						if (data.result == '1') {
+							$.topCall.success("操作成功",function(){
+//								materialHelper.reloadMaterialPage();
+//								$scope.queryCustomerInfo();
+								window.location.reload();//自从可以添加新客户的功能后只能这么粗暴了
+								
+							});
+						} else {
+							$.topCall.success(data.message);
+						}
+						
+					},error: function(data){
+						$.topCall.success(data.message);
+					}
+				})
+			}
+			//添加联系人并确定联系人关系（买方）
+			$scope.addOrUpdateBuyerCustormer = function(formKey){
+				var applyNo = $scope.data.bizApply.apply_no;
+				var customerNo = this.item && this.item.customerNo || '';
+				var apply_no = this.item && this.item.applyNo || '';
+				var id = this.item && this.item.id || '';
+				var applyStatus = $scope.data.bizApply.apply_status;
+				var param = {
+						formKey:'customerCSH',
+						applyNo:applyNo,
+						apply_no:apply_no,
+						id:id,
+						roleType:'BUY',
+						orderStatus:applyStatus
+					}
+				if(customerNo){
+					param.customer_no = customerNo;
+				}
+				if($scope.enableEditCustomer){
+					param.v2_form_permission = 'permission_edit';
+				}
+				if($scope.productHelper && $scope.productHelper.isLast){
+					param.formKey =  $scope.productHelper.isISR ? 'customerISR' : 'customerCSH';
+					param.roleType = $scope.productHelper.isJY ? 'BUY':'LENDER';
+				} 
+				CustomDialog.openCustomDialogBimsForm({
+					title:'客户基本信息',
+					maximizable:true,
+					params:param,
+					beforeSave: function(data){
+						var result = data.data,
+							currentCustomer = result[data.boCode],
+							relation  = currentCustomer.relation, 
+					    has_customer = false; 
+						// 只允许添加一个买方人,买方配偶
+						if((relation === 'BUY' || relation === 'BMATE')){
+							angular.forEach($scope.ddjfCustomer.Buyer,function(customer){
+								if(customerNo !== customer.customerNo && customer.relation === relation){
+									has_customer = true;
+								}
+							});
+						} 
+						if(has_customer){
+							$.topCall.error('重复添加关系人类型');
+							return false;
+						 }
+						var isExistCustomer = false;
+						var allCustomer = [].concat($scope.ddjfCustomer.Buyer || []).concat($scope.ddjfCustomer.Seller || []);
+						angular.forEach(allCustomer,function(customer){ 
+							if(!currentCustomer.id && currentCustomer.sub_biz_customer[0].cust_no == customer.customerNo){
+								isExistCustomer = true;
+							}
+						})
+						if(isExistCustomer){
+							$.topCall.error('重复添加用户');
+							return false;
+						}
+					},
+					success:function(data,rtn){
+						if (data.result == '1') {
+							$.topCall.success("操作成功",function(){
+//								materialHelper.reloadMaterialPage();
+//								$scope.queryCustomerInfo();
+								window.location.reload();//自从可以添加新客户的功能后只能这么粗暴了
+							});
+						} else {   
+							$.topCall.success(data.message);
+						}
+					},error: function(data){
+						$.topCall.success(data.message);
+					}
+				})
+			}
+			
+		}
+	};
+} ])
+.directive('relateProduct',['$q','baseService','$filter',function($q,baseService,$filter){
+	return {
+		restrict : 'EA',
+		templateUrl : function() { 
+			return __ctx+'/js/platform/bims/templates/flows/relateProduct.html';
+		},
+		replace : true,
+		link : function($scope, element, attrs) {
+			
+		}
+	}
+}])
+.directive('ddjfRelateProductCell',['$q','baseService','$filter','productHelper',function($q,baseService,$filter,productHelper){
+	
+	return {
+		restrict : 'EA',
+		templateUrl : function() { 
+			return __ctx+'/js/platform/bims/templates/flows/ddjfRelateProductCell.html';
+		},
+		scope:{
+			ddjfRelateProductCell:'=',
+			relateProps:'=?relateProps'
+		},
+		replace : true,
+		link : function($scope, element, attrs) {
+			$scope.$on('selectQuery:doQuery',function(event,data){  
+				if(data.alias == 'subRelateType'){
+					if(!data.result || !data.result.length){
+						 return ;
+					}
+					if(data.result.length == 1){ 
+						$scope.ddjfRelateProductCell.subRelateType = data.result[0].subRuleType;
+					}
+				}
+				if(data.alias == 'relateProducts'){
+					if(!data.result || !data.result.length){
+						$scope.$emit('relateProduct',{status:'error',cell:$scope.ddjfRelateProductCell,index:$scope.$parent.$index});
+						$.topCall.error("无更多关联产品信息");
+						return false;
+					}
+					$scope.relateProducts = data.result;
+					$scope.relateProps.existRelateProduct = true;
+					$scope.$emit('relateProduct',{status:'success',cell:$scope.ddjfRelateProductCell,index:$scope.$parent.$index});
+				}
+			});
+			$scope.changeRelateProduct = function(){
+			    angular.forEach($scope.relateProducts,function(p){
+			    	if($scope.ddjfRelateProductCell.productId == p.relevanceProductCode){
+                        $scope.ddjfRelateProductCell.__helper__ = productHelper.init($scope.ddjfRelateProductCell.productId);
+			    		$scope.ddjfRelateProductCell.productName = p.relevanceProductName;
+			    		if ($scope.ddjfRelateProductCell.__helper__.isJTJSMZ) {
+                            $scope.ddjfRelateProductCell.manCheckFirst = $scope.relateProps.manCheckFirst;
+						}
+						if ($scope.ddjfRelateProductCell.__helper__.isJSD || $scope.ddjfRelateProductCell.__helper__.isSLY ) {
+                            $scope.ddjfRelateProductCell.borrowingAmount = $scope.relateProps.borrowingAmount;
+						}
+						if ($scope.ddjfRelateProductCell.__helper__.isIMFB || $scope.ddjfRelateProductCell.__helper__.isDMFB ) {
+                            $scope.ddjfRelateProductCell.guaranteeAmount = $scope.relateProps.guaranteeAmount;
+						}
+			    	}
+			    })
+			} 
+			
+			$scope.removeRelateProduct = function(index){
+				$scope.$emit('relateProduct',{status:'remove',cell:$scope.ddjfRelateProductCell,index:$scope.$parent.$index});
+			}
+		}
+	};
+}])
+.directive('ddjfRelateProduct',['$q','baseService','$filter','productHelper','$timeout',function($q,baseService,$filter,productHelper,$timeout){
+	
+	return {
+		restrict : 'EA',
+		template:'<div><table class="table-form column-2"><tbody><tr class="firstRow"><td colspan="4" class="grid-groupTitle"><div><span>产品关联</span><a style="color:#fff" href="javascript:void(0);" class="btn btn-primary btn-sm fa-add" ng-click="addRelateProduct()"><span class="icon-plus"></span></a></div></td></tr></tbody></table><div ng-repeat="item in ddjfRelateProduct.relateProductList track by $index"><div ddjf-relate-product-cell="item.relateProduct" relate-props="item.relateProps"></div></div></div>',
+		scope:{
+			ddjfRelateProduct:'='
+		},
+		replace : true,
+		link : function($scope, element, attrs) {
+            $scope.ddjfRelateProduct.validRelateProduct = function(msg){
+                var relateOk = true;
+            	var relateProductList = $scope.ddjfRelateProduct.relateProductList || [];
+                relateProductList = filter(relateProductList, function(product) {
+                    return product.relateProduct.productId;
+                }).map(function(product){
+                    return product.relateProduct;
+                });
+                angular.forEach(relateProductList, function(product) {
+                    if (!product.tailReleaseNode && productHelper.vaildTailReleaseNode(product.productId)) {
+                        msg.push("请选择" + $scope.ddjfRelateProduct.applyNo + "关联产品（" + product.productName + ")的放款节点");
+                        relateOk = false;
+                    }
+                    if (!product.relateType) {
+                        msg.push("请选择" + $scope.ddjfRelateProduct.applyNo + "关联产品（" + product.productName + ")的关联类型");
+                        relateOk = false;
+                    }
+                    if (!product.subRelateType) {
+                        msg.push("请选择" + $scope.ddjfRelateProduct.applyNo + "关联产品（" + product.productName + ")的二级类型");
+                        relateOk = false;
+                    }
+                    if (product.__helper__.isJTJSMZ && !product.manCheckFirst){
+                        msg.push("请选择关联产品（"+product.productName+")的是否先审批");
+                        relateOk = false;
+                    }
+                    if ((product.__helper__.isJSD ||  product.__helper__.isSLY) && !product.borrowingAmount){
+                        msg.push("请选择关联产品（"+product.productName+")的预计借款金额");
+                        relateOk = false;
+                    }
+                    if ((product.__helper__.isIMFB ||  product.__helper__.isDMFB) && !product.guaranteeAmount){
+                        msg.push("请选择关联产品（"+product.productName+")的申请保险金额");
+                        relateOk = false;
+                    }
+                })
+                return relateOk === false ? relateOk : relateProductList;
+            }
+			var filter = $filter('filter');
+			$scope.ddjfRelateProduct.relateProductList = $scope.ddjfRelateProduct.relateProductList  || [];
+            $scope.$on('prodcutId:update',function (event,data) {
+                $scope.ddjfRelateProduct.relateProductList.splice(0,$scope.ddjfRelateProduct.relateProductList.length);
+            });
+
+			$scope.addRelateProduct = function(){
+				var lastRelateProductCell = {relateProduct:{}};
+				if($scope.ddjfRelateProduct.relateProductList.length){
+					lastRelateProductCell = $scope.ddjfRelateProduct.relateProductList[$scope.ddjfRelateProduct.relateProductList.length-1];
+					if(!lastRelateProductCell.relateProduct.productId){
+						$.topCall.error("请选择关联产品");
+						return;
+					}
+				}
+				var companyCode =  $scope.ddjfRelateProduct.branch_id;
+				var productId = $scope.ddjfRelateProduct.product_id || $scope.ddjfRelateProduct.productId;
+				var relProductId = lastRelateProductCell.relateProduct.productId;
+
+				var relateProps = {productId:productId,relProductId:relProductId,companyCode:companyCode,relateProduct:targetRelateProduct,existRelateProduct:false,isEdit:true,manCheckFirst:$scope.ddjfRelateProduct.man_check_first,borrowingAmount:$scope.ddjfRelateProduct.borrowing_amount,guaranteeAmount:$scope.ddjfRelateProduct.guarantee_amount};
+                var targetRelateProduct = {relateProps:relateProps,relateProduct:{}};
+				$scope.ddjfRelateProduct.relateProductList.push(targetRelateProduct);
+			}
+			
+			$scope.$on('relateProduct',function(event,data){
+				if(data.status == 'remove' || data.status == 'error'){
+					 $scope.ddjfRelateProduct.relateProductList.splice(data.index,1);
+				}
+				if(data.status == 'success'){
+					angular.forEach($scope.ddjfRelateProduct.relateProductList,function(relateProduct,index){
+						if(index < data.index){
+							relateProduct.relateProps.isEdit = false;
+						}
+					})
+				}
+				
+			})
+			 
+		}
+	};
+}]).directive('ddjfCustomerDawn',[ 'baseService','productHelper','flowTablesService','$filter',function( baseService,productHelper,flowTablesService,$filter){
+	return {
+		 restrict: 'EA',
+		 replace:true,
+		 scope:{
+			 ddjfCustomerDawn:'=',
+			 orderInfo:'='
+		 },
+		 templateUrl: __ctx+'/js/platform/bims/templates/flows/components/customerList.html',
+		 link: function ($scope, element, attrs) { 
+			 var filter  = $filter('filter');
+			 // 交易卖家和非交易产权人
+			 $scope.addCustomer = function() { 
+				if(!$scope.ddjfCustomerDawn.product_id){
+					$.topCall.toast("客户信息","请选择业务品种");
+					return false;
+				}
+				var customerRelPar = {};
+				
+				if($scope.orderInfo.productHelper.isJY){
+					if(!filter($scope.ddjfCustomerDawn.sub_biz_customer_rel,{relation:"OWN",role:"OWN"}).length){
+						customerRelPar = {role:'OWN',relation:'OWN'};
+					}else{
+						customerRelPar = {role:'OWN',relation:'PAT'};
+					} 
+				}else{
+					if(!filter($scope.ddjfCustomerDawn.sub_biz_customer_rel,{relation:"CQR",role:"OWN"}).length){
+						customerRelPar = {role:'OWN',relation:'CQR'};
+					}else{
+						customerRelPar = {role:'OWN',relation:'QTLXR'};
+					} 
+				}
+				flowTablesService.initTableByName('biz_customer_rel',customerRelPar);
+			}
+			 $scope.removeCustomer = function() {
+			 	$scope.ddjfCustomerDawn.sub_biz_customer_rel.splice(this.$index,1);
+			 }
+			 
+			 $scope.removeBuyCustomer = function() {
+                 $scope.ddjfCustomerDawn.sub_biz_customer_rel.splice(this.$index,1);
+			 }
+			 // 交易买家
+			 $scope.addBuyCustomer = function() { 
+				if(!$scope.ddjfCustomerDawn.product_id){
+					$.topCall.toast("客户信息","请选择业务品种");
+					return false;
+				}
+				var customerRelPar = {}
+				if(!filter($scope.ddjfCustomerDawn.sub_biz_customer_rel,{relation:"BUY",role:"BUY"}).length){
+					customerRelPar = {role:'BUY',relation:'BUY'};
+				}else{
+					customerRelPar = {role:'BUY',relation:'BYP'};
+				} 
+				flowTablesService.initTableByName('biz_customer_rel',customerRelPar);
+			}
+			 //非交易过滤
+			 $scope.customerFilter = function(customer){
+				 var customerType = ",OWN,BUY,YDKDYRPO,XDKDYRPO,JKRPO,XDKJKRPO,";
+				 var key = customer.key;
+				 return customerType.indexOf(","+key+",")==-1;
+			 }
+			 
+			 $scope.$on('prodcutId:update',function(event,data){
+				 
+				 if(!$scope.ddjfCustomerDawn.product_id){
+						return;
+					}
+					var customerRelPar = {};
+					if($scope.orderInfo.productHelper.isJY){ 
+						customerRelPar = {role:'OWN',relation:'OWN',customer:{"idCardType":"CER"}}; 
+					}else{
+					    customerRelPar = {role:'OWN',relation:'CQR',customer:{"idCardType":"CER"}}; 
+					}
+					flowTablesService.initTableByName('biz_customer_rel',customerRelPar);
+			 });
+			 
+		 }
+	}
+
+}]).directive('ddjfAppointMatter',[ 'baseService','productHelper','filterFilter',function( baseService,productHelper,filter){
+	return {
+		 restrict: 'EA',
+		 replace:true,
+		 scope:{
+			 ddjfAppointMatter:'=',
+			 orderInfo:'='
+		 },
+		 templateUrl: __ctx+'/js/platform/bims/templates/flows/components/appointMatter.html',
+		 compile:function compile(tElement,tAttrs,transclude){
+		      return{
+		        pre:function preLink($scope,iElement,iAttrs,controller){
+		        	$scope.appoint = $scope.ddjfAppointMatter.order_appoint ? angular.fromJson($scope.ddjfAppointMatter.order_appoint) : {relateMatters:'Interview'}; 
+		        },
+		        post:function postLink($scope,iElement,iAttrs,controller){ 
+		        	if($scope.orderInfo.productId){
+		        		$scope.orderInfo.productHelper = productHelper.init($scope.orderInfo.productId)
+		        	}
+		        	$scope.$on('prodcutId:update',function(event,data){
+		        		$scope.orderInfo.productHelper = productHelper.init(data.productId);
+		        	}); 
+		        	var $checkboxs = $(iElement).find('[ht-checkboxs]').find('input[type="checkbox"]');
+		        	var matter = {};
+		        	$checkboxs.each(function(i,checkbox){
+		        		var $c = $(checkbox),
+		        			matterKey = $c.val(),
+		        			matterName = $c.closest('label').text();
+		        			matter[matterKey] = matterName;
+		        	});
+		        	 $scope.$watch('appoint',function(newValue,oldValue){
+						   if(newValue){
+							   if(!newValue.appointTime){
+								   $scope.ddjfAppointMatter.order_appoint = undefined;
+								   return;
+							   }
+							   var appointMatter = {appointInfoList:[]};
+							   if(newValue.relateMatters){
+								   appointMatter.appointInfoList = newValue.relateMatters.split(',').map(function(m){
+									   var rm = {};
+									   rm.matterKey = m;
+									   rm.matterName = matter[m];
+									   return rm;
+								   })
+							   }
+							   $scope.ddjfAppointMatter.order_appoint = angular.toJson(angular.extend({},newValue,appointMatter));
+						   }
+				     },true)
+		        }
+		      }
+		  } 
+	}
+
+}])

@@ -1,0 +1,122 @@
+<!--
+  ~ Copyright 2013 Raffael Herzog
+  ~
+  ~ This file is part of markdown-doclet.
+  ~
+  ~ markdown-doclet is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ markdown-doclet is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with markdown-doclet.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<idea-plugin>
+  <id>ch.raffael.mddoclet.integrations.idea.MarkdownDocletIdea</id>
+  <name>Markdown Doclet for IDEA</name>
+  <version>1.4-0</version>
+  <vendor email="herzog@raffael.ch" url="https://github.com/Abnaxos/markdown-doclet/">Raffael Herzog</vendor>
+
+  <description><![CDATA[
+      <p><strong>Note: This plugin replaces "Pegdown Doclet for IDEA".</strong></p>
+
+      <p>Enables support for Quick Documentation (Ctrl-Q) for projects that use the
+      Markdown Doclet. Enable and configure the plugin in "Settings &ndash; Markdown
+      Doclet".</p>
+
+      <p><em>Tip:</em> Also install the the PlantUML integration plugin for live-previews
+      of your UML diagrams.</p>
+
+      <p><em>Known Issues</em></p>
+      <ul>
+        <li>Some formatting problems in certain constellations; the doc is still readable,
+            though</li>
+        <li>No option for Markdown parse timeout</li>
+      </ul>
+      <p><em>Limitation that won't be fixed</em></p>
+      <ul>
+        <li>It will only process JavaDocs of project source files, external libraries
+            won't be processed; use generated JavaDocs for libraries</li>
+        <li>It works only if the class where Ctrl-Q was used is located in a
+            Markdown-enabled module</li>
+        <li>It may get confused on certain constellations of Markdown-enabled and
+            Standard-JavaDoc modules</li>
+      </ul>
+      ]]></description>
+
+  <change-notes><![CDATA[
+      <dl>
+        <dt>1.4-0 (2017-07-11)</dt>
+        <dd>
+          <ul>
+            <li>Rename to Markdown Doclet</li>
+            <li>Upgrade PlantUML to 8059</li>
+            <li>Add support for markdown taglets</li>
+          </ul>
+        </dd>
+        <dt>1.3-1 (2017-01-07)</dt>
+        <dd>
+          <ul>
+            <li>Fix <a href="https://github.com/Abnaxos/markdown-doclet/issues/52">Issue #52</a>
+              (Assertion failed at PsiParameterListImpl.getParameterIndex at MarkdownDocumentationProvider.generateDoc)</li>
+          </ul>
+        </dd>
+        <dt>1.3-0 (2016-05-20)</dt>
+        <dd>
+          <ul>
+            <li>Fix various issues with rendering of links in quick Javadoc</li>
+          </ul>
+        </dd>
+        <dt>1.0 (2013-06-05)</dt>
+        <dd>
+          <ul>
+            <li>Release IDEA plugin 1.0</li>
+          </ul>
+        </dd>
+        <dt>2013-05-31</dt>
+        <dd>
+          <ul>
+            <li>Add support for UML diagrams and images</li>
+            <li>Improve formatting of code blocks</li>
+          </ul>
+        </dd>
+      </dl>
+      ]]>
+  </change-notes>
+
+  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="171"/>
+
+  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <application-components>
+    <component>
+      <implementation-class>ch.raffael.mddoclet.integrations.idea.TempFileManager</implementation-class>
+    </component>
+  </application-components>
+  <project-components>
+    <component>
+      <implementation-class>ch.raffael.mddoclet.integrations.idea.ProjectConfiguration</implementation-class>
+    </component>
+  </project-components>
+  <module-components>
+    <component>
+      <implementation-class>ch.raffael.mddoclet.integrations.idea.ModuleConfiguration</implementation-class>
+    </component>
+  </module-components>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <lang.documentationProvider language="JAVA" implementationClass="ch.raffael.mddoclet.integrations.idea.MarkdownDocumentationProvider" order="first"/>
+    <projectConfigurable instance="ch.raffael.mddoclet.integrations.idea.MarkdownConfigurable"
+                         id="ch.raffael.mddoclet.integrations.idea.MarkdownDocletIdea.Config" displayName="Markdown Doclet" groupId="tools"/>
+  </extensions>
+</idea-plugin>

@@ -1,0 +1,1335 @@
+//审批资料外传js
+
+var checkMarSendctrl = [ '$scope', 'baseService', 'flowTablesService', 'productHelper','bpm','$filter',function($scope, baseService, flowTablesService, productHelper,bpm,$filter) {
+	var applyNo = $scope.data.bizApply.apply_no;
+	var branchId = $scope.data.bizApply.branch_id;
+	var productId = $scope.data.bizApply.product_id;
+	var houseNo = $scope.data.bizApply.house_no;
+	var taskInfo = bpm.getTask();
+	$scope.$parent.productHelper = productHelper.init(productId);
+	// 合作机构
+	var partnerInsuranceId = $scope.partnerInsuranceId = $scope.data.bizApply.partner_insurance_id;
+	$scope.orderInfo = {
+		pNodeId:taskInfo.nodeId,
+		eventType:'spzlwc',
+		apply_no : applyNo
+	};
+	flowTablesService.cacheOtherApplyBo();
+	$scope.$on('boData:update',function(data){
+		var ownArr = flowTablesService.getCustomerByType("OWN"); 
+		var buyArr = flowTablesService.getCustomerByType("BUY");
+		var ownArr = ownArr.concat(buyArr);
+		var borrowers = 0;
+		angular.forEach(ownArr,function(custom){
+			if(custom.is_actual_borrower_name == "Y"){
+				borrowers++;
+			}
+		})
+		if(borrowers!=1){
+			$.topCall.error("请在客户信息选择有且只有一个主借款人！");
+			return;
+		}
+	})
+
+	$scope.bizIsrMixed = flowTablesService.getScopeTable('biz_isr_mixed')[0];
+	$scope.bizFeeSummary = flowTablesService.getScopeTable('biz_fee_summary')[0];
+	$scope.bizNewLoan = flowTablesService.getScopeTable('biz_new_loan')[0];
+	$scope.bizOriLoan = flowTablesService.getScopeTable('biz_ori_loan')[0];
+	$scope.bizHouse = flowTablesService.getScopeTable('biz_house')[0];
+	$scope.bizPartnerGrant = flowTablesService.getScopeTable('biz_partner_grant')[0];
+	var bizAccount = $scope.bizAccount = flowTablesService.getFlowTable('biz_account');
+	$scope.bizCustomerRel = $scope.data.bizApply.sub_biz_customer_rel;
+	
+	$scope.bizChargeAccount = flowTablesService.getScopeTable('biz_charge_account')[0];
+	$scope.bizChargeAccount.partner_id = partnerInsuranceId;
+	$scope.bizChargeAccount.apply_no = applyNo;
+	
+	
+	$scope.init=function(){
+        // 获取主借款人信息
+        $scope.bizCustomer = {};
+        url = __ctx + "/bims/customer/getActualBorrowerName";
+        baseService.postForm(url, {
+            applyNo : applyNo
+        }).then(function(data) {
+            $scope.mainCustomer = $scope.$parent.mainCustomer = data;
+			if ($scope.data.bizApply.partner_insurance_id == 'SNXD' || $scope.data.bizApply.partner_insurance_id == 'LFYH') {
+				/*// 获取主借款人信息
+				$scope.bizCustomer = {};
+				url = __ctx + "/bims/customer/getActualBorrowerName";
+				baseService.postForm(url, {
+					applyNo : applyNo
+				}).then(function(data) {*/
+					$scope.bizCustomer = data;
+					if($scope.data.bizApply.partner_insurance_id=='LFYH'){
+						angular.forEach($scope.bizCustomerRel,function(item){
+							if(item.customer_no==data.custNo){
+								item.customer=data;
+								//根据主借款人身份证信息代入出生日期
+								if(item.is_actual_borrower_name!="Y" || item.customer.idCardType!="CER"){
+									return;
+								}
+								//获取出生年月日
+								var birthdayYear = item.customer.idCardNo.substr(6,4);
+								var birthdayMonth = item.customer.idCardNo.substr(10,2);
+								var birthdayDay = item.customer.idCardNo.substr(12,2);
+								item.customer.birthday = birthdayYear + "-" + birthdayMonth + "-" + birthdayDay;
+							}
+						});
+					}
+			}
+        });
+
+		if ($scope.data.bizApply.partner_insurance_id == 'SNXD') {
+			// 处理买买贷账户信息
+			$scope.mmdAccount = {};
+			angular.forEach(bizAccount, function(item) {
+				if (item.type == "QT(MMD)") {
+					$scope.mmdAccount = item;
+				}
+			});
+			// 获取合同签署地
+			url = __ctx + "/bims/applyOrderInfo/getCityInfo";
+			baseService.postForm(url, {
+				branchId : branchId
+			}).then(function(data) {
+				$scope.bizCityInfo = data;
+			});
+		}
+		
+		if($scope.data.bizApply.partner_insurance_id=='LFYH'){
+			$scope.term="6";//固定值，展示作用
+			//账户管理授权信息(固定值)
+			$scope.bizPartnerGrant.pay_way="委托支付";
+			var url = __ctx + '/bims/queryAptitude/getAccountInfo';
+			baseService.postForm(url, {partnerCode:partnerInsuranceId}).then(function(data) {
+				$scope.bizPartnerGrant.repay_open_bank=data.openBankName;
+				$scope.bizPartnerGrant.repay_name=data.acctName;
+				$scope.bizPartnerGrant.repay_number=data.acctNo;
+			})
+		}		
+	}
+	$scope.init();
+	
+	$scope.initOpinion = function(){
+		var url = __ctx + '/bims/bpmFlowOpinion/getFlowOpinion';
+		var taskKeyArray = new Array();
+		taskKeyArray.push("Investigate");
+		taskKeyArray.push("ManCheck");
+		var params = {
+			"procInstId" : bpmTask.procInstId,
+			"taskKeys" : JSON.stringify(taskKeyArray)
+		};
+		
+		baseService.postForm(url, params).then(function(data) {
+			if(data.result.Investigate){
+				$scope.investigate_opinion = data.result.Investigate.opinion;
+			}else{
+				$scope.investigate_opinion = "";
+			}
+			
+			if(data.result.ManCheck){
+				$scope.manCheck_opinion = data.result.ManCheck.opinion;
+			}else{
+				$scope.manCheck_opinion = "";
+			}
+			
+		});
+	}
+	$scope.initOpinion();
+	
+	$scope.isOnline =false;
+	$scope.isOnline= function() {
+		var url = __ctx + '/bims/p2p/v2/isOnLine';
+        var params ={"partnerId":partnerInsuranceId};
+        baseService.postForm(url, params).then(function(data) {
+        	$scope.isOnline= data.flag;
+        })
+	};
+	$scope.isOnline();
+	
+	$scope.$watch("data.bizApply.partner_insurance_id", function(newValue, oldValue) {
+		if(newValue!=oldValue){		
+			$scope.init();			
+		}
+		if($scope.data.bizApply.partner_insurance_id =='BHXT'){
+			url=__ctx + "/bims/p2p/v2/generateContractNoReturn";
+			baseService.postForm(url,{applyNo:applyNo}).then(function(data){
+				$scope.bizIsrMixed.contract_no = data.contract_no;
+			});
+		}
+	});
+	
+	/**以下的js是合作机构相关的*/
+	// 判断是否真融宝业务
+	var parterId = $scope.data.bizApply.partner_insurance_id;
+	if (parterId.indexOf('ZRB') > -1 || parterId.indexOf('LYXD') > -1) {
+		$scope.isZrb = true;
+	}
+	
+	// 【外传】按钮的事件
+	$scope.sendAppr = function(scope, baseService) {
+/*		if(!isAutomatedApproveDone()) {
+			$.topCall.error("请先进行“借款信息校验”");
+			return;
+		}*/
+		
+		if(!$scope.bizFeeSummary.product_term){
+			$.topCall.error("请先填写产品期限");
+			return;
+		}
+
+		var partnerId = scope.data.bizApply.partner_insurance_id;
+		var filter = $filter('filter');
+		if(partnerId.indexOf("XDA")!=-1 || partnerId.indexOf("XTC")!=-1 ||partnerId.indexOf("ZSY")!=-1 || partnerId.indexOf("YNTRUST")!=-1 || partnerId.indexOf("XTA")!=-1 || partnerId.indexOf("LJS")!=-1){
+			var checkId = filter(scope.data.bizApply.sub_biz_p2p_ret,{task_name:'CHECK_ID',partner_id:partnerId});
+			//1 ID校验
+				if(checkId.length==0){
+				$.topCall.error("请先操作合作机构的【ID校验】");
+				return;
+			}else if(checkId[0].status!==1){
+				$.topCall.error("合作机构【ID校验】失败，请重新校验");
+				return;
+			}
+		}
+		
+		if (scope.data.bizApply.partner_insurance_name == "陆金所") {
+			var checkArr = checkOutsideFiles(scope.orderInfo);
+			if (checkArr.length > 0) {
+				$.topCall.error("您还有资料未上传，请先补全资料再提交!");
+				return;
+			}
+			var url = __ctx + "/bims/lujinsuo/uploadInfo?applyNo=" + scope.data.bizApply.apply_no + "&partnerId=" + scope.data.bizApply.product_id;
+			baseService.postForm(url, {}).then(function(data, status) {
+				if (data['success']) {
+					$.topCall.success("发送成功")
+				} else {
+					$.topCall.error(data['message']);
+				}
+			});
+		} else if (partnerId.indexOf('ZRB') > -1 || parterId.indexOf('LYXD') > -1) {
+			var url = __ctx + "/bims/zhenrongbao/v2/loadPerson";
+			var loan_expect_time = scope.data.bizApply.sub_biz_fee_summary[0].pre_use_amount_date;
+			if (!loan_expect_time) {
+				$.topCall.error("预计放款时间不能为空");
+				return;
+			}
+			baseService.postForm(url, {
+				"applyNo" : scope.data.bizApply.apply_no,
+				"loanExpectTime" : loan_expect_time
+			}).then(function(data, status) {
+				if (data['success']) {
+					$.topCall.success("发送成功",function(){
+						location.reload();
+					})
+				} else {
+					$.topCall.error(data['message']);
+				}
+			});
+		} else if (partnerId.indexOf('XTA') > -1 || partnerId.indexOf('YNTRUST') > -1 || partnerId.indexOf('ZSY') > -1|| partnerId.indexOf('XTC') > -1 ||partnerId.indexOf('BHXT') > -1) {
+			var url = __ctx + "/bims/p2p/v2/msgSendOutside";
+			baseService.postForm(url, {
+				"applyNo" : scope.data.bizApply.apply_no
+			}).then(function(data, status) {
+				if (data['success']) {
+					scope.data.bizApply.sub_biz_p2p_ret.push({
+						"apply_no" : scope.data.bizApply.apply_no,
+						"partner_id" : scope.data.bizApply.partner_insurance_id,
+						"partner_name" : scope.data.bizApply.partner_insurance_name,
+						"task_name" : "TEAM_ORG_APPROVE",
+						"status" : "1",
+						"result" : "外传通过"
+					});
+					$.topCall.success("发送成功",function(){
+						location.reload();
+					});
+				} else {
+					if (data['extra'] == 'weiXinFail') {
+						scope.data.bizApply.sub_biz_p2p_ret.push({
+							"apply_no" : scope.data.bizApply.apply_no,
+							"partner_id" : scope.data.bizApply.partner_insurance_id,
+							"partner_name" : scope.data.bizApply.partner_insurance_name,
+							"task_name" : "TEAM_ORG_APPROVE",
+							"status" : "1",
+							"result" : "外传通过"
+						});
+					}
+					$.topCall.error(data['message'].replace(/\n/g, "<br>"));
+				}
+			});
+		}else if (partnerId.indexOf('XDA') > -1 ) {
+			baseService.postForm(__ctx + "/bims/p2p/v2/xdMsgSendOutside", {
+				"applyNo" : scope.data.bizApply.apply_no
+			}).then(function(data, status) {
+				if (data['success']) {
+					$.topCall.success("发送成功",function(){
+						location.reload();
+					});
+				} else {
+					$.topCall.error(data['message'].replace(/\n/g, "<br>"));
+				}
+			});
+		} else {
+			var url = __ctx + "/business/material/MakeFileAndDownLoad/getFiles?applyNo=" + scope.data.bizApply.apply_no + "&eventType=spzlwc&deliverType=email";
+			baseService.get(url).then(function(data, status) {
+				if (data.success) {
+					$.topCall.success("发送成功");
+				} else {
+					$.topCall.error(data.reason);
+				}
+			}, function() {
+				$.topCall.error("请确认是否需要资料外传？有问题请联系管理员！");
+			});
+		}
+	};
+	// 检查真融宝审核结果
+	$scope.$parent.validate = function(scope, baseService) {
+/*		if(!isAutomatedApproveDone()) {
+			$.topCall.error("请先进行“借款信息校验”");
+			return false;
+		}*/
+	var apply = scope.data.bizApply;
+		var applyNo = apply.apply_no;
+		var parterId = apply.partner_insurance_id;
+		var bhFlag = false;
+		//若自动审批规则命中，则需要校验特殊情况说明是否有填写
+		var noDate = parseInt(applyNo.substring(5, 13));
+		if(noDate < 20180323){
+			if(scope.data.bizApply.sub_biz_hit_rule.length && !scope.data.bizApply.sub_biz_isr_mixed[0].zlwc_remark) {
+				$.topCall.error("请填写“特殊情况说明”");
+				return false;
+			}
+		}
+
+		if(parterId.indexOf("BHXT")>-1){
+			var noDate = parseInt(applyNo.substring(5, 13));
+			if(noDate > 20171210){
+				bhFlag = true;
+			}
+		}
+		var needDialog = true;
+		var isInList = false;
+		var filter = $filter('filter');
+		var partner=["ZRB","YNTRUST","ZSY","BHXT","XTA","XTC"];
+		angular.forEach(partner, function(item, i) {
+			if (parterId.indexOf(item) > -1&&(parterId.indexOf("XTA")>-1 ||parterId.indexOf("YNTRUST")>-1 || parterId.indexOf("ZSY")>-1 || parterId.indexOf("XTC")>-1|| bhFlag )) {
+				isInList=true;
+				var p2pRet = filter(apply.sub_biz_p2p_ret,{partner_id:parterId});
+				//var p2pRet = apply.sub_biz_p2p_ret;
+				var partnerName = apply.partner_insurance_name;
+				if (bhFlag && p2pRet.length ==0) {
+					$.topCall.error("请先外传资料");
+					return false;
+				}
+				if (p2pRet.length==0 || (p2pRet.length ==1 && p2pRet[0].task_name=="CHECK_ID")) {
+					$.topCall.error("请先外传资料");
+					return false;
+				}else {					
+					angular.forEach(p2pRet, function(item, i) {
+						if(item.task_name=="TEAM_ORG_APPROVE"){
+							needDialog=false;
+							if (item.status == null || item.status == '') {
+								needDialog=true;
+								$.topCall.error("合作机构还未审批");
+							} else if (item.status != 1) {
+								needDialog=true;
+								$.topCall.error(partnerName+"审批不通过");
+							}
+						}
+					})
+				}
+			}else if (parterId.indexOf(item) > -1&&parterId.indexOf("ZRB")>-1) {
+				isInList=true;
+				var p2pRet = apply.sub_biz_p2p_ret;
+					angular.forEach(p2pRet, function(item, i) {
+						if(item.task_name=="TEAM_APPROVE"){	
+							needDialog=false;
+						}
+					})
+					if(needDialog){
+						$.topCall.error("请先外传资料！");
+						return false;
+					}				
+			}
+		});
+		if (parterId.indexOf("ZRB")>-1) {
+			//真融宝才需要吧，云信和中顺义在biz_p2p_ret_extend 表有审批资料交互时间记录
+			validForm(scope);
+		}
+		if(needDialog&&isInList){
+			return false;
+		}else{
+			return true;
+		}
+			
+	};
+
+    $scope.$parent.downloadMaterial = function(typeKey){
+        var apply = $scope.data.bizApply;
+        var applyNo = apply.apply_no;
+        var downloadUrl = __ctx+"/business/materialFile/singleDownload?applyNo="+applyNo +"&typeNo=" + typeKey;
+
+        if(window.HtUtil){
+            HtUtil.download(downloadUrl);
+        }else{
+            var frm = '<form name="download" class="content" method="post" enctype="multipart/form-data" action="'+downloadUrl+'"></form>';
+            var $frm = $(frm);
+            $('body').append($frm);
+            $frm.submit();
+        }
+
+    }
+
+	//下载（诺德）按钮的事件，从前置脚本的输入框中复制过来
+	$scope.$parent.downND = function() {
+		var applyNo = $scope.data.bizApply.apply_no;
+		var noDate = parseInt(applyNo.substring(5, 13));
+		if(noDate < 20180323){
+			if(!isAutomatedApproveDone()) {
+				$.topCall.error("请先进行“借款信息校验”");
+				return;
+			}
+		}
+		
+		var frm=new com.hotent.form.Form();
+		frm.creatForm("bpmPreview",__ctx+"/business/material/MakeFileAndDownLoad/getFiles?applyNo="+AngularUtil.getScope().data.bizApply.apply_no+"&eventType=spzlwc_nd&deliverType=download&loanTime="+AngularUtil.getScope().data.bizApply.sub_biz_fee_summary[0].pre_use_amount_date);
+		frm.setMethod("get");
+		frm.submit();
+	}
+	
+	// 【一键下载】按钮的事件
+	$scope.$parent.down = function() {
+		var applyNo = $scope.data.bizApply.apply_no;
+		var noDate = parseInt(applyNo.substring(5, 13));
+		if(noDate < 20180323){
+			if(!isAutomatedApproveDone()) {
+				$.topCall.error("请先进行“借款信息校验”");
+				return;
+			}
+		}
+		
+		var loanTime = $scope.data.bizApply.sub_biz_fee_summary[0].pre_use_amount_date;
+		if ($scope.isZrb && !loanTime) {
+			$.topCall.error("请正确填写【预计放款时间】");
+			return;
+		}
+		if(partnerInsuranceId.indexOf("LYXD")!=-1 && !loanTime){
+			$.topCall.error("请正确填写【预计用款时间】");
+			return;
+		}
+
+		var frm = new com.hotent.form.Form();
+		frm.creatForm("bpmPreview", __ctx + "/business/material/MakeFileAndDownLoad/getFiles?applyNo=" + $scope.data.bizApply.apply_no + "&eventType=spzlwc&deliverType=download&loanTime=" + loanTime);
+		frm.setMethod("get");
+		frm.submit();
+	};
+	
+	//ID校验
+	$scope.$parent.openLuIdValidate = function (formKey){
+		formKey = 'lenderValidate';
+		var applyOrder = $scope.data.bizApply;
+		if(!applyOrder.partner_insurance_id){
+            $.topCall.toast("消息提示", "请在产品/费用信息中选择合作机构");
+            return ;
+		}else if(applyOrder.partner_insurance_id.indexOf("XDA") == -1 && applyOrder.partner_insurance_id.indexOf("LJS") == -1 && applyOrder.partner_insurance_id.indexOf("YNTRUST") == -1 && applyOrder.partner_insurance_id.indexOf("ZSY") == -1 && applyOrder.partner_insurance_id.indexOf("XTC") == -1 && applyOrder.partner_insurance_id.indexOf("XTA") == -1){
+            $.topCall.toast("消息提示", "当前合作机构["+ applyOrder.partnerInsuranceName +"]不支持");
+            return ;
+		} 
+		getSellerByApplyNo(applyOrder.apply_no).then(function(data){
+			var customer = data.result;
+			if (!customer) {
+				$.topCall.error("请在客户信息选择有且只有一个主借款人！");
+				return;
+			} 
+			var title="ID校验";
+			
+			if(applyOrder.partner_insurance_id.indexOf("LJS") != -1){
+				title="陆金所ID校验";
+			}else if(applyOrder.partner_insurance_id.indexOf("YNTRUST") != -1 || applyOrder.partner_insurance_id.indexOf("XTA-YN") != -1 ){
+				title="云南信托ID校验";
+			}else if(applyOrder.partner_insurance_id.indexOf("ZSY") != -1||applyOrder.partner_insurance_id.indexOf("XTC") != -1){
+				title="中顺易ID校验";
+			}
+			
+			var partnerInsuranceId = applyOrder.partner_insurance_id;
+			var productName = applyOrder.product_name;
+		    var param = {
+                formKey : formKey,
+                apply_no : applyNo,
+                partnerInsuranceId : partnerInsuranceId,
+                productName : productName,
+
+            };
+		    
+		    var luUsername;
+		    var isLJS = false;//判断是否是陆金所
+            CustomDialog.openCustomDialogBimsForm({
+                maximizable:true,
+                title:title,
+                params:param,
+                width: 950,
+                beforeSave: function(angularScope){
+                	var boCode = angularScope.boCode
+                	var formData = angularScope.data[boCode]; 
+                	if(formData.partner_insurance_id.indexOf("LJS") != -1){
+                		isLJS = true;
+                		if(!formData.sub_bizLuIdValidate.length){
+                			$.topCall.error("未验证陆金所");
+                			return false;
+                		}
+                		luUsername = formData.sub_bizLuIdValidate[0].lu_username;
+    				}else{
+    					luUsername = formData.sub_biz_p2p_ret[0].partner_name;
+    				}
+                    
+                    console.log("beforeSave:"+applyNo+"lu_username:"+luUsername);
+                },
+                success:function(data,rtn) {
+                    if (data.result == '1') {
+                    	if(isLJS){//是陆金所
+                    		$scope.data.bizOrderFlow.sub_biz_isr_mixed[0].partners_user_name = luUsername;
+                    	}
+                        $.topCall.success("操作成功",function(){
+                        	location.reload();
+                        });
+                        $scope.$apply();
+                    } else {
+                        $.topCall.success(data.message);
+                    }
+                },error: function(data){
+                    $.topCall.success(data.message);
+                }
+            });
+		}); 
+	};
+	
+	function getSellerByApplyNo(applyNo) { 
+	    var url = __ctx + '/bims/lujinsuo/getWaitCheckCustomer?applyNo=' + applyNo;
+	    return AngularUtil.getService('baseService').post(url);
+	 }
+	
+	
+	//自动审批
+	function isAutomatedApproveDone(){
+		
+		var biz_isr_mixed = $scope.data.bizApply.sub_biz_isr_mixed[0];
+		if(biz_isr_mixed.is_automated_approve_done == 1) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	function executeAutomatedApprove(){
+		var preliminaryResult = $scope.data.bizApply.preliminary_result;
+		
+		var url = __ctx + '/bims/queryAptitude/getAutomatedApprovalResult';
+		baseService.postForm(url, {
+			applyNo : applyNo,
+			flowNode : "hbzlwc"
+		}).then(function(data) {
+			if (data.result == "E") {
+				$.topCall.error(data.msg);
+				return;
+			}
+			
+			if (data.result == "Y" || ($scope.bizIsrMixed.remark && preliminaryResult)) {
+				location.reload();
+			}else {
+				$.topCall.success("自动审批不通过，请填写情况说明/申诉意见", function() {
+					location.reload();
+				});
+			}
+		});
+	}
+	
+	$scope.hitRules = $scope.data.bizApply.sub_biz_hit_rule;
+	$scope.$parent.automatedApprove = function() {
+		var applyNo = $scope.data.bizApply.apply_no;
+		var matterKeys = new Array();
+		matterKeys.push("CostMark");
+		//有赎楼才需要判断是否办理“预约赎楼”
+		if($scope.productHelper.isSL){
+			matterKeys.push("PreRandom");
+		}
+		//是否办理过费率登记
+		var url = __ctx + "/bims/orderMatterBpm/isMattersDone";	
+		baseService.postForm(url,{applyNo:applyNo,matterKeys:JSON.stringify(matterKeys)}).then(function(data) {
+			if(!data.isSuccess){
+				$.topCall.error(data.msg);
+				return false;
+			}else{
+				var url = __ctx + '/bims/queryAptitude/getAutomatedApprovalResult';
+				baseService.postForm(url, {
+					applyNo : applyNo,
+					flowNode : "hbzlwc"
+				}).then(function(data) {
+					$.topCall.success("自动审批已完成", function() {
+						location.reload();
+					});
+				});
+			}
+		})
+	}
+	
+	// 提交的时候更新订单流转的审批资料外传时间
+	function validForm(scope) {
+		var $filter = AngularUtil.getService('$filter');
+		var filter = $filter('filter');
+		var dateFilter = $filter('date');
+		var spzljh_pc_list = filter(scope.data.bizApply.sub_biz_order_flow, {
+			flow_type : 'spzljh_pc'
+		});
+		var spzljhPc = {};
+		if (!spzljh_pc_list.length) {
+			spzljhPc = angular.extend(angular.copy(scope.data.bizApply.initData.biz_order_flow), {
+				flow_type : 'spzljh_pc'
+			});
+			scope.data.bizApply.sub_biz_order_flow.push(spzljhPc);
+		} else {
+			spzljhPc = spzljh_pc_list[0];
+		}
+		spzljhPc.handle_time = dateFilter(new Date(), 'yyyy-MM-dd');
+
+		return true;
+	}
+	
+	//大桔,赢众通,陆金所,贵州直销  收款账户是配置的公司账户
+	$scope.isCompAcco = true;
+	var isSuccess = false;
+	//判断机构是否外传成功
+	$scope.isSend = function(){
+		angular.forEach($scope.data.bizApply.sub_biz_p2p_ret,function(item){
+			if(item.task_name =="TEAM_ORG_APPROVE" && item.status==1){
+				isSuccess = true;
+			}
+		});
+	};
+	$scope.isSend();
+	if (partnerInsuranceId.indexOf("GZYHZX")!=-1 ||partnerInsuranceId.indexOf("LJS")!=-1 ||partnerInsuranceId.indexOf("DJW")!=-1 || isSuccess) {
+		$scope.isCompAcco = false;
+	}
+		
+	//初始化账户信息
+	var partnerCode = $scope.data.bizApply.partner_insurance_id;
+	$scope.getAccountInfo = function(){
+		var querydata = {"purpose_type":"business","buss_type":"platToCompany","pay_type":"enter","area_code":"","partner_code":partnerCode};
+		var params = {alias:"companyAccountConfig",querydata:querydata};
+		//需要使用机构指定收款账户
+		if(checkPartner(partnerCode)){
+			$scope.bizChargeAccount.payee = "customer";
+			var hasInit = $scope.initTuoGuanPartnerGrantAccount("QT(MMD)");
+			if(!hasInit){
+				var hasInitAccount = $scope.initPartnerGrantAccount("QT(MMD)");
+				if(!hasInitAccount){
+					console.error($scope.data.bizApply.partner_insurance_name+"机构指定收款账户信息不存在！");
+				}
+			}
+			return ;
+		}
+		DoQuery(params,function(data){
+			//划回公司
+			$scope.$apply(function(){
+				if(data&&data.length>0){
+					var account = data[0];
+					$scope.bizChargeAccount.charge_name = account.acct_name;
+					$scope.bizChargeAccount.charge_number = account.acct_no;
+					$scope.bizChargeAccount.charge_open_bank_name = account.open_bank_name;
+					$scope.bizChargeAccount.charge_open_bank_code = account.open_bank_code;
+					$scope.bizChargeAccount.payee = "company";
+				}
+				//划回个人账户
+				else{
+					$scope.bizChargeAccount.payee = "customer";
+					//赎楼E取供楼卡，若有托管优先取托管供楼卡
+					var account ;
+					if($scope.data.bizApply.product_id.indexOf("SLY_")!=-1){
+						var hasInit = $scope.initTuoGuanPartnerGrantAccount("GLK");
+						//没有托管则取账户卡
+						if(!hasInit){
+							var hasInitAccount = $scope.initPartnerGrantAccount("GLK");
+							if(!hasInitAccount){
+								console.error("供楼卡尚未托管,或者未添加供楼卡信息！");
+							}
+						}						
+					}else{
+						//周转资金收款账户
+						var hasInitAccount = $scope.initPartnerGrantAccount("ZZZJSKZH");
+						if(!hasInitAccount){
+							console.error("周转资金收款账户缺失！");
+						}
+					}
+				}
+			})
+		})
+	}
+	
+	$scope.initPartnerGrantAccount = function(type){
+		var account;
+		if(!$scope.data.bizApply.sub_biz_account)return account;
+		for(var i=0,a;a=$scope.data.bizApply.sub_biz_account[i++];){
+			if(type == a.type){ 
+				account = a;
+			}
+		}
+		if(account){
+			if (partnerInsuranceId.indexOf("LFYH")!=-1) {
+				$scope.bizPartnerGrant.charge_name = account.name;
+				$scope.bizPartnerGrant.charge_number = account.number;
+				$scope.bizPartnerGrant.charge_open_bank = account.open_bank;
+				$scope.bizPartnerGrant.charge_open_bank_code = account.bank_code;
+				$scope.bizPartnerGrant.payee = "customer";
+			}
+			$scope.bizChargeAccount.charge_name = account.name;
+			$scope.bizChargeAccount.charge_number = account.number;
+			$scope.bizChargeAccount.charge_open_bank_name = account.open_bank;
+			$scope.bizChargeAccount.charge_open_bank_code = account.open_bank_no;
+			return true;
+		}
+		return false;
+	}
+	
+	$scope.initTuoGuanPartnerGrantAccount = function(type){
+		var account;
+		for(var i=0,a;a=$scope.data.bizApply.sub_biz_project_account[i++];){
+			if(type == a.type){ account = a; }
+		}
+		//托管卡
+		if(account){
+			if (partnerInsuranceId.indexOf("LFYH")!=-1) {
+				$scope.bizPartnerGrant.charge_name = account.account_name;
+				$scope.bizPartnerGrant.charge_number = account.account_no;
+				$scope.bizPartnerGrant.charge_open_bank = account.bank_name;
+				$scope.bizPartnerGrant.charge_open_bank_code = account.bank_code;
+				$scope.bizPartnerGrant.payee = "customer";
+			}
+			$scope.bizChargeAccount.charge_name = account.account_name;
+			$scope.bizChargeAccount.charge_number = account.account_no;
+			$scope.bizChargeAccount.charge_open_bank = account.bank_name;
+			$scope.bizChargeAccount.charge_open_bank_code = account.bank_code;
+			return true;
+		}
+		return false;
+	}
+	//如果收款账户信息表没有数据则初始化数据，有账户信息就用这个表的数据
+	if (partnerInsuranceId.indexOf("LFYH")!=-1 && !$scope.bizPartnerGrant.id) {//廊坊银行之前已经在biz_partner_grant表存放收款账户
+		$scope.getAccountInfo();
+	}else if(partnerInsuranceId.indexOf("LFYH")<0 && (!$scope.bizChargeAccount.id || partnerInsuranceId.indexOf("LJS")!=-1 ||partnerInsuranceId.indexOf("DJW")!=-1 ||partnerInsuranceId.indexOf("SNXD")!=-1 )) {
+		$scope.getAccountInfo();
+	}
+	
+	
+	//保存收款账户信息
+	$scope.$parent.send = function(scope, baseService) {
+		var chargeAccount = $scope.data.bizApply.sub_biz_charge_account[0];
+		if (!chargeAccount.charge_name || !chargeAccount.charge_number || !chargeAccount.charge_open_bank_name) {
+			$.topCall.error("请先填写收款账户信息！！");
+			return false;
+		}
+		url = __ctx + "/bims/chargeAccount/getJson";
+		baseService.postForm(url, {
+			chargeAccount:JSON.stringify($scope.bizChargeAccount)
+		}).then(function(data) {
+			//机构外传
+			$scope.sendAppr(scope, baseService);
+		});
+	}
+	
+	
+	var conf = {
+			selectNum:1,
+			param:{house_no:houseNo,type:""}
+	};
+	if (checkPartner(partnerInsuranceId)) {
+		conf.param.type = "QT(MMD)";
+	}else if ($scope.productHelper.isSL) {
+		conf.param.type = "GLK";
+	}else {		
+		conf.param.type = "ZZZJSKZH";
+	}
+
+	$scope.addaccount = function() {
+		CustomDialog.openCustomDialog('zhklbv2',function(data,dialog){
+		    //alert("返回结果："+JSON.stringify(data));//处理数据，数据格式是设置的返回字段的json格式
+
+		    //本对话框的返回格式:data:[{"id":"id0","apply_no":"apply_no0","house_no":"house_no0","remark":"remark0","name":"name0","number":"number0","open_bank_no":"open_bank_no0","open_bank":"open_bank0","type":"type0","application":"application0","create_user_id":"create_user_id0","update_user_id":"update_user_id0","create_time":"create_time0","update_time":"update_time0","rev":"rev0","delete_flag":"delete_flag0"},{"id":"id0","apply_no":"apply_no0","house_no":"house_no0","remark":"remark0","name":"name0","number":"number0","open_bank_no":"open_bank_no0","open_bank":"open_bank0","type":"type0","application":"application0","create_user_id":"create_user_id0","update_user_id":"update_user_id0","create_time":"create_time0","update_time":"update_time0","rev":"rev0","delete_flag":"delete_flag0"}];这里两个数据
+
+		    //注意：当单选的也是jsonArray，可以data[0]得到结果，然后data[0].name或者data[0].id
+			$scope.$apply(function() {
+				if (partnerInsuranceId.indexOf("LFYH")!=-1) {
+					$scope.bizPartnerGrant.charge_name = data[0].name;
+					$scope.bizPartnerGrant.charge_number = data[0].number;
+					$scope.bizPartnerGrant.charge_open_bank = data[0].open_bank;
+					$scope.bizPartnerGrant.charge_open_bank_code = data[0].open_bank_no;
+					$scope.bizPartnerGrant.payee = "customer";
+				}				
+				$scope.bizChargeAccount.charge_name = data[0].name;
+				$scope.bizChargeAccount.charge_number = data[0].number;
+				$scope.bizChargeAccount.charge_open_bank_name = data[0].open_bank;
+				$scope.bizChargeAccount.charge_open_bank_code = data[0].open_bank_no;
+				$scope.bizChargeAccount.payee = "customer";
+				
+			});
+			
+			
+			
+		    dialog.dialog('close');//关闭弹出框
+
+		},conf);
+	};
+	
+	//影像信息---全部资料！！
+	var imageUrl="/x5/business/material/shotUpload/shotImageView?objectNo="+applyNo+"&typeNo=All&eventType=spzlwc";
+	$("#imageContainer").attr('src',imageUrl);
+} ];
+
+
+//机构可用放款额度
+function getOrgLimit(baseService, apply, $scope) {
+//查询机构额度
+    baseService.postForm(__ctx + "/bims/p2pLines/queryOrgLimit", {
+        "applyNo": apply.apply_no,
+        "code1": "CSH",
+        "code2": apply.partner_insurance_id
+    }).then(function (data) {
+        $scope.orgLimit = {};
+        if (data.total > 0) {
+            $scope.orgLimit = data.rows[0];
+        }
+    })
+}
+
+
+$(function() {
+	
+	var baseService = AngularUtil.getService("baseService"); 
+	var productHelper = AngularUtil.getService("productHelper");
+	var $scope = AngularUtil.getScope();
+	var $q = AngularUtil.getService("$q");
+	var apply =  $scope.data.bizApply;
+	var feeSummary = $scope.data.bizApply.sub_biz_fee_summary[0];
+	var custRel = $scope.data.bizApply.sub_biz_customer_rel;					
+	var oriLoan = $scope.data.bizApply.sub_biz_ori_loan[0];
+	var house = $scope.data.bizApply.sub_biz_house[0];
+	var bizPartnerGrant = $scope.data.bizApply.sub_biz_partner_grant[0];
+	var customerRels =  $scope.data.bizApply.sub_biz_customer_rel;
+	var flowTablesService = AngularUtil.getService("flowTablesService"); 
+	var filter = AngularUtil.getService('$filter')('filter');
+	flowTablesService.cacheOtherApplyBo();
+    $scope.bizChargeAccount = flowTablesService.getScopeTable('biz_charge_account')[0];
+    $scope.bizPartnerGrant = flowTablesService.getScopeTable('biz_partner_grant')[0];
+    getOrgLimit(baseService, apply, $scope);
+
+	//检查收款账户
+	function checkAccount(){
+		var defer = $q.defer();
+		//个人帐户
+		if (($scope.data.bizApply.partner_insurance_id == 'LFYH'  && $scope.bizPartnerGrant.charge_name != $scope.mainCustomer.name)
+			|| ($scope.data.bizApply.partner_insurance_id != 'LFYH' && $scope.bizChargeAccount.charge_name != $scope.mainCustomer.name)) {
+			$.topCall.confirm("提示", "收款账户与主借款人不一致，是否继续外传", function (r) {
+				if (r) {
+					defer.resolve();
+				} else {
+					defer.reject();
+				}
+			})
+		} else {
+			defer.resolve();
+		}
+		return defer.promise;
+	}
+
+
+	window.validForm = function($scope) {
+		return checkAccount().then(function() {
+			return baseService.postForm(__ctx + "/bims/customer/getCustomerListByApplyNo", {
+				applyNo : apply.apply_no
+			});
+		}).then(function(data) {
+			var deferred = $q.defer(); 
+
+			var msg = [];
+			if($scope.data.bizApply.partner_insurance_id=='ZRBNDXD' || $scope.data.bizApply.partner_insurance_id=='LYXD'){
+				if(!feeSummary.pre_use_amount_date){
+					msg.push("请填写预计用款时间!");
+				}
+			}
+			for ( var key in reportChecker) {// 遍历报单验证器
+				reportChecker[key]($scope, apply, msg);
+			}
+			var borrowers = 0;
+			for (var i=0,len = customerRels.length;i<len;i++) {
+				if(customerRels[i].is_actual_borrower_name === 'Y'){
+					borrowers++;
+					for(var j = 0 ,jlen = data.length;j<jlen;j++){
+						if(customerRels[i].customer_no == data[j].custNo  && !data[j].phone){
+						//	msg.push("请填写"+data[j].name+"的联系方式-客户信息");
+						}
+						
+					}
+				}
+			}
+			if(borrowers!=1){
+				msg.push("请填写且只能填写一个主借款人-客户信息");
+			}
+			
+			if (msg.length > 0) {
+				if(msg.length>10){	
+					msg.splice(10,100)
+				}
+				var str = msg.map(function(data) {
+					return '<p>' + data + '</p><br>';
+				}).join("");
+				$.topCall.error(str); 
+				deferred.reject(); 
+			}else{
+
+				// deferred.resolve();
+                if (feeSummary.ransom_borrow_amount > $scope.orgLimit.usableLoanAmt){
+                    $.topCall.confirm("提示","所选合作机构可用放款额度不足，是否继续提交",function (r) {
+                        if (r){
+                        	deferred.resolve();
+                        }
+                    });
+                }else {
+                	deferred.resolve();
+                }
+			} 
+			return deferred.promise;
+		});/*.then(function() {
+			return checkNeededMaterials();
+		});*/
+	}
+	//校验资料
+	function checkNeededMaterials(){	
+		var url = __ctx +"/bims/productImageConf/checkApplyOrderImage/"+$scope.data.bizApply.apply_no; 
+		return baseService.get(url).then(function(data) {
+			var deferred = $q.defer(); 
+			if (data.result=="0") {			
+				var datas = data.vars.checkMessageList;
+				var msg =''; 
+				angular.forEach(datas,function(item){
+					msg +="请上传资料-"+item.name+"!</br>";
+				});
+				$.topCall.error(msg);
+				deferred.reject(data);
+			}else {
+				deferred.resolve(data);
+			}
+			return deferred.promise;
+		});
+	}
+	
+	
+	// 报单验证器
+	var reportChecker = {};
+	reportChecker.checkAccount = function($scope, apply, msg) {
+		var bizPartnerGrant = $scope.data.bizApply.sub_biz_partner_grant[0];
+		var feeSummary = $scope.data.bizApply.sub_biz_fee_summary[0];
+		if($scope.data.bizApply.partner_insurance_id=='LFYH'){
+			if(!bizPartnerGrant.second_account_name){
+				msg.push("请填写账户管理授权信息-廊坊银行二类账户户名!");
+			}
+			if(!bizPartnerGrant.second_account_number){
+				msg.push("请填写账户管理授权信息-廊坊银行二类账户账号!");
+			}
+			if(!bizPartnerGrant.charge_open_bank){
+				msg.push("请填写账户管理授权信息-收款账户开户行!");
+			}
+			if(!bizPartnerGrant.charge_name){
+				msg.push("请填写账户管理授权信息-收款账户户名!");
+			}
+			if(!bizPartnerGrant.charge_number){
+				msg.push("请填写账户管理授权信息-收款账户账号!");
+			}
+			
+			if(!feeSummary.borrowing_amount){
+				msg.push("请填写贷款事项-申请贷款金额!");
+			}			
+			if(productHelper.isSL&&!oriLoan.ori_loan_bank_name){
+				msg.push("请填写贷款事项-原贷款名称!");
+			}		
+			if(!house.house_address){
+				msg.push("请填写贷款事项-房产地址!");
+			}
+			
+		}
+
+		var apply =  $scope.data.bizApply;
+		if ($scope.productHelper.isSL) {// 有赎楼
+			if (!apply.sub_biz_ori_loan.length) {
+				msg.push("请填写原贷款信息-数据为空");
+			}
+			var bizOriLoan = apply.sub_biz_ori_loan;
+			angular.forEach(bizOriLoan, function(oriLoan) {
+				if (!oriLoan.ori_loan_bank_name) {
+					msg.push("请填写原贷款信息-原贷款机构");
+				}
+				if (!angular.isNumber(oriLoan.busi_deduct_principal_balance)) {
+					msg.push("请填写原贷款信息-商贷本金余额");
+				}
+				if (!oriLoan.pre_ransom_date) {
+					msg.push("请填写原贷款信息-预计赎楼时间");
+				}
+				if (!oriLoan.fund_loan_flag) {
+					msg.push("请填写原贷款信息-有无公积金贷款");
+				}
+				if (oriLoan.fund_loan_flag == "Y" && !angular.isNumber(oriLoan.fund_deduct_balance)) {
+					msg.push("请填写原贷款信息-公积金贷款本金余额");
+				}
+			}) 
+
+		}
+
+		var isrMixed = apply.sub_biz_isr_mixed[0];
+		if (!apply.partner_insurance_name) {
+			msg.push("请填写产品信息-合作机构");
+		}
+		if ($scope.productHelper.isSL && (!feeSummary || !angular.isNumber(feeSummary.own_fund_amount))) {
+			msg.push("请填写产品信息-卖方自有资金（元）");
+		}
+		if (!feeSummary || !feeSummary.product_term) {
+			msg.push("请填写产品信息-借款期限（天）");
+		}
+		if(!feeSummary || !feeSummary.product_term_and_charge_way){
+			msg.push("请填写产品信息-收费方式");
+		}
+		if(!feeSummary || !feeSummary.fixed_term){
+			msg.push("请填写产品信息-预估产品期限");
+		}
+		if(!feeSummary || !feeSummary.borrowing_amount){
+			msg.push("请填写产品信息-借款金额");
+		}
+		if(!feeSummary || !feeSummary.refund_source){
+			msg.push("请填写产品信息-还款来源");
+		}
+		
+		if($scope.productHelper.isSL){ 
+			// 供楼卡验证
+			var has_glk = false;
+			angular.forEach($scope.data.bizApply.sub_biz_account, function(data) {
+				if (data.type == "GLK") {
+					has_glk = true;
+					if (!data.name) {
+						msg.push("请填写账户信息-供楼卡户名(原贷款信息)");
+					}
+					if (!data.number) {
+						msg.push("请填写账户信息-供楼卡账号(原贷款信息)");
+					}
+					if (!data.open_bank) {
+						msg.push("请填写账户信息-供楼卡开户行(原贷款信息)");
+					}
+				}
+			});
+			if (!has_glk) {
+				msg.push("请填写账户信息-供楼卡信息为空(原贷款信息)");
+			}
+		}
+	}
+
+	// 卖家信息校验  
+	reportChecker.checkSeller = function(scope, apply, msg) {
+		
+		var ownArr = flowTablesService.getCustomerByType("OWN"); 
+		angular.forEach(ownArr, function(customer) {
+			var str = "请填写客户信息 " + customer.name;
+			if (customer.is_proposer === "Y" || customer.relation === "OWN") {// 申请人
+				
+				if(!customer.is_actual_borrower_name){
+					msg.push(str + "-是否主借款人");
+				}else if(customer.is_actual_borrower_name === "Y"){
+					scope.borrowerCount++;
+				}
+				
+				if (!customer.name) {
+					msg.push(str + "-姓名");
+				}
+				if (!customer.id_card_type) {
+					msg.push(str + "-证件类型");
+				}
+				if (!customer.id_card_no) {
+					msg.push(str + "-证件号码");
+				}
+				if (!customer.age) {// 年龄是自动审批的必填验证
+					msg.push(str + "-年龄");
+				}
+				if (!customer.id_card_validity) {
+					msg.push(str + "-证件有效期");
+				}
+				if (customer.is_actual_borrower_name === "Y") {
+					if(!customer.address){
+						msg.push(str + "-家庭地址");
+					}
+					if(!customer.marital_status){
+						msg.push(str + "-婚姻状态");
+					}
+					if(!customer.education){
+						msg.push(str + "-教育程度");
+					}
+				}
+				
+			} 
+		});	
+	};
+
+	// 买家家信息校验
+	reportChecker.checkBuyer = function(scope, apply, msg) {
+		if (!scope.productHelper.isJY) {// 非交易保
+			return;
+		}
+		var buyArr = flowTablesService.getCustomerByType("BUY");
+		if (buyArr.length === 0) {
+			msg.push("请先填写买家信息");
+		}
+		angular.forEach(buyArr, function(customer) {
+			var str = "请填写客户信息 " + customer.name;
+			if (customer.is_proposer === "Y") {// 申请人
+				
+				if(!customer.is_actual_borrower_name){
+					msg.push(str + "-是否主借款人");
+				}else if(customer.is_actual_borrower_name === "Y"){
+					scope.borrowerCount++;
+				}
+				
+				if (!customer.name) {
+					msg.push(str + "-姓名");
+				}
+				if (!customer.id_card_type) {
+					msg.push(str + "-证件类型");
+				}
+				if (!customer.id_card_no) {
+					msg.push(str + "-证件号码");
+				}
+				if (!customer.age) {// 年龄是自动审批的必填验证
+					msg.push(str + "-年龄");
+				}
+				if (!customer.id_card_validity) {
+					msg.push(str + "-证件有效期");
+				}
+				if (customer.is_actual_borrower_name === "Y") {
+					if(!customer.address){
+						msg.push(str + "-家庭地址");
+					}
+					if(!customer.marital_status){
+						msg.push(str + "-婚姻状态");
+					}
+					if(!customer.education){
+						msg.push(str + "-教育程度");
+					}
+				}
+			}
+		});
+	};
+
+	// 个人诉讼信息校验
+	reportChecker.checkPersonalLitigation = function(scope, apply, msg) {
+		var personalLitigationsAll = flowTablesService.getFlowTable('biz_personal_litigation_s');  
+//		（交易类）卖方所有关系人、买家 是否查询。      是
+//		（非交易类）所有关系人 是否查询。                  是
+		var specialCustomerList = flowTablesService.getCustomerByOptions(function(c){ 
+			if(scope.productHelper.isJY){
+				if(c.role === 'OWN'){
+					return true;
+				}
+				if(c.role === 'BUY' && c.relation === 'BUY'){
+					return true;
+				}
+			}else{
+				return true;
+			} 
+			return false;
+		});
+		if(specialCustomerList.length){ 
+			//有特殊人群才校验
+			angular.forEach(specialCustomerList,function(customer){
+				var specialONEPersonalLitigations = filter(personalLitigationsAll, function(litigation) {
+					if (litigation.type != 'ONE') {
+						//只查询单篇
+						return false;
+					}
+					if(customer.customer_no != litigation.customer_no){
+						return false;
+					}
+					return true;
+				});
+				if(!specialONEPersonalLitigations.length){
+					msg.push("请录入["+customer.name+"]的个人诉讼(单篇)）"); 
+				}
+				var specialALLPersonalLitigations = filter(personalLitigationsAll, function(litigation) {
+					if (litigation.type != 'ALL') {
+						//只查询全文
+						return false;
+					}
+					if(customer.customer_no != litigation.customer_no){
+						return false;
+					}
+					return true;
+				});
+				if(!specialALLPersonalLitigations.length){
+					msg.push("请录入["+customer.name+"]的个人诉讼(全文)）"); 
+				}
+				var specialTHIRDPARTYPersonalLitigations = filter(personalLitigationsAll, function(litigation) {
+					if (litigation.type != 'THIRDPARTY') {
+						//只查询全文
+						return false;
+					}
+					if(customer.customer_no != litigation.customer_no){
+						return false;
+					}
+					return true;
+				});
+				if(!specialTHIRDPARTYPersonalLitigations.length){
+					msg.push("请录入["+customer.name+"]的第三方数据"); 
+				}
+			})
+			
+		}
+		
+		var oneIndex = 1;
+		var allIndex = 1;
+		var thirdpartyIndex = 1;
+		angular.forEach(personalLitigationsAll, function(data, i) {
+			var index;
+			var name;
+			if(data.type==="ONE"){
+				index = oneIndex;
+				name ="(单篇)";
+				oneIndex++;
+			}else if(data.type==="ALL"){
+				index = allIndex;
+				name="(全篇)";
+				allIndex++;
+			}else if(data.type==="THIRDPARTY"){
+				index = thirdpartyIndex;
+				name="(第三方)";
+				thirdpartyIndex++;
+			}
+			
+			if (!data.customer_name) {
+				msg.push("请填写第 " + index + " 条个人诉讼信息"+name+"-姓名");
+			}
+			/*if(data.type!=="THIRDPARTY"){
+				if (!data.has_eco_litigation) {
+					msg.push("请填写第 " + index + " 条个人诉讼信息"+name+"-近2年内有无经济类诉讼信息");
+				}
+				if (!data.hass_unfinish_exec) {
+					msg.push("请填写第 " + index + " 条个人诉讼信息"+name+"-有无未完结执行信息");
+				}
+			}*/
+			if (!data.query_time) {
+				msg.push("请填写第 " + index + " 条个人诉讼信息"+name+"-查询日期");
+			}
+			if (!data.query_user_name) {
+				msg.push("请填写第 " + index + " 条个人诉讼信息"+name+"-查询人员");
+			}
+
+		});
+	}
+	// 征信报告校验
+	reportChecker.checkQueryCredit = function(scope, apply, msg) {
+		var queryCredits = flowTablesService.getFlowTable('biz_query_credit');
+//		征信报告上传校验内容：
+//		（交易类）卖方中的所有申请人 是否上传征信报告。      是，其余人都不需要上传
+//		（非交易类）所有申请人 是否上传征信报告。                是
+		var specialCustomerList = flowTablesService.getCustomerByOptions(function(c){
+			if(scope.productHelper.isJY){
+				if(c.role === 'OWN' && c.is_proposer == 'Y'){
+					return true;
+				}
+			}else{ 
+				return c.is_proposer == 'Y';
+			}  
+			return false;
+		});
+		if(specialCustomerList.length){
+			//有特殊人群
+			angular.forEach(specialCustomerList,function(customer){
+				var specialQueryCredits= filter(queryCredits, function(credit) {  
+					if(customer.customer_no != credit.customer_no){
+						return false;
+					} 
+					return true;
+				});
+				if(!specialQueryCredits.length){
+					msg.push("请录入"+customer.name+"的征信信息-无数据");
+					return;
+				}
+			}) 
+		}
+		angular.forEach(queryCredits, function(data, i) {
+			if (!data.parse_way) {
+				msg.push("请填写第 " + (i + 1) + " 条征信信息-解析方式");
+			}
+			if (!data.parse_time) {
+				msg.push("请填写第 " + (i + 1) + " 条征信信息-操作时间");
+			}
+//			if (!data.report_from) {
+//				msg.push("请填写第 " + (i + 1) + " 条征信信息-征信报告来源");
+//			}
+
+		});
+	}
+	
+	//工商信息及公司诉讼查询
+	reportChecker.checkBusinessInfo = function(scope, apply, msg) {
+		var selfEmployedList = [];
+		var bizBusinessInfo = flowTablesService.getFlowTable('biz_business_info'); 
+		angular.forEach(bizBusinessInfo,function(businessInfo){
+			if(!businessInfo.query_time){
+				msg.push("请查询"+businessInfo.customer_name+"的工商信息");
+			}
+			if(businessInfo.is_self_employed == 'Y'){
+				selfEmployedList.push({customer_no:businessInfo.customer_no,customer_name:businessInfo.customer_name})
+			}
+		});
+		if(selfEmployedList.length){
+			var bizCompanyLitigation = flowTablesService.getFlowTable('biz_company_litigation_s'); 
+			angular.forEach(selfEmployedList,function(customer){
+				var currentCompanyLitigation = filter(bizCompanyLitigation,function(companyLitigation){ return companyLitigation.customer_no == customer.customer_no});
+				if(!currentCompanyLitigation.length){
+					msg.push("请查询"+customer.customer_name+"的公司诉讼信息");
+				}
+				/*angular.forEach(currentCompanyLitigation,function(companyLitigation){
+					if(!companyLitigation.has_eco_litigation){
+						msg.push("请填写["+companyLitigation.customer_name+":"+companyLitigation.work_unit+"]近2年内有无经济类诉讼");
+					}
+					if(!companyLitigation.hass_unfinish_exec){
+						msg.push("请填写["+companyLitigation.customer_name+":"+companyLitigation.work_unit+"]有无未完结执行信息");
+					}
+				})*/
+			})
+		}
+		 
+	}
+});
+
+//检查外传资料
+function checkOutsideFiles(orderInfo){
+	var checkStr = '';
+    var igoreTypes = ["1002","2002","2004"];
+    var selectTypes = ["2002","2004"];
+    var i = 0;
+    var typeName = [];
+	jQuery.each(orderInfo.materials, function(i, material){
+		if(jQuery.inArray(material.typeNo, igoreTypes) == -1 && "0" == material.count){
+			checkStr += '请补全资料[' + material.typeName + "]<br />";
+		}
+		if(jQuery.inArray(material.typeNo, selectTypes) >= 0 && "0" == material.count) {
+			i ++;
+			typeName.push(material.typeName);
+		}
+	});
+	if(i == 2) 
+		checkStr += "资料[" + typeName[0] + "]或者["+typeName[1]+"]至少一种不能为空<br />";
+	return checkStr;
+}
+
+var partnerCode = ['SNXD','XTA-NH','LHTZP565','XTA-ZG','XDA-WC'];
+function checkPartner(params) {
+	 for (var i = 0; i < partnerCode.length; i++) {
+		if (params.indexOf(partnerCode[i])!=-1) {
+			return true;
+		}
+	}
+	 return false;
+}

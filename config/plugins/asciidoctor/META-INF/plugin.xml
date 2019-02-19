@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/asciidoctor/asciidoctor-intellij-plugin">
   <id>org.asciidoctor.intellij.asciidoc</id>
   <name>AsciiDoc</name>
-  <version>0.20.6</version>
+  <version>0.23.2</version>
   <vendor email="erik.pragt@jworks.nl" url="http://asciidoctor.org">Asciidoctor Project</vendor>
   <description>
       &lt;p&gt;&lt;a href="http://www.methods.co.nz/asciidoc/"&gt;AsciiDoc&lt;/a&gt; language support for IntelliJ platform.&lt;p&gt;
@@ -10,9 +10,12 @@
       including HTML, PDF, EPUB, man page. AsciiDoc is, in contrast to Markdown, highly configurable: both the AsciiDoc
       source file syntax and the backend output markups (which can be almost any type of SGML/XML markup)
     can be customized and extended by the user.
-      &lt;p&gt;If you want to use the JavaFX instead of the Swing preview, you'll need to run IntelliJ with 64bit Java.
-      If your IntelliJ distribution doesn't come with 64bit Java, you'll need to have an environment variable
-      `IDEA_JDK` or `IDEA_JDK64` pointing to the installation folder of a 64bit Java. See &lt;a href="https://intellij-support.jetbrains.com/hc/en-us/articles/206544879-Selecting-the-JDK-version-the-IDE-will-run-under"&gt;Jetbrains support database&lt;/a&gt; for more information.
+      &lt;p&gt;The most advanced and recommended preview mode is JavaFX.
+To use the JavaFX preview instead of the Swing preview, you'll need to run IntelliJ with 64bit Java and JavaFX installed.
+Oracle JDK installations include JavaFX, but can make the IDE unstable and crash.
+Pre-bundled OpenJDK installations usually don't include JavaFX.
+Therefore, JetBrains OpenJDK pre-bundled with your IDE is recommended.
+ See &lt;a href="https://intellij-support.jetbrains.com/hc/en-us/articles/206544879-Selecting-the-JDK-version-the-IDE-will-run-under"&gt;Selecting the JDK version the IDE will run under&lt;/a&gt; for more details.
   &lt;p&gt;
   &lt;p&gt;
   &lt;p&gt;
@@ -24,33 +27,25 @@
   </description>
   <change-notes>
     &lt;ul&gt;
-      &lt;li&gt;0.20.6 Display all PlantUML graphics as PNG for preview (#170)&lt;/li&gt;
-      &lt;li&gt;0.20.5 Adding hiDPI support for JavaFX preview (#125)&lt;/li&gt;
-      &lt;li&gt;0.20.4 Requiring 2017.1 as minimum for this plugin&lt;/li&gt;
-      &lt;li&gt;0.20.3 avoiding deadlock on JavaFX initialization (#207)&lt;br /&gt;Requiring 2017.2 as minimum for this plugin&lt;/li&gt;
-      &lt;li&gt;0.20.2 Dejavu fonts now display chinese characters in tables (#203)&lt;/li&gt;
-      &lt;li&gt;0.20.1 Updated Asciidoctor Diagram to 1.5.8&lt;br&gt;
-          Dejavu fonts now display chinese characters (#203)&lt;/li&gt;
-      &lt;li&gt;0.20.0 Add MathJax support in JavaFX preview #201&lt;br&gt;
-          JavaFX preview is now the default for new installations of the plugin&lt;br&gt;
-          Include DejaVu fonts for improved and consistent preview #184
-          &lt;/li&gt;
-      &lt;li&gt;0.19.2 Fix NullPointerExceptions when used with IntelliJ Language Injection and Fragment Editor #194&lt;/li&gt;
-      &lt;li&gt;0.19.1 Support inspections to convert markdown and old style AsciiDoc headings to modern AsciiDoc headings&lt;br&gt;
-          JRuby runtime updated to 9.1.8.0 to work with recent JDK versions&lt;/li&gt;
-      &lt;li&gt;0.19.0 Support Icon fonts (thanks to Matthias Balke)&lt;br&gt;
-        Update to asciidoctorj-1.5.6 (aka asciidoctor-1.5.6.1) and asciidoctorj-diagram-1.5.4.1&lt;br&gt;
-        Support "search everywhere" and "goto by name" for all AsciiDoc sections&lt;br&gt;
-        Support Markdown style sections in syntax highlighting&lt;/li&gt;
-      &lt;li&gt;0.18.2 Headings in Darcula theme preview are now light grey for better readability&lt;/li&gt;
-      &lt;li&gt;0.18.1 Improved handling for non-printable characters in syntax highlighting&lt;/li&gt;
-      &lt;li&gt;0.18.0 Update to asciidoctor 1.5.5/asciidoctor-diagram 1.5.4&lt;br&gt;
-        Capture Asciidoctor messages on stdout/stderr and write them to IDE notifications&lt;br&gt;
-        Close files when images are shown in preview&lt;br&gt;
-        Set focus in editor when re-opening file&lt;br&gt;
-        Fix "line must be non negative" error when clicking on preview&lt;/li&gt;
-      &lt;li&gt;0.17.3 Make click-on-link-to-open and click-on-preview-to-set-cursor in JavaFX preview compatible with Java 8 u111+&lt;br&gt;
-      Formatting actions from the toolbar should not throw exceptions when triggered at the beginning or end of the document&lt;/li&gt;
+      &lt;li&gt;0.23.2 Resource cleanup for Asciidoctor Ruby Extensions (#220)&lt;/li&gt;
+      &lt;li&gt;0.23.1 Updated file icon with less intrusive icon, also introducing SVG for icons (#230)
+      &lt;br&gt;Editor notification to switch to JetBrains 64bit JDK (#189)
+      &lt;br&gt;Tuning support for Asciidoctor Ruby Extensions (#220)&lt;/li&gt;
+      &lt;li&gt;0.23.0 EXPERIMENTAL: Support Asciidoctor Ruby Extensions when placed in _.asciidoctor/lib_ (#220)&lt;/li&gt;
+      &lt;li&gt;0.22.0 Update to AsciidoctorJ 1.5.8.1&lt;br&gt;
+      Workaround for incompatible plugins (#226)&lt;br&gt;
+      Toggle softwraps only available in context menu of AsciiDoc documents (#227)&lt;br&gt;
+      Recognize list continuations plus block instead of marking them as old style headings (#228)&lt;br&gt;
+      EXPERIMENTAL: supporting _.asciidoctorconfig_ configuration files (#220)&lt;br&gt;
+      &lt;/li&gt;
+      &lt;li&gt;0.21.4 Add official asciidoctor logo (#219)
+      &lt;br&gt;Add soft wrap to tool bar (#221)
+      &lt;br&gt;Editor Toolbar show status of toggles
+      &lt;br&gt;Update to Asciidoctor Diagram 1.5.10 (#215)&lt;/li&gt;
+      &lt;li&gt;0.21.3 upgrade to MathJAX 2.4.7 (as bundled in AsciidoctorJ 1.5.7)&lt;/li&gt;
+      &lt;li&gt;0.21.2 show title of document again (#217)&lt;/li&gt;
+      &lt;li&gt;0.21.1 allow attributes to be pre-defined in plugin settings (#216)&lt;/li&gt;
+      &lt;li&gt;0.21.0 Update to AsciidoctorJ 1.5.7 and Asciidoctor Diagram 1.5.9&lt;br /&gt;Treat "line must be non negative" only as a warning (#212)&lt;/li&gt;
     &lt;/ul&gt;
       
   </change-notes>
@@ -82,6 +77,7 @@
         <action class="org.asciidoc.intellij.actions.editorlayout.EditorOnlyLayoutChangeAction" id="org.asciidoc.intellij.actions.editorlayout.EditorOnlyLayoutChangeAction" text="Show editor only" description="Sets AsciiDoc editor layout to show editor only" icon="AsciiDocIcons.Layout.Editor_only"/>
         <action class="org.asciidoc.intellij.actions.editorlayout.EditorAndPreviewLayoutChangeAction" id="org.asciidoc.intellij.actions.editorlayout.EditorAndPreviewLayoutChangeAction" text="Show editor and preview" description="Sets AsciiDoc editor layout to show editor and preview in split" icon="AsciiDocIcons.Layout.Editor_preview"/>
         <action class="org.asciidoc.intellij.actions.editorlayout.PreviewOnlyLayoutChangeAction" id="org.asciidoc.intellij.actions.editorlayout.PreviewOnlyLayoutChangeAction" text="Show preview only" description="Sets AsciiDoc editor layout to show preview only" icon="AsciiDocIcons.Layout.Preview_only"/>
+        <action class="org.asciidoc.intellij.actions.asciidoc.ToggleSoftWrapsAction" id="org.asciidoc.intellij.actions.asciidoc.ToggleSoftWrapsAction" text="Use Soft Wraps" description="Toggle using soft wraps in current editor" icon="AllIcons.Actions.ToggleSoftWrap"/>
       </group>
       <action id="asciidoc.convert.document" class="org.asciidoc.intellij.actions.ConvertToAsciiDocAction" text="Convert to AsciiDoc" description="Convert this document to AsciiDoc">
         <add-to-group group-id="ProjectViewPopupMenu" relative-to-action="CutCopyPasteGroup" anchor="before"/>
@@ -105,6 +101,8 @@
     <applicationConfigurable id="Settings.AsciiDoc.Preview" bundle="AsciiDocBundle" groupId="language" nonDefaultProject="true" key="settings.asciidoc.preview.name" instance="org.asciidoc.intellij.settings.AsciiDocPreviewConfigurable"/>
     <applicationService serviceImplementation="org.asciidoc.intellij.settings.AsciiDocApplicationSettings"/>
     <editorNotificationProvider implementation="org.asciidoc.intellij.editor.javafx.JavaFxCouldBeEnabledNotificationProvider"/>
+    <editorNotificationProvider implementation="org.asciidoc.intellij.editor.javafx.ChangeJdkForJavaFXNotificationProvider"/>
+    <editorNotificationProvider implementation="org.asciidoc.intellij.editor.ExtenionsAvailableNotificationProvider"/>
     <gotoSymbolContributor implementation="org.asciidoc.intellij.psi.AsciiDocChooseByNameContributor"/>
     <searchEverywhereClassifier implementation="org.asciidoc.intellij.psi.AsciiDocSearchEverywhereClassifier"/>
     <localInspection language="AsciiDoc" displayName="Heading inspection" groupPath="AsciiDoc" groupName="General" enabledByDefault="true" level="WARNING" implementationClass="org.asciidoc.intellij.inspections.AsciidocHeadingStyleInspection"/>

@@ -1,0 +1,539 @@
+angular.module('app',['materialModel'])
+.controller('materialImageCtrl',['$scope','baseService','$filter','materialHelper',function($scope,baseService,$filter,materialHelper){
+	var timeId;
+	var filter = $filter('filter');
+	var orderBy = $filter('orderBy');
+	$scope.materialStatus = 0;
+	$scope.applyNo= $.getParameter('applyNo');
+	$scope.nodeId = $.getParameter('nodeId');
+	$scope.eventType = $.getParameter('eventType');
+	$scope.changeColumn = function(){
+		$scope.materialListInfo.imageColumn = !$scope.materialListInfo.imageColumn;
+	}
+	
+	 
+	$scope.parentMaterialNodeFilter = function(material){
+		var count = +(filter($scope.materialInfo.list,function(image){
+			if(!material.typeNo){
+				return true;
+			}
+			if(!material.children || !material.children.length){
+				return false;
+			}
+			for(var i=0,child;child = material.children[i++];){ 
+				if(child.typeNo == image.typeNo){
+					return true;
+				}
+			}
+			return false;
+		}).length)
+		material.fullName = material.name +"("+count+")";  	
+		return true;
+	}
+	$scope.materialNodeFilter = function(material){
+		var count = +(filter($scope.materialInfo.list,function(image){
+			if(!material.typeNo && $scope.materialJson.parentTypeNo){
+				return image.typeNo.indexOf($scope.materialJson.parentTypeNo)>-1;
+			}
+			if(material.custNo){
+				return material.custNo == image.custNo && material.typeNo == image.typeNo;
+			}  
+			return  material.typeNo == image.typeNo;
+		}).length);
+		material.fullName = (material.custNo ? material.childName:material.name) +"("+count+")";  
+		return true;
+	}
+	$scope.dealMaterialResult = function(){
+		var data = $scope.materialInfo; 
+		var parentMaterialNode = [{name:"全部",typeNo:''}];
+		angular.forEach(data.material,function(material){
+			material.name = material.name;
+			parentMaterialNode.push(material)
+		})
+		$scope.parentMaterialNode = parentMaterialNode;
+		
+		$scope.dealMaterialImage();
+	}
+	$scope.changeParentMaterialNode = function(){
+		$scope.materialJson.typeNo = '';
+		$scope.materialJson.custNo = '';
+		$scope.materialJson.key = '';
+		if(!$scope.materialJson.parentTypeNo){
+			$scope.materialNode = [];
+			$scope.dealMaterialImage(); 
+			return ;
+		} 
+		angular.forEach($scope.materialInfo.material,function(material){
+			var materialNode = []; 
+			if($scope.materialJson.parentTypeNo == material.typeNo){ 
+				if($scope.materialJson.parentTypeNo == 'M01'){
+					angular.forEach(material.children,function(child){
+						var mChild = {childName:child.name,name:child.name,typeNo:'',key:'',hasRelation:child.hasRelation};
+						if(!child.children || !child.children.length){
+							if(child.hasRelation){
+								return ;
+							}
+							mChild.childName = mChild.childName;
+							mChild.key = mChild.typeNo = child.typeNo;
+							materialNode.push(mChild)
+							return;
+						} 
+						angular.forEach(child.children,function(c){
+							var cChild = angular.copy(mChild);
+							cChild.childName = c.name;
+							cChild.typeNo = child.typeNo;
+							cChild.custNo = c.custNo;
+							cChild.key  = cChild.typeNo +'_' +c.custNo; 
+							materialNode.push(cChild);
+						})
+					})  
+				}else{
+					materialNode =  material.children.map(function(m){
+						m.nodeName = m.name; 
+						m.key = m.typeNo;
+						return m;
+					});
+				}
+				$scope.materialNode = materialNode; 
+			}
+		})
+		
+		$scope.dealMaterialImage();
+	}	
+
+	$scope.changeMaterialNode = function(){ 
+		angular.forEach($scope.materialNode,function(material){
+			if(material.key == $scope.materialJson.key){ 
+				$scope.materialJson.typeName = material.name;
+				$scope.materialJson.typeNo = material.typeNo;
+				$scope.materialJson.custNo = material.custNo;
+				$scope.materialJson.hasRelation = material.hasRelation;
+			}
+		})
+		$scope.dealMaterialImage();
+	}
+	 
+	$scope.dealMaterialImage = function(){
+		var totalMaterialList = []; 
+		if(!$scope.materialJson.parentTypeNo){
+			totalMaterialList = $scope.materialInfo.list; 
+		}else if($scope.materialJson.parentTypeNo && !$scope.materialJson.typeNo){ 
+			angular.forEach($scope.materialInfo.list,function(l){
+				for(var i=0,m ;m=$scope.materialNode[i++];){ 
+					if(l.typeNo == m.typeNo || (m.typeNo && m.typeNo.indexOf('_'+l.typeNo)>-1)){
+						totalMaterialList.push(l);
+						break;
+					}
+				}
+			})  
+			 
+		}else if($scope.materialJson.parentTypeNo && $scope.materialJson.typeNo && !$scope.materialJson.custNo){
+			angular.forEach($scope.materialInfo.list,function(l){ 
+				if(l.typeNo == $scope.materialJson.typeNo){
+					totalMaterialList.push(l); 
+				} 
+			})  
+		}else if($scope.materialJson.parentTypeNo && $scope.materialJson.typeNo && $scope.materialJson.custNo){
+			angular.forEach($scope.materialInfo.list,function(l){ 
+				if(l.typeNo == $scope.materialJson.typeNo && l.custNo == $scope.materialJson.custNo){
+					totalMaterialList.push(l); 
+				} 
+			})  
+		}
+		$scope.materialListInfo.totalMaterialList = totalMaterialList;  
+		$scope.materialListInfo.materialList = $scope.materialListInfo.totalMaterialList.slice(0,10);
+	}
+	
+	 
+	 
+ 
+	 
+	 $scope.getMaterialInfo = function(){
+		 $scope.materialNode = [];
+		 $scope.materialJson = {parentTypeNo:''}; 
+		 var url = __ctx+"/bims/materialFile/getMaterialInfo"; 
+		 var params = {applyNo:$scope.applyNo,nodeId:$scope.nodeId,eventType:$scope.eventType};
+		 return baseService.postForm(url,params).then(function(result){
+			 if(result.code != 1){
+				 return ;
+			 }
+			 for(var i = 0,file;file=result.data.list[i];){
+				 file.sortNo_ = file.sortNo;
+				  var fTypeNo = file.typeNo;
+				  var fCustNo = file.typeNo == 'M98001' ? '':file.custNo;//坑，已删除资料并没有删除custno值
+				  if(file.typeNo == 'M99001'){
+					  fCustNo = '';//坑，“其他资料”居然有custno值
+				  }
+				  var exist = false;
+				  for(var j=0,material;material=result.data.material[j++];){ 
+					  if(fTypeNo.indexOf(material.typeNo)==-1){
+						  continue;
+					  }
+					  if(!material.children || !material.children.length){
+						  continue;
+					  }
+					  for(var k=0,c;c=material.children[k++];){
+						  if(fTypeNo!=c.typeNo){
+							  continue;
+						  }
+						  if(fCustNo && c.hasRelation){ 
+							  angular.forEach(c.children,function(subChild){
+								  if(subChild.custNo == fCustNo){
+									  exist = true;
+								  }
+							  })
+						  }else if(!fCustNo && !c.hasRelation){
+							  exist = true;
+						  }else if(fTypeNo == "M99001"){
+							  //迁移的旧资料带有custNo归类在其他资料下，但是不能将其按照已删除资料过滤
+							  exist = true;
+						  }else{
+							  break;
+						  }
+					  }
+				  } 
+				  if(!exist){
+					  result.data.list.splice(i,1);
+				  }else{
+					  i+=1;
+				  } 
+			  }
+			  $scope.materialInfo = result.data; 
+		 })
+	 }
+	 $scope.init = function(){
+		 $scope.getMaterialInfo().then(function(){
+			 $scope.materialJson = {parentTypeNo:''}; 
+			 $scope.materialListInfo = {materialList:[],applyNo:$scope.applyNo}; 
+			 $scope.dealMaterialResult();
+		 });
+	 }
+	 $scope.init();
+	 
+	 $scope.getMaterialFileListByTypeNo = function(){
+		 var url = __ctx+"/business/materialFile/list/get/"+$scope.applyNo; 
+		 var _params_ = {};
+		 if(!$scope.materialJson.typeNo){
+			 return ;
+		 }
+		 if($scope.materialJson.typeNo){ 
+			 _params_.typeNo = $scope.materialJson.typeNo;
+		 }else{
+			 _params_.custNo = $scope.materialJson.custNo;
+		 }
+		 
+		 baseService.postForm(url,_params_).then(function(result){
+			 if(result.code == 1){ 
+				  angular.forEach(result.data,function(d){
+					  for(var i=0,l;l=$scope.materialInfo.list[i++];){
+						  if(d.id == l.id){
+							  return ;
+						  }
+					  }
+					  d.sortNo_ = d.sortNo;
+					  $scope.materialInfo.list.push(d);
+				  });
+				  $scope.dealMaterialImage();
+			 } 
+		 })
+	 }
+	 
+	 $scope.materialCancel = function(){ 
+		 angular.forEach($scope.materialListInfo.materialList,function(m){
+			 m.selected = false;
+		 })
+		 $scope.materialListInfo.isEdit = 0; 
+	 }
+	 
+	 $scope.materialOk = function(){ 
+		 if(!$scope.materialJson.typeNo){
+			 $.topCall.alert("温馨提示","请选择资料项");
+			 return ;
+	     }  
+		 var selectedMaterialList=[];
+		 if($scope.materialListInfo.isEdit==1){
+			 //分类
+			  selectedMaterialList = filter($scope.materialListInfo.materialList,function(m){ return m.selected}).map(function(m){
+				  return m.fileId;
+			  });
+			  
+			  if(!selectedMaterialList.length){
+					 $.topCall.alert("温馨提示","请选中资料项");
+					 return ;
+			  }   
+			  $scope.showDialog(selectedMaterialList);
+		 }else if($scope.materialListInfo.isEdit==2){
+			 //删除
+			  selectedMaterialList = filter($scope.materialListInfo.materialList,function(m){ return m.selected}).map(function(m){
+				  return m.fileId;
+			  });  
+			 $scope.__delete__(selectedMaterialList);
+		 }else if($scope.materialListInfo.isEdit == 3){
+			 //排序
+			 selectedMaterialList = filter($scope.materialListInfo.materialList,function(file){ return +file.sortNo_>0 && file.sortNo_!=file.sortNo;}).map(function(m){
+				 return m.fileId+"_"+m.sortNo_;
+			 })
+			 if(!selectedMaterialList.length){
+				 $.topCall.alert("温馨提示","无修改数据");
+				 return ;
+			 } 
+			
+			 $scope.__sort__(selectedMaterialList);
+		 }
+		 
+	 }
+	 
+ 
+		//绑定滚动加载图片事件
+	$('.image-container').on('scroll', function() {  
+		var sum = this.scrollHeight; 
+		if (sum <= ($(this).scrollTop() + $(this).height()+100)) {
+			if(timeId){
+				clearTimeout(timeId)
+			}
+			 timeId = setTimeout(function(){ 
+				if($scope.materialListInfo.materialList.length>=$scope.materialListInfo.totalMaterialList.length){
+					return ;
+				}
+				var nextMaterialList = $scope.materialListInfo.totalMaterialList.slice($scope.materialListInfo.materialList.length,$scope.materialListInfo.materialList.length+9);
+				$scope.materialListInfo.materialList.push.apply($scope.materialListInfo.materialList,nextMaterialList);
+				$scope.$apply();
+			},200);
+		}
+	});
+
+	$scope.materialSelect = function(){ 
+		 var disAllSelected = filter($scope.materialListInfo.materialList,function(m){ return !m.selected}).length > 0; 
+		 angular.forEach($scope.materialListInfo.materialList,function(m){
+			 m.selected=disAllSelected;
+		 })
+	}
+	 
+	 $scope.materialSort = function(){
+		 if(!$scope.materialJson.typeNo){
+			 $.topCall.alert("温馨提示","请选择资料项");
+			 return;
+	     }
+		 if($scope.materialJson.typeNo == 'M98001'){
+			 $.topCall.alert("温馨提示","已删除资料不能操作");
+			 return ;
+	     } 
+		 $scope.materialListInfo.imageColumn = false;
+		 $scope.materialListInfo.isEdit = 3;  
+	 }
+	 
+	 $scope.materialClassify = function(){
+		 if(!$scope.materialJson.typeNo){
+			 $.topCall.alert("温馨提示","请选择资料项");
+			 return ;
+	     }
+		 if($scope.materialJson.typeNo == 'M98001'){
+			 $.topCall.alert("温馨提示","已删除资料不能操作");
+			 return ;
+	     } 
+		 $scope.materialListInfo.imageColumn = false;
+		 $scope.materialListInfo.isEdit = 1;  
+	 }
+	 
+	 $scope.materialDelete = function(){
+		 if(!$scope.materialJson.typeNo){
+			 $.topCall.alert("温馨提示","请选择资料项");
+			 return ;
+	     }
+		 if($scope.materialJson.typeNo == 'M98001'){
+			 $.topCall.alert("温馨提示","已删除资料不能操作");
+			 return ;
+	     }
+		 $scope.materialListInfo.imageColumn = false;
+		 $scope.materialListInfo.isEdit = 2; 
+	 }
+	 $scope.uploadImage = function(material) {
+     	var options= {data:{applyNo:$scope.applyNo}};  
+     	if(!$scope.materialJson.typeNo){
+     		 $.topCall.alert("温馨提示","请选择资料项");
+     		 return ;
+     	} 
+     	options.data.typeNo = $scope.materialJson.typeNo;
+     	
+     	if($scope.materialJson.custNo){
+     		options.data.custNo = $scope.materialJson.custNo;
+     	}
+     	 if($scope.materialJson.hasRelation && !$scope.materialJson.custNo){
+			 $.topCall.alert("温馨提示","请指定用户上传");
+			 return;
+		 }
+     	
+     	options.callback = function(){
+     		$scope.$apply(function(){
+         		$scope.getMaterialFileListByTypeNo();
+     		})
+     	}
+     	materialHelper.uploadMaterialDialog(options);
+ 	}
+     
+     $scope.download = function(){
+     	var params = {applyNo:$scope.applyNo};
+     	//typeNo 不可以不传；需要下载当前展示的资料项列表
+     	if(!$scope.materialJson.parentTypeNo){
+     		var typeNos = [];
+     		angular.forEach($scope.materialInfo.material,function(material){
+				angular.forEach(material.children,function(child){
+					if(child.hasRelation){
+						angular.forEach(child.children,function(subChild){
+							typeNos.push(child.typeNo+"_"+subChild.custNo);
+						})
+						return ;
+					}
+					typeNos.push(child.typeNo)
+				}) 
+     		}) 
+     		params.typeNo = typeNos.join(',');
+     	}
+     	if($scope.materialJson.parentTypeNo && !$scope.materialJson.typeNo){
+     		var typeNos = [];
+     		angular.forEach($scope.materialInfo.material,function(material){
+     			if(material.typeNo != $scope.materialJson.parentTypeNo){
+     				return;
+     			}
+				angular.forEach(material.children,function(child){
+					if(child.hasRelation){
+						angular.forEach(child.children,function(subChild){
+							typeNos.push(child.typeNo+"_"+subChild.custNo);
+						})
+						return ;
+					}
+					typeNos.push(child.typeNo)
+				}) 
+     		})  
+     		params.typeNo = typeNos.join(','); 
+     	}
+     	if($scope.materialJson.typeNo){
+     		params.typeNo = $scope.materialJson.typeNo;
+     	}
+     	if($scope.materialJson.custNo){
+     		params.typeNo = $scope.materialJson.typeNo+"_"+$scope.materialJson.custNo;
+     	}
+     	var count = filter($scope.materialInfo.list,function(file){
+     		if(!$scope.materialJson.parentTypeNo){
+     			return true;
+     		}
+     		if($scope.materialJson.typeNo && $scope.materialJson.custNo){
+     			return $scope.materialJson.typeNo == file.typeNo && $scope.materialJson.custNo == file.custNo;
+     		}
+ 			for(var i=0,child;child = $scope.materialNode[i++];){ 
+				if(child.typeNo == file.typeNo){
+					return true;
+				}
+			}
+ 			return false;
+     	}).length; 
+     	if(!count){
+     		$.messager.alert("提示信息","没有可下载资料");
+     		return ;
+     	}
+
+     	materialHelper.download(params);
+     }
+     
+ 	$scope.reviewImage = function(material){
+ 		var params = {applyNo:$scope.ddjfMaterialEis.applyNo}
+     	if(!+material.count){
+     		$.topCall.alert("提示信息","没有可查看资料");
+     		return ;
+     	}
+     	if(material.typeNo){
+     		params.typeNo = material.typeNo;
+     	}
+     	if(material.custNo){
+     		options.data.custNo = material.custNo;
+     	}
+     	materialHelper.review(params);
+ 	}
+ 	
+ 	$scope.__sort__ = function(fileIdList){ 
+ 		var params = {fileIdWithSortList:fileIdList.join(',')};
+     	var url = __ctx+"/business/materialFile/sort/"+$scope.applyNo;
+ 		baseService.postForm(url,params).then(function(){ 
+ 			 $.topCall.alert("温馨提示","修改成功","",function(){
+ 				$scope.__reset__();
+ 			 });
+ 			 
+ 		})
+ 	}
+ 	  
+ 	
+ 	$scope.__delete__ = function(fileIdList){
+ 		var params = {fileIdList:fileIdList.join(',')};
+     	var url = __ctx+"/business/materialFile/delete/"+$scope.applyNo;
+ 		baseService.postForm(url,params).then(function(result){
+ 			if(result.code !='1'){
+ 				$.topCall.alert("温馨提示",result.msg);
+ 				return ;
+ 			} 
+ 			$.topCall.alert("温馨提示","删除成功","",function(){
+ 				$scope.__reset__();
+ 			});
+ 		})
+ 		
+ 	}
+ 	
+ 	 $scope.__category__ = function(params){ 
+ 		var url = __ctx+"/business/materialFile/update/"+$scope.applyNo+"/"+params.typeNo;
+ 		baseService.postForm(url,params).then(function(){  
+ 			$.topCall.alert("温馨提示","成功修改分类","",function(){
+ 				$scope.__reset__();
+ 			})  
+ 		})
+ 	 }
+ 	 
+ 	 $scope.__reset__ = function(){
+ 		var _materialJson = angular.copy($scope.materialJson);
+		$scope.materialJson = {parentTypeNo:''}; 
+		$scope.materialListInfo = {materialList:[],applyNo:$scope.applyNo};  
+		$scope.getMaterialInfo().then(function(){
+			$scope.materialJson.parentTypeNo = _materialJson.parentTypeNo;  
+			$scope.changeParentMaterialNode();
+			$scope.materialJson.key = _materialJson.key;
+			$scope.changeMaterialNode();
+		});
+ 	 }
+ 	 $scope.iePluginTip = function(){
+ 		 $.topCall.warn("请确认安装IE插件");
+ 	 }
+ 	 
+ 	 $scope.showDialog = function(fileIdList){
+		 var _params = {applyNo:$scope.applyNo,nodeId:$scope.nodeId,eventType:$scope.eventType};
+		 var dialog;
+		 var url = __ctx + "/bims/materialFile/imagePage/selectMaterial?"+$.param(_params);
+		 var def = {
+			      title : '资料分类管理',
+			      width : 600,
+			      height :  400,
+			      modal : true,
+			      resizable : true,
+			      buttons : [ {
+			        text : '确定',
+			        handler : function(e) {
+			        	 var win = dialog.innerWin;// 获取自定义对话框
+			        	 var result = win.getData();
+			        	 if(!result.typeNo){
+			        		 $.topCall.alert("温馨提示","请选中分类资料项");
+			        		 return;
+			        	 }
+			        	 result.fileIdList = fileIdList.join(',');
+			        	 $scope.__category__(result);
+			        	 dialog.dialog('close');  
+			        }
+			      }, {
+			        text : '关闭',
+			        handler : function() { 
+			        	dialog.dialog('close'); 
+			        }
+			      } ]
+			    };   
+		    dialog = $.topCall.dialog({
+		      src : url,
+		      base : def
+		    });
+	 }
+}]) 

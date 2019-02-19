@@ -1,0 +1,627 @@
+<div>
+	<!-- 交易保（有赎楼）--获取节点头部信息 -->
+	<div ng-if="(!ddjfOrderInfo.productHelper.isMFB && ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL && !ddjfOrderInfo.productHelper.isIMFB && !ddjfOrderInfo.productHelper.isDMFB && !ddjfOrderInfo.productHelper.isDZYB && !ddjfOrderInfo.productHelper.isZYB)">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>产品期限（天）</th>
+				<td ng-bind="ddjfOrderInfo.productTerm | number:0"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode | dic:'fkjd_SLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_SLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_JYSLY'| dic:'fkjd_NJYSLY'| dic:'fkjd_JYJSD' | dic:'fkjd_NJYJSD' | dic:'fkjd_ql':(ddjfOrderInfo.productHelper.isLast)"> </span></td>
+			</tr>
+			<tr>
+				<th>卖方姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>买方姓名</th>
+				<td ng-bind="ddjfOrderInfo.buyerName"></td>
+				<th>合作保险</th>
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th>新贷款银行</th>
+				<td ng-bind="ddjfOrderInfo.newLoan.newLoanBankName"></td>
+			</tr>
+			<tr>	
+				<th>商业贷款金额(元)</th>
+				<td ng-bind="ddjfOrderInfo.bizLoanAmount | number:2"></td>
+				<th>赎楼金额（元）</th>
+				<td  ng-bind="ddjfOrderInfo.ransomBorrowAmount | number:2"></td>
+				<th>尾款金额（元）</th>
+				<td ng-bind="ddjfOrderInfo.balancePayment | number:2"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+			</tr>
+			<tr>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+				<th>房产地址</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+				<th></th>
+				<td></td>
+				<th></th>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	<!--  交易保（无赎楼）--获取节点头部信息 -->
+	<div ng-if="(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL && !ddjfOrderInfo.productHelper.isIMFB && !ddjfOrderInfo.productHelper.isDMFB)">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>产品期限（天）</th>
+				<td ng-bind="ddjfOrderInfo.productTerm | number:0"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode | dic:'fkjd_SLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_SLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_JYSLY'| dic:'fkjd_NJYSLY'| dic:'fkjd_JYJSD' | dic:'fkjd_NJYJSD' | dic:'fkjd_ql':(ddjfOrderInfo.productHelper.isLast)"> </span></td>
+				
+			</tr>
+			<tr>
+				<th>卖方姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>买方姓名</th>
+				<td ng-bind="ddjfOrderInfo.buyerName"></td>
+				<th>合作保险</th> 
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th>新贷款银行</th>
+				<td ng-bind="ddjfOrderInfo.newLoan.newLoanBankName"></td>
+			</tr>
+			<tr>	
+				<th>商业贷款金额(元)</th>
+				<td ng-bind="ddjfOrderInfo.bizLoanAmount | number:2"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+				<th>房产地址</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td> 
+			</tr>
+		</table>
+	</div>	
+	
+	<!-- 提放保（有赎楼）--获取节点头部信息 -->
+	<div ng-if="(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL && !ddjfOrderInfo.productHelper.isZYB)">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>产品期限（天）</th>
+				<td ng-bind="ddjfOrderInfo.productTerm | number:0"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode | dic:'fkjd_SLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_SLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_JYSLY'| dic:'fkjd_NJYSLY'| dic:'fkjd_JYJSD' | dic:'fkjd_NJYJSD' | dic:'fkjd_ql':(ddjfOrderInfo.productHelper.isLast)"> </span></td>
+			</tr>
+			<tr>
+				<th>借款人姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>合作保险</th>
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th>新贷款银行</th>
+				<td ng-bind="ddjfOrderInfo.newLoan.newLoanBankName"></td>
+				<th>商业贷款金额(元)</th>
+				<td ng-bind="ddjfOrderInfo.bizLoanAmount | number:2"></td>
+			</tr> 
+			<tr>
+				<th>赎楼金额（元）</th>
+				<td  ng-bind="ddjfOrderInfo.ransomBorrowAmount | number:2"></td>
+				<th>尾款金额（元）</th>
+				<td ng-bind="ddjfOrderInfo.balancePayment  | number:2"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+			</tr> 
+			<tr>
+				<th>房产地址</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+				<th></th>
+				<td></td> 
+				<th></th>
+				<td></td> 
+				<th></th>
+				<td></td> 
+			</tr>
+		</table>
+	</div>
+	
+	<!-- 提放保（无赎楼）--获取节点头部信息 -->
+	<div ng-if="(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL)">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>产品期限（天）</th>
+				<td ng-bind="ddjfOrderInfo.productTerm | number:0"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode | dic:'fkjd_SLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_SLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_JYSLY'| dic:'fkjd_NJYSLY'| dic:'fkjd_JYJSD' | dic:'fkjd_NJYJSD' | dic:'fkjd_ql':(ddjfOrderInfo.productHelper.isLast)"> </span></td>
+			</tr>
+			<tr>
+				<th>借款人姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>合作保险</th>
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th>新贷款银行</th>
+				<td ng-bind="ddjfOrderInfo.newLoan.newLoanBankName"></td>
+				<th>商业贷款金额(元)</th>
+				<td ng-bind="ddjfOrderInfo.bizLoanAmount | number:2"></td>
+			</tr> 
+			<tr>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+				<th>房产地址</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+				<th></th>
+				<td></td> 
+			</tr>
+		</table>
+	</div>
+	
+	<!-- 赎楼E（交易）--获取节点头部信息  C01 -->
+	<div ng-if="(ddjfOrderInfo.productHelper.isCSH && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL)">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>借款期限（天）</th>
+				<td ng-bind="ddjfOrderInfo.productTerm|number:0"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode | dic:'fkjd_SLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_SLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_JYSLY'| dic:'fkjd_NJYSLY'| dic:'fkjd_JYJSD' | dic:'fkjd_NJYJSD' | dic:'fkjd_ql':(ddjfOrderInfo.productHelper.isLast)"> </span></td>
+			</tr>
+			<tr>
+				<th>卖方姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>买方姓名</th>
+				<td ng-bind="ddjfOrderInfo.buyerName"></td>
+				<th>合作机构</th>
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th>新贷款银行</th>
+				<td ng-bind="ddjfOrderInfo.newLoan.newLoanBankName"></td>
+			</tr>
+			<tr>	
+				<th>商业贷款金额(元)</th>
+				<td ng-bind="ddjfOrderInfo.bizLoanAmount | number:2"></td>
+				<th>借款金额（元）</th>
+				<td  ng-bind="ddjfOrderInfo.borrowingAmount | number:2"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+			</tr>
+			<tr>
+				<th>房产地址</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+				<th></th>
+				<td></td>
+				<th></th>
+				<td></td>
+				<th></th>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	
+	<!-- 赎楼E（非交易）--获取节点头部信息  	C02  -->
+	<div ng-if="(ddjfOrderInfo.productHelper.isCSH && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL)">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>借款期限（天）</th>
+				<td ng-bind="ddjfOrderInfo.productTerm|number:0"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode | dic:'fkjd_SLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_SLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_JYSLY'| dic:'fkjd_NJYSLY'| dic:'fkjd_JYJSD' | dic:'fkjd_NJYJSD' | dic:'fkjd_ql':(ddjfOrderInfo.productHelper.isLast)"> </span></td>
+			</tr>
+			<tr>
+				<th>借款人姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>合作机构</th>
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th>新贷款银行</th>
+				<td ng-bind="ddjfOrderInfo.newLoan.newLoanBankName"></td>
+				<th>商业贷款金额(元)</th>
+				<td ng-bind="ddjfOrderInfo.bizLoanAmount | number:2"></td>
+			</tr>
+			<tr>	
+				<th>借款金额（元）</th>
+				<td  ng-bind="ddjfOrderInfo.borrowingAmount | number:2"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+				<th>房产地址</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+			</tr>
+		</table>
+	</div>
+	<!-- 及时贷（交易类）--获取节点头部信息 -->
+	<div ng-if="(ddjfOrderInfo.productHelper.isCSH && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL)">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>借款期限（天）</th>
+				<td ng-bind="ddjfOrderInfo.productTerm|number:0"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode | dic:'fkjd_SLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_SLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_JYSLY'| dic:'fkjd_NJYSLY'| dic:'fkjd_JYJSD' | dic:'fkjd_NJYJSD' | dic:'fkjd_ql':(ddjfOrderInfo.productHelper.isLast)"> </span></td>
+			</tr>
+			<tr>
+				<th>卖方姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>买方姓名</th>
+				<td ng-bind="ddjfOrderInfo.buyerName"></td>
+				<th>合作机构</th>
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th>新贷款银行</th>
+				<td ng-bind="ddjfOrderInfo.newLoan.newLoanBankName"></td>
+			</tr>
+			<tr>	
+				<th>商业贷款金额(元)</th>
+				<td ng-bind="ddjfOrderInfo.bizLoanAmount | number:2"></td>
+				<th>借款金额（元）</th>
+				<td ng-bind="ddjfOrderInfo.borrowingAmount | number:2"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+			</tr>
+			<tr>
+				<th>房产地址</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+				<th></th>
+				<td></td>
+				<th></th>
+				<td></td>
+				<th></th>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	<!-- 及时贷（非交易类）--获取节点头部信息 -->
+	<div ng-if="(ddjfOrderInfo.productHelper.isCSH && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL)">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>借款期限（天）</th>
+				<td ng-bind="ddjfOrderInfo.productTerm|number:0"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode | dic:'fkjd_SLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_SLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_JYSLY'| dic:'fkjd_NJYSLY'| dic:'fkjd_JYJSD' | dic:'fkjd_NJYJSD' | dic:'fkjd_ql':(ddjfOrderInfo.productHelper.isLast)"> </span></td>
+			</tr>
+			<tr>
+				<th>借款人姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>合作机构</th>
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th>新贷款银行</th>
+				<td ng-bind="ddjfOrderInfo.newLoan.newLoanBankName"></td>
+				<th>商业贷款金额(元)</th>
+				<td ng-bind="ddjfOrderInfo.bizLoanAmount | number:2"></td>
+			</tr>
+			<tr>	
+				<th>借款金额（元）</th>
+				<td ng-bind="ddjfOrderInfo.borrowingAmount | number:2"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+				<th>房产地址</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+			</tr>
+		</table>
+	</div>
+	<!-- 按揭服务节点头部信息 -->
+	<div ng-if="ddjfOrderInfo.productHelper.isAJFW">
+		<div class="block-title">
+        <span class="form-title">订单基础信息</span>
+    	</div>
+		<table class="ddjf-gridtable column-5">
+			<tr>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+				</tr>
+			<tr>
+				
+				<th>买方姓名</th>
+				<td ng-bind="ddjfOrderInfo.buyerName"></td>
+				<th>卖方姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>房屋地址</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+			</tr>
+			<tr>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode  | dic:'fkjd_ql'"></span></td>
+				<th>贷款类型</th>
+				<td ng-bind="ddjfOrderInfo.newLoan.newLoanType | dic:'dklx'"></td>
+				
+				<th>新贷款银行</th>
+				<td ng-bind="ddjfOrderInfo.newLoan.newLoanBankName"></td>
+				</tr>
+			<tr>
+				<th>贷款金额(元)</th>
+				<td ng-bind="ddjfOrderInfo.bizLoanAmount | number:2"></td>
+			
+				<th>跟进人员</th>
+				<td ng-bind="ddjfOrderInfo.followUpUsername"></td>
+				<th></th>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	
+<!-- 买付保（有赎楼）--获取节点头部信息 -->
+	<div ng-if="(ddjfOrderInfo.productHelper.isMFB && !ddjfOrderInfo.productHelper.isIMFB)">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>产品期限（天）</th>
+				<td ng-bind="ddjfOrderInfo.productTerm | number:0"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode | dic:'fkjd_ql'"> </span></td>
+			</tr>
+			<tr>
+				<th>卖方姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>买方姓名</th>
+				<td ng-bind="ddjfOrderInfo.buyerName"></td>
+				<th>合作保险</th>
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th>新贷款银行</th>
+				<td ng-bind="ddjfOrderInfo.newLoan.newLoanBankName"></td>
+			</tr>
+			<tr>	
+				<th>赎楼金额（元）</th>
+				<td ng-bind="ddjfOrderInfo.ransomBorrowAmount | number:2"></td>
+				<th>保障金额（元）</th>
+				<td  ng-bind="ddjfOrderInfo.guaranteeAmount | number:2"></td>
+				<th>买方首付款金额（元）</th>
+				<td ng-bind="ddjfOrderInfo.downPaymentAmount | number:2"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+			</tr>
+			<tr>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+				<th>房产地址</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+				<th></th>
+				<td></td>
+				<th></th>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	<div ng-if="(ddjfOrderInfo.productHelper.isSER || ddjfOrderInfo.productHelper.isXSD)">
+		<table class="ddjf-gridtable column-5">
+			<tr>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+				</tr>
+			<tr>
+				<th>客户姓名</th>
+				<td ng-bind="ddjfOrderInfo.buyerName"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode  | dic:'fkjd_ql'"></span></td>
+				<th>跟进人员</th>
+				<td ng-bind="ddjfOrderInfo.followUpUsername"></td>
+			</tr>
+			<tr>
+				<th>合作机构</th>
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th></th>
+				<td></td>
+				<th></th>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	<!-- 大道快贷（自营）--获取节点头部信息 -->
+	<div ng-if="ddjfOrderInfo.productHelper.isDDKDZY">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>客户姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+			</tr>
+			<tr>	
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+				<th>房产地址</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+			</tr>
+			<tr>
+			    <th>借款金额（元）</th>
+			    <td ng-bind="ddjfOrderInfo.applyBusinessSum | number:2"></td>
+			    <th>借款期限（月）</th>
+			    <td ng-bind="ddjfOrderInfo.productTerm | number:0"></td>
+			    <th></th>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	<!-- 买付保（有赎楼）-->
+	<div ng-if="((ddjfOrderInfo.productHelper.isIMFB || ddjfOrderInfo.productHelper.isDMFB) && ddjfOrderInfo.productHelper.isSL)">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>产品期限（天）</th>
+			    <td ng-bind="ddjfOrderInfo.productTerm | number:0"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode | dic:'fkjd_SLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_SLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_JYSLY'| dic:'fkjd_NJYSLY'| dic:'fkjd_JYJSD' | dic:'fkjd_NJYJSD' | dic:'fkjd_ql':(ddjfOrderInfo.productHelper.isLast)"> </span></td>
+			</tr>
+			<tr>	
+				<th>卖方姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>买方姓名</th>
+				<td ng-bind="ddjfOrderInfo.buyerName"></td>
+				<th>合作保险</th>
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+			</tr>
+			<tr>
+				<th>（申请）保险金额（元）</th>
+				<td  ng-bind="ddjfOrderInfo.guaranteeAmount | number:2"></td>
+				<th>赎楼金额（元）</th>
+				<td  ng-bind="ddjfOrderInfo.ransomBorrowAmount | number:2"></td>
+				<th>尾款金额（元）</th>
+				<td ng-bind="ddjfOrderInfo.tailAmount | number:2"></td>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+			</tr>
+			<tr>
+				<th>房产地址（坐落）</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+			</tr>
+		</table>
+	</div>
+	<!-- 买付保（无赎楼）-->
+	<div ng-if="((ddjfOrderInfo.productHelper.isIMFB || ddjfOrderInfo.productHelper.isDMFB) && !ddjfOrderInfo.productHelper.isSL)">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>产品期限（天）</th>
+			    <td ng-bind="ddjfOrderInfo.productTerm | number:0"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode | dic:'fkjd_SLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_SLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_JYSLY'| dic:'fkjd_NJYSLY'| dic:'fkjd_JYJSD' | dic:'fkjd_NJYJSD' | dic:'fkjd_ql':(ddjfOrderInfo.productHelper.isLast)"> </span></td>
+			</tr>
+			<tr>	
+				<th>卖方姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>买方姓名</th>
+				<td ng-bind="ddjfOrderInfo.buyerName"></td>
+				<th>合作保险</th>
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+			</tr>
+			<tr>
+				<th>（申请）保险金额（元）</th>
+				<td  ng-bind="ddjfOrderInfo.guaranteeAmount | number:2"></td>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+				<th>房产地址（坐落）</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+				<th></th>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	<!--交易保两笔担保和保险 S09-S10 -->
+	<div ng-if="(ddjfOrderInfo.productHelper.isJY && (ddjfOrderInfo.productHelper.isDZYB || ddjfOrderInfo.productHelper.isZYB))">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>产品期限（天）</th>
+				<td ng-bind="ddjfOrderInfo.productTerm | number:0"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode | dic:'fkjd_SLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_SLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_JYSLY'| dic:'fkjd_NJYSLY'| dic:'fkjd_JYJSD' | dic:'fkjd_NJYJSD' | dic:'fkjd_ql':(ddjfOrderInfo.productHelper.isLast)"> </span></td>
+			</tr>
+			<tr>
+				<th>卖方姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>买方姓名</th>
+				<td ng-bind="ddjfOrderInfo.buyerName"></td>
+				<th>合作保险</th>
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th>合作银行</th>
+				<td ng-bind="ddjfOrderInfo.newLoan.newLoanBankName"></td>
+			</tr>
+			<tr>	
+				<th>实际商业贷款金额(元)</th>
+				<td ng-bind="ddjfOrderInfo.bizLoanAmount | number:2"></td>
+				<th>赎楼金额（元）</th>
+				<td  ng-bind="ddjfOrderInfo.ransomBorrowAmount | number:2"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+			</tr>
+			<tr>
+				<th>房产地址</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+				<th></th>
+				<td></td>
+				<th></th>
+				<td></td>
+				<th></th>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	<!--交易保两笔担保和保险 S11 -->
+	<div ng-if="(!ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isZYB)">
+		<table class="ddjf-gridtable column-4">
+			<tr>
+				<th>订单编号</th>
+				<td ng-bind="ddjfOrderInfo.applyNo"></td>
+				<th>业务品种</th>
+				<td ng-bind="ddjfOrderInfo.productName"></td>
+				<th>产品期限（天）</th>
+				<td ng-bind="ddjfOrderInfo.productTerm | number:0"></td>
+				<th>放款节点</th>
+				<td><span ng-bind="ddjfOrderInfo.tailReleaseNode | dic:'fkjd_SLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLJYB':(ddjfOrderInfo.productHelper.isISR && ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_SLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_NSLTFB':(ddjfOrderInfo.productHelper.isISR && !ddjfOrderInfo.productHelper.isJY && !ddjfOrderInfo.productHelper.isSL) | dic:'fkjd_JYSLY'| dic:'fkjd_NJYSLY'| dic:'fkjd_JYJSD' | dic:'fkjd_NJYJSD' | dic:'fkjd_ql':(ddjfOrderInfo.productHelper.isLast)"> </span></td>
+			</tr>
+			<tr>
+				<th>借款人姓名</th>
+				<td ng-bind="ddjfOrderInfo.sellerName"></td>
+				<th>合作保险</th>
+				<td ng-bind="ddjfOrderInfo.partnerInsuranceName"></td>
+				<th>合作银行</th>
+				<td ng-bind="ddjfOrderInfo.newLoan.newLoanBankName"></td>
+				<th>渠道经理</th>
+				<td ng-bind="ddjfOrderInfo.salesUserName"></td>
+			</tr>
+			<tr>	
+				<th>实际商业贷款金额(元)</th>
+				<td ng-bind="ddjfOrderInfo.bizLoanAmount | number:2"></td>
+				<th>赎楼金额（元）</th>
+				<td  ng-bind="ddjfOrderInfo.ransomBorrowAmount | number:2"></td>
+				<th>房产所在区域</th>
+				<td ng-bind="ddjfOrderInfo.houseArea"></td>
+				<th>房产地址</th>
+				<td ng-bind="ddjfOrderInfo.houseAddress"></td>
+			</tr>
+		</table>
+	</div>
+</div>
