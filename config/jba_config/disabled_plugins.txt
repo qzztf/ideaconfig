@@ -1,6 +1,5 @@
 CloudBees
 StrutsAssistant
-com.github.tinselspoon.intellij.kubernetes
 com.intellij.dmserver
 com.intellij.flex
 com.intellij.gwt
@@ -32,9 +31,7 @@ org.jetbrains.plugins.javaFX
 org.jetbrains.plugins.sass
 org.jetbrains.plugins.stylus
 spy-js
-Pythonid
 Key promoter
-com.vladsch.idea.multimarkdown
 com.ccnode.codegenerator.MyBatisCodeHelperPro
 com.seventh7.plugin.mybatis
 Geronimo
@@ -42,3 +39,10 @@ CloudFoundry
 PerforceDirectPlugin
 JBoss
 com.intellij.uiDesigner
+com.intellij.bigdecimal-folding
+jd-intellij
+cn.wuzhizhan.plugin.mybatis
+com.baomidou.plugin.idea.mybatisx
+com.vladsch.idea.multimarkdown
+com.chrisrm.idea.MaterialThemeUI
+me.xdrop.night-owl

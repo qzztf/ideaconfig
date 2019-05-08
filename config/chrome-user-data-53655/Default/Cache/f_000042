@@ -1,0 +1,1044 @@
+angular.module('commonCache', [])
+    .factory('commonCacheFactory', function () {
+        window._sysVersion = '1.0.0.15';
+        $.support.storage = ('localStorage' in window && 'sessionStorage' in window);
+        return $.support.storage;
+
+    })
+    .factory('commonFormFactory', function () {
+        //一定是脑子发热才把代码写在这里。
+        var factory = {};
+
+        factory.initFormData = function ($scope, urlParams, baseService) {
+            $scope.applyNo = urlParams.applyNo;
+            $scope.formKey = urlParams.formKey;
+            $scope.buttons = {save: true};
+//		$scope.defaultConfig = defaultConfig;
+            factory.defineSubTableData($scope);
+            factory.defineExcuteScript($scope);
+            factory.defineSaveFun($scope, baseService);
+            factory.defineExt($scope);
+            $scope.$on('order:html', function (event, data) {
+                event.preventDefault();
+                $scope.ddjf = data;
+            });
+            if ($scope.$parent.ddjf) {
+                $scope.ddjf = $scope.$parent.ddjf.apply_order;
+            }
+            factory.defineFormData($scope, urlParams, baseService).getFormData();
+        };
+
+
+        factory.defineFormData = function ($scope, urlParams, baseService) {
+            var that = this,
+                formKey = urlParams.formKey,
+                id = urlParams.id || '',
+                applyNo = urlParams.applyNo,
+                houseNo = urlParams.houseNo;
+            var p = {id: id, readonly: ''};
+            var url = __ctx + "/form/formBus/" + formKey + "/getData";
+            if (!p.id) {// 没有配置主键，就用参数过滤的方式找对象
+                url = __ctx + "/form/formBus/" + formKey + "/getDataByMap";
+                if (houseNo) {
+                    p = angular.extend({house_no: houseNo, applyNo: applyNo}, p);
+                } else {
+                    p = angular.extend({apply_no: applyNo}, p);
+                }
+            }
+            angular.extend(p, $scope.$parent.formStatus);
+            that.getFormData = function () {
+                return baseService.postFormData(url, p).then(function (data) {
+                    $scope.data = {};
+                    $scope.boCode = data.boCode;
+                    $scope.data[data.boCode] = data.data; // 表单中结构都为 boCode{boJson}
+                    $scope.permission = data.permission;
+                    $scope.formHtml = data.formHtml;
+                    $scope.formBusSet = data.formBusSet;
+                    if (angular.isFunction($scope.render)) {
+                        // 如果在业务表的js代码里定义了 $scope.render ，则保存后重新获取数据会再执行$scope.render()
+                        // 方法。
+                        $scope.render();
+                    }
+                    that.setButtonStatus($scope);
+                    // 子表必填，一对一数据填充
+                    window.setTimeout($scope.initSubTableData, 100);
+                    var currentFormStatus = factory.getCurrentFormStatus(data.data);
+                    $scope.data[data.boCode].currentFormStatus = currentFormStatus;
+                }, function (a) {
+                    $.topCall.error("请求错误", "" + a);
+                });
+            };
+            return that;
+        };
+        //设置隐藏通用表单保存按钮
+        factory.setButtonStatus = function ($scope) {
+            var isHide = true;
+            angular.forEach($scope.permission.fields, function (permission) {
+                angular.forEach(permission, function (p) {
+                    if (p !== 'r') {
+                        isHide = false;
+                    }
+                });
+            });
+            if (isHide) {
+                $scope.buttons.save = false;
+            }
+        };
+        factory.defineSaveFun = function ($scope, baseService) {
+            $scope.save = function (onlySave) {//onlySave 只保存操作（不显示弹出框提示语，不做校验。应用场景：原、新贷款信息中监管信息、账户信息弹出框后）
+                if (!onlySave) {
+                    if (angular.isFunction($scope.beforeSaveForm) && false === $scope.beforeSaveForm()) {
+                        //动态校验表单时候，可以在scope添加beforeSaveForm 函数 根据条件实现校验（需要去掉 ht-validate的校验）
+                        return;
+                    }
+                    var isValid = $scope.custForm.$valid;
+                    if (!isValid) {
+                        if ($scope.__allowInValid === true) {
+                            $scope.__allowInValid = false;
+                        } else if (angular.isFunction($scope.allowInValidSaveForm)) {
+                            $scope.allowInValidSaveForm().then(function () {
+                                $scope.__allowInValid = true;
+                                $scope.save();
+                            }, function () {
+                                $scope.__allowInValid = false;
+                            });
+                            return false;
+                        } else {
+                            return false;
+                        }
+                    }
+
+                }
+                var jsonData = angular.toJson($scope.data[$scope.boCode]);
+                // js 前置事件
+                if (!$scope.excuteScript(true, $scope.data[$scope.boCode])) {
+                    return;
+                }
+
+                var formKey = $scope.formKey;
+                var applyNo = $scope.applyNo;
+                var rtn = baseService.postFormData(__ctx + "/form/formBus/" + formKey + "/save", {json: jsonData});
+                return rtn.then(function (data) {
+                    $scope.$emit('order:update', {applyNo: applyNo});  // 刷新基本信息
+                    // js 后置事件
+                    if (!$scope.excuteScript(false, data)) {
+                        return;
+                    }
+                    if (data.result === 1 && !onlySave) {
+                        if (formKey === 'isrProductFeeTranstion_v3') {
+                            AngularUtil.getService('$state').reload();//重新加载ui-view
+                        } else {
+                            factory.getFormData();
+                        }
+                        $.topCall.alert('温馨提示', '操作成功', "", function () {
+                            // if (top.document.title.indexOf('录入完成') > -1) {
+                            //     top.location.reload();
+                            // }
+                            //2018-10-20
+                        });
+                    } else {
+                        if (onlySave) {
+                            return;
+                        }
+                        if (data.cause) {
+                            $.topCall.errorStack(data.message, data.cause, "错误信息");
+                        } else {
+                            $.topCall.error(data.message);
+                        }
+                    }
+                }, function () {
+                    $.topCall.error("请求失败");
+                });
+            }
+        };
+
+        factory.getCurrentFormStatus = function getCurrentFormStatus(data) {//jshint ignore:line
+            //获取当前表单的状态：放款前、归档前、报单前
+            var applyStatus = data === undefined ? undefined : data.apply_status;
+            if (!applyStatus) {
+                applyStatus = angular.isFunction(window.currentFormStatus) && window.currentFormStatus();
+            }
+            if (applyStatus === "check" || applyStatus === "approve"|| applyStatus === "passed" || applyStatus === "tobeLoan") {//放款前
+                return "fkq";
+            } else if (applyStatus === "loan" || applyStatus === "transfer" || applyStatus === "guaranty" || applyStatus === "finalpay" || applyStatus === "ransomfloor") {//归档前
+                return "gdq";
+            } else if (applyStatus === "manualReview" || applyStatus === "preauth" || applyStatus === "report" || applyStatus === "interview") {//报单前
+                return "bdq";
+            }
+            return "";
+
+        };
+
+        factory.defineExcuteScript = function ($scope) {
+            $scope.excuteScript = function (isBefore) {
+                if (!$scope.formBusSet) {
+                    return true;
+                }
+                var code = isBefore ? $scope.formBusSet.jsPreScript : $scope.formBusSet.jsAfterScript;
+                var script = "var tempFunction = function(data){ " + code + "};";
+                var result = eval(script + "tempFunction($scope);");
+                if (false === result) {
+                    return false;
+                }
+                return true;
+            };
+
+        };
+        factory.defineExt = function ($scope) {
+            $scope.add = function (path) {
+                var arr = path.split(".");
+                if (arr.length < 2) {
+                    $.topCall.error("subtable path is error!");
+                }
+                var subTableName = arr[1].replace("sub_", "");
+                var tempData = $scope.data[arr[0]].initData[subTableName];
+                if (!tempData){
+                    tempData = {};
+                }
+                var ary = eval("$scope.data." + path);
+                if (!angular.isArray(ary)){
+                    ary = [];
+                }
+                ary.push(angular.copy(tempData));
+                eval("$scope.data." + path + "=ary");
+                if(!$scope.$$phase){
+                    $scope.$digest();
+                }
+            };
+
+            $scope.remove = function (path, index) {
+                var ary = eval("($scope.data." + path + ")");
+                if (ary && ary.length > 0) {
+                    ary.splice(index, 1);
+                }
+            };
+        };
+        factory.defineSubTableData = function ($scope) {
+            $scope.initSubTableData = function () {
+                var permission = $scope.permission;
+                var initSubTable = [];
+                for (var subTable in permission.table) {
+                    if (permission.table[subTable].required) {
+                        initSubTable.push(subTable);
+                    }
+                }
+                $("[type='subGroup'][initdata]").each(function (i, item) {
+                    initSubTable.push($(item).attr("tablename"));
+                });
+                var data = $scope.data,i;
+                for (i = 0, subTable; subTable = initSubTable[i++];) {
+                    for (var boCode in data) {
+                        var initData = data[boCode].initData[subTable];
+                        if (initData && (!data[boCode]["sub_" + subTable] || !data[boCode]["sub_" + subTable].length)) {
+                            data[boCode]["sub_" + subTable] = [];
+                            data[boCode]["sub_" + subTable].push($.extend({}, initData));
+                        }
+                    }
+                }
+
+                if(!$scope.$$phase){
+                    $scope.$digest();
+                }
+
+            }
+        };
+
+        return factory;
+    })
+    .service('productHelper', ['filterFilter',function (filter) {
+        this.init = function (productId) {//jshint ignore:line
+            var result = {};
+            if (!angular.isDefined(productId)) {
+                return result;
+            }
+            result.isLast = true; //是否为9月之后的订单
+            if (productId.split('_').length < 2) {
+                result.isLast = false;
+                productId = productId.replace(/[\d]/g, '');
+                var productMap = {
+                    "SL-JYB": "JYB_YSL_YJY_ISR"
+                    , "NSL-JYB": "JYB_NSL_YJY_ISR"
+                    , "SL-TFB": "TFB_YSL_NJY_ISR"
+                    , "NSL-TFB": "TFB_NSL_NJY_ISR"
+                    , "JY-JSD": "JSD_NSL_YJY_CSH"
+                    , "NJY-JSD": "JSD_NSL_NJY_CSH"
+                    , "JY-SLY": "SLY_YSL_YJY_CSH"
+                    , "NJY-SLY": "SLY_YSL_NJY_CSH"
+                };
+                productId = productMap[productId];
+            }
+            result.productId = productId;
+            result.isJYB = /(JYB_YSL_YJY_ISR)|(JYB_NSL_YJY_ISR)/.test(productId);
+            result.isTFB = /(TFB_YSL_NJY_ISR)|(TFB_NSL_NJY_ISR)/.test(productId);
+            result.isJSD = /(JSD_NSL_YJY_CSH)|(JSD_NSL_NJY_CSH)/.test(productId);
+            result.isSLY = /(SLY_YSL_YJY_CSH)|(SLY_YSL_NJY_CSH)/.test(productId);
+            result.isSL = /_YSL[_]?/.test(productId);//是否赎楼
+            result.isJY = /_YJY[_]?/.test(productId);//是否交易
+            result.isISR = /ISR/.test(productId);//是否保险类
+            result.isCSH = /CSH/.test(productId);//是否现金类
+            result.isAJFW = /(AJFW_NSL_YJY)/.test(productId);//增加按揭服务产品判断
+            result.isSER = /SER/.test(productId); //服务类
+            result.isPMB = /PMB/.test(productId); //拍卖宝
+            result.isBXFW = /BXFW/.test(productId); //保险服务
+            result.isMFB = /^MFB/.test(productId);//买付保（现金版）
+            result.isXSD = /XSD/.test(productId);//限时贷
+            result.isSSD = /SSD/.test(productId);//随时贷
+            result.isDDKDZY = /DDKD_NJY_OTH/.test(productId);//大道快贷（自营）
+            result.isIMFB = /^IMFB/.test(productId);//买付保（保险版）
+            result.isDMFB = /^DMFB/.test(productId);//买付保(保险版有担保)
+            result.isDDKDSER = /DDKD_NJY_SER/.test(productId);//大道快贷（贷款服务）
+            result.isPMD = /PMD/.test(productId);//拍卖贷
+            result.isDDKDCPGD = /DDKD_NJY_OTH_CPGD/.test(productId);//大道快贷（自营版）F06   产品过渡
+            result.isDYDB = /DDKD_NSL_NJY_SER/.test(productId);//抵押代办
+            result.isJSDDKFW = /JSD_NSL_NJY_SER/.test(productId);//及时贷(贷款服务)
+            result.isDZYB = /^DZYB/.test(productId);//交易保（两笔）-担保
+            result.isZYB = /^ZYB/.test(productId);//交易保（两笔）-保险
+            result.isBXFW = /BXFW_NSL_NJY_ISR/.test(productId); //保险服务
+            result.isDDFDY = /^DDKD_NJY_OTH/.test(productId);//大道房抵贷
+            console.log("productHelper"+productId);
+            
+            //及时贷、交易保、提放保、买付保（保险+担保）、交易保（两笔）(担保+保险）
+            
+            result.isJTJSMZ = result.isJYB || result.isTFB || result.isJSD || result.isSLY || result.isIMFB || result.isDMFB || result.isZYB || result.isDZYB;
+            if (result.isJSDDKFW) {
+                result.isJSD = false;
+            }
+            //过渡产品
+            result.isTransitionProduct = result.isPMB || result.isDDKDSER || result.isSSD || result.isPMD || result.isXSD || result.isDDKDCPGD || result.isJSDDKFW || result.isDYDB || result.isBXFW;
+            return result;
+        };
+
+        this.vaildTailReleaseNode = function (productId) {
+            var helper = this.init(productId);
+            var valid = false;
+            if (helper.isAJFW || helper.isIMFB || helper.isMFB || helper.isJYB || helper.isTFB || helper.isJSD || helper.isSLY) {
+                valid = true;
+            }
+            return valid;
+        };
+        this.validSettledTailReleaseNode = function validSettledTailReleaseNode (productId,tailReleaseNode,relateProductList,msg){ //jshint ignore:line
+            if(!productId || !tailReleaseNode){
+                return true;
+            }
+            var cHelper = this.init(productId);
+            if(!(cHelper.isTFB && !cHelper.isJY) && !(cHelper.isJSD)){
+                return true;
+            }
+            if(!angular.isArray(relateProductList)){
+                relateProductList = [];
+            }
+            var exist = false,existSettledRelateProductFilter;
+            if('SPJFQK（JQJF）' === tailReleaseNode && ((cHelper.isTFB && !cHelper.isJY))){
+                existSettledRelateProductFilter = function (rpr) {
+                    var rp = rpr.relateProduct;
+                    return /(SLY_YSL_NJY_CSH)/.test(rp.productId);
+                };
+                exist = filter(relateProductList,existSettledRelateProductFilter).length > 0;
+                if(!exist){
+                    var error = '需关联及时贷（非交易赎楼）才可选择审批即放全款（结清即放）';
+                    if(!angular.isArray(msg)){
+                        $.topCall.alert('放款节点',error);
+                    }else{
+                        msg.push(error);
+                    }
+                }
+            }
+            if('PJQPZFK' === tailReleaseNode && ((cHelper.isJSD && !cHelper.isJY))){
+                existSettledRelateProductFilter = function (rpr) {
+                    var rp = rpr.relateProduct;
+                    return /(SLY_YSL_NJY_CSH)/.test(rp.productId);
+                }
+                exist = filter(relateProductList,existSettledRelateProductFilter).length > 0;
+                if(!exist){
+                    error = '需关联及时贷（非交易赎楼）才可选择凭结清凭证放款'
+                    if(!angular.isArray(msg)){
+                        $.topCall.alert('放款节点',error);
+                    }else{
+                        msg.push(error);
+                    }
+                }
+                return exist;
+            }
+            if('PJQPZFK' === tailReleaseNode && ((cHelper.isJSD && cHelper.isJY))){
+                existSettledRelateProductFilter = function (rpr) {
+                    var rp = rpr.relateProduct;
+                    return /JYB_YSL_YJY_ISR|SLY_YSL_YJY_CSH|IMFB_YSL_YJY_ISR|DMFB_YSL_YJY_ISR|ZYB_YSL_YJY_ISR|ZYB_YSL_NJY_ISR|DZYB_YSL_YJY_ISR|MFB_YSL_YJY_ISR/i.test(rp.productId);
+                }
+                exist = filter(relateProductList,existSettledRelateProductFilter).length > 0;
+                if(!exist){
+                    error = '需关联交易保（有赎楼）、及时贷（交易赎楼）、买付保（有赎楼）、买付保（有赎楼）担保、交易保(两笔)-保险、交易保(两笔)-担保、买付保（有赎楼）大道保障模式才可选择凭结清凭证放款';
+                    if(!angular.isArray(msg)){
+                        $.topCall.alert('放款节点',error);
+                    }else{
+                        msg.push(error);
+                    }
+                }
+                return exist;
+            }
+            return true;
+        }
+    }])
+    .service('materialHelper', ['$q','baseService','productHelper', function ($q,baseService,productHelper) {
+        this.enableMaterialLast = function (productId, version) {
+            var helper = productHelper.init(productId);
+            var isMaterialLast = false;
+            if (helper.isTransitionProduct) {
+                isMaterialLast = true;
+            } else if (helper.isJYB || helper.isTFB || helper.isJSD || helper.isSLY) {
+                if (version) {
+                    isMaterialLast = true;
+                }
+            } else {
+                isMaterialLast = true;
+            }
+            return isMaterialLast;
+        };
+        this.enableRelateProduct = function (productId, version) {
+            return this.enableMaterialLast(productId, version);
+        };
+
+        this.uploadMaterial = function(target){
+            var that = this;
+            var deferred = $q.defer();
+            var $target = target ? $(target) :$('body');
+            var $file = $('<input type="file" style="display:none;">')
+            $target.after($file);
+            $file.trigger('click');
+            $file.detach();
+            $file.on('change',function(e){
+                var files = e.target.files;
+                if(files.length){
+                    var url = __ctx+'/bims/material/sign/upload';
+                    var file = files[0];
+                    var rtn = that.uploadFile(url,file);
+                    if(rtn){
+                        rtn.then(function(data){
+                            deferred.resolve(data);
+                        })
+                    }
+                }else{
+                    deferred.reject();
+                }
+            });
+            return deferred.promise;
+        };
+        this.uploadFile = function(url,file){
+            var deferred = $q.defer();
+            try{
+                var xhr = new XMLHttpRequest();
+                xhr.onabort = function(){
+                    deferred.reject();
+                }
+                xhr.onload = function(){
+                    if(xhr.readyState === 4 && xhr.status === 200){
+                        var responseText = xhr.responseText;
+                        if(responseText){
+                            var result = JSON.parse(responseText)
+                            deferred.resolve(result);
+                        }
+                    }
+                }
+                var form = new FormData();
+                form.append("file",file,file.name);
+                xhr.open("POST", url, true);
+                xhr.send(form);
+            }catch (e){
+                console.error("上传异常",e)
+                deferred.reject();
+            }
+            return deferred.promise;
+        }
+        this.uploadMaterialDialog = function (options) {
+            var data = options.data || {};
+            if (!data.applyNo) {
+                $.messager.alert("提示信息", "订单编号不能为空！");
+                return;
+            }
+            var conf = $.extend({}, options);
+            // var max = conf.max || 80,
+                // type = conf.type || "",
+                // size = conf.size || 15;
+            var  title = conf.title || "附件上传";
+            if (!data.typeNo) {
+                data.typeNo = "99";
+            }
+            //---根据IE调用不同的上传页面
+            var url;
+            if (navigator.userAgent.indexOf("MSIE") > 0) {
+                url = __ctx + '/bims/materialFile/uploadMaterialDialog?max=80&size=15&' + $.param(data);
+            } else {
+                url = __ctx + '/bims/materialFile/uploadPictureMaterialDialog?max=80&size=15&' + $.param(data);
+            }
+
+            var dialog = null;
+            var def = {
+                passConf: {dialog: dialog},
+                title: title,
+                width: 900,
+                height: 600,
+                modal: true,
+                resizable: true,
+                buttons: [{
+                    text: '确定',
+                    handler: function () {
+                        var win = dialog.innerWin;
+                        var scope = win.getData();
+                        if (!scope) {
+                            $.topCall.error("获取已上传文件信息时出错");
+                            return;
+                        }
+                        if (scope.uploader.getNotUploadedItems().length > 0) {
+                            $.topCall.alert("提示信息", "有文件尚未上传，请上传该文件或删除该文件.");
+                            return;
+                        }
+                        if (!scope.uploader.queue.length) {
+                            $.topCall.alert("提示信息", "至少需要上传一个文件.");
+                            return;
+                        }
+                        if (conf.callback) {
+                            var ary = [];
+                            angular.forEach(scope.uploader.queue, function (item) {
+                                ary.push(item.json);
+                            });
+                            conf.callback(ary);
+                            dialog.dialog("close");
+                            $.topCall.alert("提示信息", "上传成功");
+                        } else {
+                            dialog.dialog("close");
+                        }
+                    }
+                }, {
+                    text: '取消',
+                    handler: function () {
+                        dialog.dialog("close");
+                    }
+                }]
+            };
+            dialog = $.topCall.dialog({
+                src: url,
+                base: def
+            });
+        };
+
+        this.download = function (params) {
+            var self = this;
+            if (+new Date() - (self.downloadTime || 0) < 10000) {
+                $.topCall.alert("温馨提示", "10秒内已发起下载请求");
+                return;
+            }
+            self.downloadTime = +new Date();
+            var url = __ctx + "/business/materialFile/download";
+            var _params_ = {applyNo: params.applyNo};
+            if (params.typeNo) {
+                _params_.typeNo = params.typeNo;
+            }
+            if (params.custNo) {
+                _params_.custNo = params.custNo;
+            }
+            url = url + "?" + $.param(_params_);
+            var frm = '<form name="download" class="content" method="post" enctype="multipart/form-data" action="' + url + '"></form>';
+            var $frm = $(frm);
+            $('body').append($frm);
+            $frm.submit();
+        };
+
+        this.review = function (params) {
+            var _params_ = {applyNo: params.applyNo};
+            if (params.typeNo) {
+                _params_.typeNo = params.typeNo;
+            }
+            if (params.custNo) {
+                _params_.custNo = params.custNo;
+            }
+            var dialog;
+            var url = __ctx + "/bims/materialFile/imageView?" + $.param(_params_);
+            var def = {
+                title: '资料查看',
+                width: 1000,
+                height: 600,
+                modal: true,
+                resizable: true,
+                maximizable: true,
+                buttons: [{
+                    text: '确定',
+                    handler: function () {
+                        dialog.dialog('close');
+                    }
+                }]
+            };
+            dialog = $.topCall.dialog({
+                src: url,
+                base: def
+            });
+        };
+
+        this.reloadMaterialPage = function () {
+            var $iframe = $('[ddjf-right-material]').find('iframe');
+            if (!$iframe.length) {
+                $iframe = $('[ddjf-data-material]').find('iframe');
+            }
+            $iframe.attr("src", $iframe.attr("src") + "&r=" + new Date().getTime())
+        }
+    }])
+    .service('commonCacheService', ['baseService', function (baseService) {
+        $.support.storage = ('localStorage' in window && 'sessionStorage' in window);
+        var commonCacheService = this;
+        commonCacheService.getLS = function (name) {
+            var key = 'ddjr|' + name;
+            var value = localStorage.getItem(key);
+            return value && JSON.parse(value);
+        };
+        commonCacheService.setLS = function (name, value) {
+            var key = 'ddjr|' + name;
+            if (value) {
+                value = JSON.stringify(value);
+                localStorage.setItem(key, value);
+            }
+        };
+        commonCacheService.getSS = function (name) {
+            var key = 'ddjr|' + name;
+            var value = sessionStorage.getItem(key);
+            return value && JSON.parse(value);
+        };
+        commonCacheService.setSS = function (name, value) {
+            var key = 'ddjr|' + name;
+            if (value) {
+                value = JSON.stringify(value);
+                sessionStorage.setItem(key, value);
+            }
+        };
+        commonCacheService.removeSS = function (name) {
+            var key = 'ddjr|' + name;
+            sessionStorage.removeItem(key);
+        };
+        commonCacheService.setCookie = function (name, value) {
+            var key = 'ddjr|' + name;
+            if (value) {
+                $.setCookie(key, value);
+            }
+        };
+        commonCacheService.getCookie = function (name) {
+            var key = 'ddjr|' + name;
+            return $.getCookie(key) || '';
+        };
+        commonCacheService.setData = function (name, value) {
+            if ($.support.storage) {
+                commonCacheService.setLS(name, value);
+                commonCacheService.getData = commonCacheService.getLS;
+            } else {
+                commonCacheService.setCookie(name, value);
+                commonCacheService.setData = commonCacheService.setCookie;
+            }
+        };
+        commonCacheService.getData = function (name) {
+            var value = '';
+            if ($.support.storage) {
+                value = commonCacheService.getLS(name);
+                commonCacheService.getData = commonCacheService.getLS;
+            } else {
+                value = commonCacheService.getCookie(name);
+                commonCacheService.getData = commonCacheService.getCookie;
+            }
+            return value;
+        };
+
+        commonCacheService.clear = function () {
+            if ($.support.storage) {
+                localStorage.clear();
+                commonCacheService.clear = localStorage.clear();
+            } else {
+                commonCacheService.clear = function () {
+                };
+            }
+        };
+        commonCacheService.getSysDic = function (typeKey, typeValue) {
+            var dicTypes = commonCacheService.getData(typeKey);
+            if (dicTypes) {
+                for (var dicType, i = 0; dicType = dicTypes[i++];) {
+                    if (typeValue === dicType.key) {
+                        return dicType.name;
+                    }
+                }
+                return typeValue;
+            }
+            return typeValue;
+        };
+
+        //查询字典列表
+        commonCacheService.querySysDicTypesByKey = function () {
+            var setSysDicType = function (data) {
+                var typeKey = '', typeValue = [],subTypeDic= [];
+                for (var dic, i = 0; dic = data[i++];) {
+                    typeKey = dic.typeKey;
+                    typeValue = [];
+                    subTypeDic = [];
+                    angular.forEach((dic.children || []), function (data) {
+                        if (data.typeGroupKey === 'DIC') {
+                            subTypeDic.push(data);
+                        } else {
+                            typeValue.push({key: data.key, name: data.name, status: +(data.status === 'forbid')});
+                        }
+                    });
+                    commonCacheService.setData(typeKey, typeValue);
+                    if (subTypeDic.length) {
+                        setSysDicType(subTypeDic);
+                    }
+                }
+
+            };
+            baseService.get(__ctx + '/business/dictionary/getList').then(function (data) {
+                setSysDicType(data || []);
+                commonCacheService.setData('_sysVersion', window._sysVersion);
+            });
+        };
+
+        commonCacheService.querySysZJMC = function () {
+            baseService.postForm(__ctx + '/form/customQuery/doQuery', {alias: 'zjmc'}).then(function (data) {
+                var result = data.rows || [];
+                commonCacheService.setData('agency_zjmc', result);
+            });
+        };
+
+        commonCacheService.queryProjects = function () {
+            baseService.get(__ctx + '/js/common/util/product.json').then(function (data) {
+                var products = data.products;
+                commonCacheService.setData('cityProducts', products);
+                var rights = data.rights;
+                commonCacheService.setData('rights', rights);
+            });
+        };
+        commonCacheService.queryExtFeeDefine = function () {
+            baseService.get(__ctx + '/js/common/util/extFeeDefine.json').then(function (data) {
+                var extFeeDefine = data.extFeeDefine;
+                commonCacheService.setData('ExtFeeDefine', extFeeDefine);
+
+            });
+        };
+        commonCacheService.getSysZJMC = function (partnerId) {
+            var agencyZjmcs = commonCacheService.getData('agency_zjmc');
+            if (agencyZjmcs) {
+                for (var agencyZjmc, i = 0; agencyZjmc = agencyZjmcs[i++];) {
+                    if (partnerId === agencyZjmc.partner_id) {
+                        return agencyZjmc.partner_name;
+                    }
+                }
+                return partnerId;
+            }
+            return partnerId;
+        }
+    }]);
+angular.module('ddjfCache', ['base', 'commonCache'])
+    .service('formBoService', ['$filter', function ($filter) {
+        var filter = $filter('filter');
+        var checkScopeInForm = function (scope, boCode, tableKey) {
+            if (!scope.data[boCode] || !scope.data[boCode]['initData']) {
+                console.log('参数有误', scope, boCode);
+                return false;
+            }
+            var subTable = scope.data[boCode]['sub_' + tableKey];
+            if (!angular.isArray(subTable)) {
+                console.log('当前scope没有子表信息', scope, boCode, tableKey);
+                return false;
+            }
+            return true;
+        };
+        /**
+         * @describle 初始化子表数据
+         * @param {Object} scope 业务表单的scope
+         * @param {String} boCode 业务表单的key
+         * @param {String} tableKey 子表名称
+         */
+        this.initTableByKey = function (scope, boCode, tableKey, data) {
+            return this.getScopeTable(scope, boCode, tableKey, data);
+        };
+        /**
+         * @describle 业务表单添加子表数据方法
+         * @param {Object} scope 业务表单的scope
+         * @param {String} boCode 业务表单的key
+         * @param {String} tableKey 子表名称
+         */
+        this.add = function (scope, boCode, tableKey, data) {
+            if (checkScopeInForm(scope, boCode, tableKey)) {
+                var initTableData = angular.copy(scope.data[boCode]['initData'][tableKey]);
+                scope.data[boCode]['sub_' + tableKey].push(initTableData);
+                return angular.extend(initTableData, data);
+            }
+
+        };
+        /**
+         * @describle 业务表单初始子表数据方法（初始某个特定条件的子表数据）
+         * @param {Object} scope 业务表单的scope
+         * @param {String} boCode 业务表单的key
+         * @param {String} tableKey 子表名称
+         * @param {Object} 返回表数据中添加额外值 | 非必填
+         * @param {Object|Function} 筛选子表数据列 | 非必填
+         * @return 返回 {Array}
+         *
+         */
+        this.getScopeTable = function (scope, boCode, tableKey, data, dataFilter) {
+            if (angular.isFunction(data)) {
+                dataFilter = data;
+                data = undefined;
+            }
+            if (checkScopeInForm(scope, boCode, tableKey)) {
+                var targetTable = scope.data[boCode]['sub_' + tableKey];
+                var result = null;
+                if (angular.isDefined(dataFilter)) {
+                    result = filter(targetTable, dataFilter);
+                    if (!result.length) {
+                        var target = this.add(scope, boCode, tableKey, data);
+                        //返回的数据必须是数组
+                        result = [target];
+                    }
+                } else {
+                    if (!targetTable.length) {
+                        //为什么不需要将返回结果赋值给result ？ 因为这个方法用的是push
+                        this.add(scope, boCode, tableKey, data);
+                    }
+                }
+
+                return result ? result : targetTable;
+            }
+
+        };
+        /**
+         * @describle 获取子表初始数据
+         * @param {Object} scope 业务表单的scope
+         * @param {String} boCode 业务表单的key
+         * @param {String} tableKey 子表名称
+         * @return 返回 {Object}
+         */
+        this.getInitTableData = function (scope, boCode, tableKey) {
+            if (checkScopeInForm(scope, boCode, tableKey)) {
+                var targetTableData = scope.data[boCode]['initData'][tableKey];
+                return angular.copy(targetTableData);
+            }
+        }
+    }])
+    .directive('ddjfClick', [ function () {
+        return {
+            restrict: 'A',
+            scope: {
+                ddjfClick: '&'
+            },
+            link: function (scope, element, attrs) {
+                 console.log(attrs);
+            }
+
+        }
+    }])
+    .filter('dic', ['commonCacheService', function (commonCacheService) {
+        return function (typeValue, typeKey, isFilter) {
+            if (isFilter === false) {
+                //第二个参数判断是否直接返回typeValue
+                return typeValue;
+            }
+            if (angular.isFunction(typeKey)) {
+                //2017-08-23 允许不是字典的key，通过函数自己转换（没有新增filter）
+                return typeKey(typeValue);
+            }
+            //2.0的放款节点有中文的括号这个坑货
+            if (!/^[\d-_a-z\(\)（）]+$/i.test(typeValue)) {
+                //已经转换了，就不需要重新查询
+                return typeValue;
+            }
+            if (typeKey && typeValue) {
+                var result = commonCacheService.getSysDic(typeKey, typeValue);
+                if (typeof(result) === 'string') {
+                    return result;
+                }
+                return typeValue;
+            }
+            return typeValue;
+        };
+    }])
+    .filter('multiDic', ['$filter', function ($filter) {
+        var dicFiter = $filter('dic');
+        return function (TypeValue, TypeKey, separator) {
+            separator = separator || ',';
+            if (TypeKey && TypeValue) {
+                return TypeValue.split(separator).map(function (data) {
+                    return dicFiter(data, TypeKey);
+                }).join(separator);
+            }
+            return TypeValue;
+        };
+    }])
+    .filter('join', [function () {
+        return function (value, separator) {
+            var result = [];
+            separator = separator || ',';
+            if (angular.isArray(value)) {
+                result = value;
+            } else if (angular.isUndefined(value) || value === null) {
+                result = [];
+            } else {
+                result.push(value.toString());
+            }
+            return result.join(separator);
+        };
+    }])
+    .filter('group', [function () {
+        //group 和 unique 的区别？
+        return function (item, groupBy) {
+            if (!angular.isArray(item)) {
+                return;
+            }
+            //支持group by 多个条件组合成一个关键key
+            //eg: function(item){ return item.customerNo+'_'+item.workUnit;}
+            //不同客户但是相同的工作单位则视为多条不同的数据
+            //如果返回undefined 则该条数据不满足
+            var handler = angular.isFunction(groupBy) ? groupBy : function handler(data) {
+                return data[groupBy]
+            };
+            var groupList = [];
+            var i = 0, len = item.length,data;
+            while (i < len) {
+                data = item[i++];
+                var groupByValue = handler(data);
+                if (groupByValue === undefined) {
+                    item.splice(--i, 1);
+                } else if (groupList.indexOf(groupByValue) > -1) {
+                    item.splice(--i, 1);
+                } else {
+                    groupList.push(groupByValue);
+                }
+                len = item.length;
+            }
+            return item;
+        }
+    }])
+    .filter('zjmcDic', ['commonCacheService', function (commonCacheService) {
+        return function (partnerId) {
+            if (partnerId) {
+                var result = commonCacheService.getSysZJMC(partnerId);
+                if (typeof(result) === 'string') {
+                    return result;
+                }
+                return partnerId;
+            }
+            return partnerId;
+        }
+    }])
+    .filter('feeNameFilter', function () {
+        return function (input) {
+            switch (input) {
+                case '服务费' :
+                    return '客户缴费总额';
+                default :
+                    return input;
+            }
+        }
+    })
+    .directive('ddjfBindHtml', [function () {
+        return {
+            restrict: 'A',
+            link: function (scope, elm, attrs) {
+                scope.unWatch = scope.$watch(attrs.ddjfBindHtml, function (newVal) {
+                    if (!elm.data('unbindWatchTag')) {
+                        if (newVal) {
+                            elm.data('unbindWatchTag', true);
+                            elm.html(newVal);
+                        }
+                        else {
+                            //避免重复添加监视
+                            if(elm.data('unbindWatchTag')){
+                                scope.unWatch();
+                            }
+                        }
+                    }
+                });
+            }
+        };
+    }])
+    .directive('analysisCard', ['dateFilter',function (dateFilter) {
+        return {
+            restrict: 'ECMA',
+            require: 'ngModel',
+            scope: {
+                analysisCard: '='
+            },
+            link: function (scope, element, attrs, ctrl) {
+                if (!ctrl) {
+                    return;
+                }
+                scope.$parent.$watch(attrs.ngModel, function (newValue) {
+                    if (newValue) {
+                        var idCardNo = newValue.replace(/\s/g, '');
+                        if ($.fn.rules.idcard.rule(idCardNo)) {
+                            var birthday = idCardNo.replace(/^\d{6}(\d{4})(\d{2})(\d{2})(\d{3}[\dXx])/, '$1/$2/$3');
+                            birthday = new Date(birthday);
+                            if (birthday.getTime()) {
+                                var year = birthday.getFullYear();
+                                var currentYear = new Date().getFullYear();
+                                scope.analysisCard.age = currentYear - year;
+                                scope.analysisCard.birthday = dateFilter(birthday,'yyyy-MM-dd');
+                            }
+                            //根据身份证号码代入性别
+                            var sex = idCardNo.substr(16, 1);
+                            scope.analysisCard.sex = scope.analysisCard.sex || ((sex - 0) % 2 ? 'M' : 'F');
+                        }
+                    }
+                })
+            }
+        }
+    }])
+    .directive('tongJi', [function () {
+        return {
+            restrict: 'AE',
+            compile: function () {
+                return function ($scope, element, attr) {
+                    var _hmt = window._hmt || (window._hmt = []);
+                    var tj = attr.tongJi;//参数
+                    var tjType = attr.tjtype;//建议采用“提交-xxx.html”形式
+                    var tjPlatform = 'mobile';//平台：默认为移动端
+                    if (attr.tjplatform) {
+                        tjPlatform = attr.tjplatform;
+                    }
+                    var tjFn = function () {
+                        var tongji = ['_trackEvent', tjPlatform, '点击-' + tjType, '参数=' + tj];
+                        _hmt.push(tongji);
+                    }
+                    element.on('click', function () {
+                        tjFn();
+                    });
+                };
+            }
+        };
+    }])
+    .run(['baseService', 'commonCacheFactory', 'commonCacheService', function (baseService, commonCacheFactory, commonCacheService) {
+        if (commonCacheService.getData('_sysVersion') !== window._sysVersion) {
+            commonCacheService.querySysDicTypesByKey();
+            commonCacheService.queryProjects();
+            commonCacheService.queryExtFeeDefine();
+            commonCacheService.setData('_sysVersion', window._sysVersion);
+            commonCacheService.setData('_LoginTime', new Date().getTime());
+        } else if (new Date().getTime() - commonCacheService.getData('_LoginTime') > 30 * 60 * 1000) {
+            commonCacheService.querySysDicTypesByKey();
+            commonCacheService.queryProjects();
+            commonCacheService.queryExtFeeDefine();
+            commonCacheService.setData('_LoginTime', new Date().getTime());
+        }
+    }])
+
+;(function () {
+    if(!window._hmt){
+        window._hmt = [];
+    }
+    if (window.location.hostname === '127.0.0.1'|| window.location.hostname === 'localhost') {
+        return false;
+    }
+    var hm = document.createElement("script");
+    if (window.location.hostname === "120.25.133.111" || window.location.hostname === 'bpms.ddjf.com') {
+        hm.src = "https://hm.baidu.com/hm.js?4edd049f76b80322423c69d106f44550";//移动的百度统计和pc端的百度统计分离
+    } else if (window.location.host === "120.25.130.236:8080") {//UAT
+        hm.src = "https://hm.baidu.com/hm.js?d8ef7bfb99d53bade8ab2120bcd31c3d"
+    } else if (window.location.host === "120.25.130.236:8888") {//灰度
+        hm.src = "https://hm.baidu.com/hm.js?bfe7c63c53b7a8ef1f6faf05773f3544"
+    } else {//sit 开发
+        hm.src = "https://hm.baidu.com/hm.js?6674ab3d188a9ef5e6f2dbda770afae5"
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+

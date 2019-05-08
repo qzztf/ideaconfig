@@ -1,5 +1,8 @@
 <application>
   <component name="ScratchFileService">
+    <file url="file://$APPLICATION_CONFIG_DIR$/scratches/AppServiceApplication.http" value="HTTP Request" />
     <file url="file://$APPLICATION_CONFIG_DIR$/scratches/SpringoApplication.http" value="HTTP Request" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/scratches/rest-api.http" value="HTTP Request" />
+    <file url="file://$APPLICATION_CONFIG_DIR$/scratches/rest-api_1.http" value="HTTP Request" />
   </component>
 </application>

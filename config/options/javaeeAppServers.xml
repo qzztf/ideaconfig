@@ -7,7 +7,22 @@
         <option name="CATALINA_BASE" value="" />
       </DATA>
     </ServerDK>
+    <ServerDK NAME="Tomcat 8.5.40">
+      <option name="SOURCE_INTEGRATION_NAME" value="Tomcat Server" />
+      <DATA>
+        <option name="CATALINA_HOME" value="F:/apache-tomcat-8.5.40" />
+        <option name="CATALINA_BASE" value="" />
+      </DATA>
+    </ServerDK>
     <LibraryTable>
+      <library name="Tomcat 8.5.40">
+        <CLASSES>
+          <root url="jar://F:/apache-tomcat-8.5.40/lib/jsp-api.jar!/" />
+          <root url="jar://F:/apache-tomcat-8.5.40/lib/servlet-api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
       <library name="Tomcat 9.0.0.M1">
         <CLASSES>
           <root url="jar://F:/apache-tomcat-9.0.0.M1/lib/jsp-api.jar!/" />

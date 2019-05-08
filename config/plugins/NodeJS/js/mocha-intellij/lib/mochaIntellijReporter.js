@@ -17,8 +17,8 @@ function findOrCreateAndRegisterSuiteNode(tree, test) {
     var suiteName = suite.title;
     var childNode = treeUtil.getNodeForSuite(suite);
     if (!childNode) {
-      var locationPath = getLocationPath(test.file, parentNode, suiteName);
-      childNode = parentNode.addTestSuiteChild(suiteName, 'suite', locationPath);
+      var locationPath = getLocationPath(parentNode, suiteName);
+      childNode = parentNode.addTestSuiteChild(suiteName, 'suite', locationPath, test.file);
       childNode.register();
       treeUtil.setNodeForSuite(suite, childNode);
     }
@@ -39,12 +39,11 @@ function getSuitesFromRootDownTo(suite) {
 }
 
 /**
- * @param {string} testFilePath test file path
  * @param {TestSuiteNode} parent
  * @param {string} childName
  * @returns {string}
  */
-function getLocationPath(testFilePath, parent, childName) {
+function getLocationPath(parent, childName) {
   var names = []
     , node = parent
     , root = node.tree.root;
@@ -52,7 +51,6 @@ function getLocationPath(testFilePath, parent, childName) {
     names.push(node.name);
     node = node.parent;
   }
-  names.push(testFilePath || '');
   names.reverse();
   names.push(childName);
   return util.joinList(names, 0, names.length, '.');
@@ -92,8 +90,8 @@ function registerTestNode(tree, test) {
     throw Error("Test node has already been associated!");
   }
   var suiteNode = findOrCreateAndRegisterSuiteNode(tree, test);
-  var locationPath = getLocationPath(test.file, suiteNode, test.title);
-  testNode = suiteNode.addTestChild(test.title, 'test', locationPath);
+  var locationPath = getLocationPath(suiteNode, test.title);
+  testNode = suiteNode.addTestChild(test.title, 'test', locationPath, test.file);
   testNode.register();
   treeUtil.setNodeForTest(test, testNode);
   return testNode;
@@ -144,6 +142,17 @@ function addStdErr(testNode, err) {
  */
 function finishTestNode(tree, test, err, finishingQueue) {
   var testNode = treeUtil.getNodeForTest(test);
+  if (finishingQueue != null) {
+    const passed = testNode != null && testNode === finishingQueue.current && testNode.outcome === Tree.TestOutcome.SUCCESS;
+    if (passed && err != null) {
+      // do not deliver passed event if this test is failed now
+      finishingQueue.clear();
+    }
+    else {
+      finishingQueue.processAll();
+    }
+  }
+
   if (testNode != null && testNode.isFinished()) {
     /* See https://youtrack.jetbrains.com/issue/WEB-10637
        A test can be reported as failed and passed at the same test run if a error is raised using
@@ -325,16 +334,16 @@ function IntellijReporter(runner) {
   }));
 
   runner.on('pass', util.safeFn(function (test) {
-    finishingQueue.processAll();
     finishTestNode(tree, test, null, finishingQueue);
   }));
 
   runner.on('fail', util.safeFn(function (test, err) {
-    finishingQueue.processAll();
     if (isBeforeEachHook(test)) {
+      finishingQueue.processAll();
       handleBeforeEachHookFailure(tree, test, err);
     }
     else if (isBeforeAllHook(test)) {
+      finishingQueue.processAll();
       finishTestNode(tree, test, err);
       markChildrenFailed(tree, test.parent, test.title + " failed");
     }

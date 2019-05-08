@@ -1,7 +1,7 @@
 License Agreement for ZeroTurnaround Software
-The ZeroTurnaround combined EULA is applicable to all JRebel, XRebel Local and JRebel for Android licenses. The initial applicable revision of EULA is the latest revision at the moment of purchase of license or acceptance of this Agreement. The applicable EULA revision might change based on section "Alteration of Terms".
+The ZeroTurnaround combined EULA is applicable to all JRebel, XRebel and JRebel for Android licenses. The initial applicable revision of EULA is the latest revision at the moment of purchase of license or acceptance of this Agreement. The applicable EULA revision might change based on section "Alteration of Terms".
 
-(revision of March 14th, 2018; version 3.9)
+(revision of August 2nd, 2018; version 3.10)
 
 NOTICE TO ALL USERS: PLEASE READ THIS AGREEMENT CAREFULLY. THIS AGREEMENT HAS BEEN MADE AVAILABLE TO YOU ON ZEROTURNAROUND'S WEBSITE (http://www.zeroturnaround.com) PRIOR TO YOUR PURCHASE OF LICENSE CERTIFICATE OR PRIOR TO INSTALLATION OF LICENSED SOFTWARE FOR EVALUATION. BY PURCHASING THE LICENSE CERTIFICATE OR BY INSTALLING THE LICENSED SOFTWARE INTO YOUR COMPUTER FOR EVALUATION OR OTHER USAGE, YOU HAVE AGREED THAT THIS AGREEMENT IS ENFORCEABLE LIKE ANY WRITTEN CONTRACT SIGNED BY YOU.
 
@@ -30,7 +30,7 @@ I. DEFINITIONS
 
 11. "IP Rights" - Intellectual property rights, such as (i) patents, pending patent applications, designs, trademarks and trade names (whether registered or unregistered), copyright and related rights, database rights, knowhow and confidential information; (ii) all other intellectual property rights and similar or equivalent rights anywhere in the world which currently exist or are recognized in the future; and (iii) applications, extensions and renewals in relation to any such rights.
 
-12. "JRebel Software", "XRebel Local Software", "JRebel for Android Software" - The software program distributed by the Licensor or its distributors, resellers or other authorized business partners, under the name JRebel (or XRebel Local, or JRebel for Android, respectively) (or under a replacement product name, should the product be renamed in the future), as produced by the Licensor, including its documentation, related explanatory materials in printed, electronic, or online form, and upgrades, updates and modified or subsequent versions of the software.
+12. "JRebel Software", "XRebel Software", "JRebel for Android Software" - The software program distributed by the Licensor or its distributors, resellers or other authorized business partners, under the name JRebel (or XRebel, or JRebel for Android, respectively) (or under a replacement product name, should the product be renamed in the future), as produced by the Licensor, including its documentation, related explanatory materials in printed, electronic, or online form, and upgrades, updates and modified or subsequent versions of the software.
 
 13. "License" - The license to Use the Licensed Software, as granted to the Licensee in section III ("Grant of License").
 
@@ -40,7 +40,7 @@ I. DEFINITIONS
 
 15. "License Key" - A unique key-code that enables an Authorized User to use Licensed Software by unlocking the copy protection mechanism. Only Licensor and/or its representatives are permitted to produce License Keys for the Licensed Software.
 
-16. "Licensed Software" - the JRebel Software, the XRebel Local Software, or the JRebel for Android Software, depending on what the Licensor has licensed to the Licensee.
+16. "Licensed Software" - the JRebel Software, the XRebel Software, or the JRebel for Android Software, depending on what the Licensor has licensed to the Licensee.
 
 17. "Licensee" - You, the end user of the Licensed Software; a natural or a legal person or entity. The legal identity of the Licensee may change due to a merger, acquisition or other types of succession.
 
@@ -117,7 +117,7 @@ All types of Licenses are independent of the product version of the Licensed Sof
 (ii) By upgrading to a newer version, the Licensee accepts the terms and conditions of the Agreement attached to the newer version if the Agreement has changed between the two versions of the Licensed Software.
 
 
-Based on the type of Licensed Software the Licensee is using (JRebel or XRebel Local or JRebel for Android Software or some or all), the applicable portions of subchapter III-B or subchapter III-C or subchapter III-D will apply.
+Based on the type of Licensed Software the Licensee is using (JRebel or XRebel or JRebel for Android Software or some or all), the applicable portions of subchapter III-B or subchapter III-C or subchapter III-D will apply.
 
 
 III-B. GRANT OF LICENSE FOR JREBEL
@@ -160,28 +160,28 @@ Licensor hereby grants a Licensee who has subscribed to the Licensed Software vi
 (iv) Licensee cannot Use Licensed Software for any commercial purposes, including but not limited to development of commercial software or other work within a commercial project or institution.
 
 
-III-C. GRANT OF LICENSE FOR XREBEL LOCAL
+III-C. GRANT OF LICENSE FOR XRebel
 
 
-38. General Terms for XRebel Local Licenses
+38. General Terms for XRebel Licenses
 
-For all XRebel Local Licenses, the Licensed Software is the XRebel Local Software.
-
-
-39. XRebel Local Evaluation License
-
-Licensor hereby grants the Evaluating Licensee a non-exclusive, non-sublicensable, non-assignable, time-limited license to Use the Licensed Software according to the same terms as specified by the JRebel Evaluation License section and according to general terms of this Agreement (the "XRebel Local Evaluation License") and the Evaluating Licensee accepts this Evaluation License by downloading and installing the Licensed Software and acquiring a License Key for evaluation.
+For all XRebel Licenses, the Licensed Software is the XRebel Software.
 
 
-40. XRebel Local Commercial License
+39. XRebel Evaluation License
 
-Licensor hereby grants the Authorized Users of a Commercial Licensee who is holding a valid License Certificate of type "XRebel Local Commercial", a non-exclusive, non-sublicensable, non-assignable, time-limited license ("XRebel Local Commercial License") to Use the Licensed Software according to the terms and conditions of this Agreement and the Licensee accepts this License by purchasing the License Certificate. The XRebel Local Commercial License is subject to the following terms:
-(i) XRebel Local Commercial License has the subtypes of XRebel Local Dedicated License and XRebel Local Managed License.
-(ii) In the case of XRebel Local Dedicated License, the Authorized Users are fixed Employees of Licensee and can only be changed by submitting a change request to sales-operations@zeroturnaround.com. Usage of the Licensed Software by anyone other than Authorized Users is prohibited.
-(iii) In the case of a XRebel Local Managed License, the Authorized Users are Employees of the Licensee to whom the Seats have been assigned via the ZeroTurnaround License Server, with the restriction that the number of Authorized Users using Seats cannot exceed the number of Seats specified by the License Certificate held by the Licensee.
-(iv) The Authorized User of a XRebel Local Managed License is required to provide his email address in order to acquire the Seat.
+Licensor hereby grants the Evaluating Licensee a non-exclusive, non-sublicensable, non-assignable, time-limited license to Use the Licensed Software according to the same terms as specified by the JRebel Evaluation License section and according to general terms of this Agreement (the "XRebel Evaluation License") and the Evaluating Licensee accepts this Evaluation License by downloading and installing the Licensed Software and acquiring a License Key for evaluation.
+
+
+40. XRebel Commercial License
+
+Licensor hereby grants the Authorized Users of a Commercial Licensee who is holding a valid License Certificate of type "XRebel Commercial", a non-exclusive, non-sublicensable, non-assignable, time-limited license ("XRebel Commercial License") to Use the Licensed Software according to the terms and conditions of this Agreement and the Licensee accepts this License by purchasing the License Certificate. The XRebel Commercial License is subject to the following terms:
+(i) XRebel Commercial License has the subtypes of XRebel Dedicated License and XRebel Managed License.
+(ii) In the case of XRebel Dedicated License, the Authorized Users are fixed Employees of Licensee and can only be changed by submitting a change request to sales-operations@zeroturnaround.com. Usage of the Licensed Software by anyone other than Authorized Users is prohibited.
+(iii) In the case of a XRebel Managed License, the Authorized Users are Employees of the Licensee to whom the Seats have been assigned via the ZeroTurnaround License Server, with the restriction that the number of Authorized Users using Seats cannot exceed the number of Seats specified by the License Certificate held by the Licensee.
+(iv) The Authorized User of a XRebel Managed License is required to provide his email address in order to acquire the Seat.
 (v) The Seat of a Managed License is intended to be used by a single Authorized User during the term of the Authorized User's employment with the Licensee or the duration of Authorized User's assignment to a development project. Seats cannot be reassigned on a daily basis and the Licensed Software may include measures to prevent it. Seats can be reassigned under special circumstances (e.g., Employee leaving the company or finishing a project, etc.) and at a frequency of once per month.
-(vi) The number of devices on which a XRebel Local Managed License's Seat can be used by the Authorized User will be limited by the number of devices that the Licensed Software will allow to be associated with the Authorized User's email address.
+(vi) The number of devices on which a XRebel Managed License's Seat can be used by the Authorized User will be limited by the number of devices that the Licensed Software will allow to be associated with the Authorized User's email address.
 (vii) The License is granted only for the time period specified in the License Certificate, subject to renewal as set forth in Section 66 hereof.
 
 III-D. GRANT OF LICENSE FOR JREBEL FOR ANDROID LICENSES
@@ -261,7 +261,7 @@ For an Unpaid Licensee, the Licensor will have no obligation to provide support,
 
 For a Commercial Licensee holding a valid License Certificate, support will be available during the period of validity of Licensee's License Certificate as follows:
 i. For holders of a paid License Certificate of any type, Forum Support and E-mail Support are guaranteed to be available at least during a period of one year from the purchase of the License Certificate. The response time will be reasonable, but no specific response time guarantees are given.
-ii. For holders of License Certificate with Premium Support Add-on for the same type of Licensed Software (JRebel or XRebel Local) that the support request is related to, E-mail Support will have a response time of 1 hour during the Business Hours. The Authorized User is eligible for this time-guarantee only if he sends his support request via his/her personal secret e-mail address that was provided to him/her on the purchase of License Certificate with Premium Support Add-on.
+ii. For holders of License Certificate with Premium Support Add-on for the same type of Licensed Software (JRebel or XRebel) that the support request is related to, E-mail Support will have a response time of 1 hour during the Business Hours. The Authorized User is eligible for this time-guarantee only if he sends his support request via his/her personal secret e-mail address that was provided to him/her on the purchase of License Certificate with Premium Support Add-on.
 
 
 51. Supported Versions
@@ -381,5 +381,5 @@ Each license granted hereunder is granted for the initial time period specified 
 For exceptions or modifications to this Agreement, please contact Licensor at:
 Address: Ülikooli 2, Tartu 51003, Estonia
 E-mail: support@zeroturnaround.com (JRebel; general)
-        xrebel@zeroturnaround.com (XRebel Local)
+        xrebel@zeroturnaround.com (XRebel)
         android@zeroturnaround.com (JRebel for Android)

@@ -1,7 +1,8 @@
 <application>
   <component name="FileTypeManager" version="17">
     <extensionMap>
-      <mapping ext="klib" type="ARCHIVE" />
+      <mapping ext="vsdx" type="Native" />
+      <mapping pattern="自定义命名空间解析.md" type="PLAIN_TEXT" />
       <mapping ext="processor" type="PLAIN_TEXT" />
     </extensionMap>
   </component>

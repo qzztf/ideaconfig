@@ -5,7 +5,7 @@
         <SonarServerConfig>
           <option name="anonymous" value="true" />
           <option name="hostUrl" value="http://10.1.108.172:9000" />
-          <option name="name" value="sonar" />
+          <option name="name" value="http://10.1.108.172:9000" />
           <option name="user" value="" />
         </SonarServerConfig>
       </list>

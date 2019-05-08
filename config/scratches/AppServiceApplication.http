@@ -1,0 +1,59 @@
+POST http://localhost:11001/ares/material/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+accessToken: eyJhbGciOiJERVMiLCJ0eXAiOiJBV1QifQ.eyJmcm9tVXNlciI6IjEwMTA7MSIsImlhdCI6MTU1Mzc3MjkzNzI5NywiaXNzIjoiYXd0LXByb2R1Y2VyIn0.5Z-9Xccs71DqOB5reAjO4QOoPn_BxWbNCRdPj5T4_Y87_g4g0or2iS0YTD2t5q90Kmcp4xezx7_BU0Gm-uxZr1ab98xHr722kGu96NdoUCyQRXBvuxszNWx_PJ4EhXoJnBy3QoE13NEvc1Yn8oje_2yP5XwlKHIL
+
+--WebAppBoundary
+Content-Disposition: form-data; name="orderNo"
+Content-Type: text/plain
+
+FMS201903301918429833
+--WebAppBoundary
+Content-Disposition: form-data; name="typeNo"
+Content-Type: text/plain
+
+M01001
+--WebAppBoundary
+Content-Disposition: form-data; name="customerId"
+Content-Type: text/plain
+
+11111
+--WebAppBoundary
+#Content-Disposition: form-data; name="files"; filename="aaa.jpg"
+#Content-Type: image/jpeg
+#
+#< f:/cluster.jpg
+#--WebAppBoundary
+#Content-Disposition: form-data; name="files"; filename="aaa.jpg"
+#Content-Type: image/jpeg
+#
+#< f:/cluster.jpg
+#--WebAppBoundary--
+
+<> 2019-04-08T053831.200.json
+<> 2019-04-08T052745.200.json
+<> 2019-04-08T052034.200.json
+<> 2019-04-08T051845.200.json
+<> 2019-04-08T051440.200.json
+<> 2019-04-08T051340.200.json
+<> 2019-04-08T051103.200.json
+<> 2019-04-08T050947.500.json
+<> 2019-04-08T045920.200.json
+<> 2019-04-08T045812.200.json
+<> 2019-04-08T045405.500.json
+<> 2019-04-08T045230.200.json
+<> 2019-04-08T044946.200.json
+
+
+
+
+
+
+###
+
+GET http://localhost:11001/ares/material/download?fileIds=5cc547487953fb1db04faa61&fileIds=5cc547487953fb1db04faa63&packName=FMS201903301918429833.zip
+accessToken: eyJhbGciOiJERVMiLCJ0eXAiOiJBV1QifQ.eyJmcm9tVXNlciI6IjEwMTA7MSIsImlhdCI6MTU1Mzc3MjkzNzI5NywiaXNzIjoiYXd0LXByb2R1Y2VyIn0.5Z-9Xccs71DqOB5reAjO4QOoPn_BxWbNCRdPj5T4_Y87_g4g0or2iS0YTD2t5q90Kmcp4xezx7_BU0Gm-uxZr1ab98xHr722kGu96NdoUCyQRXBvuxszNWx_PJ4EhXoJnBy3QoE13NEvc1Yn8oje_2yP5XwlKHIL
+
+<> 2019-04-28T035838.200.txt
+
+###
+

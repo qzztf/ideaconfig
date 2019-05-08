@@ -22,4 +22,8 @@ SingleElementQueue.prototype.processAll = function () {
   }
 };
 
+SingleElementQueue.prototype.clear = function () {
+  this.current = null;
+};
+
 module.exports = SingleElementQueue;

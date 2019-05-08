@@ -50,10 +50,11 @@ Tree.prototype.testingFinished = function () {
  * @param {string} name node name (it could be a suite/spec name)
  * @param {string} type node type (e.g. 'config', 'browser')
  * @param {string} locationPath string that is used by IDE to navigate to the definition of the node
+ * @param {string} metaInfo
  * @abstract
  * @constructor
  */
-function Node(tree, id, parent, name, type, locationPath) {
+function Node(tree, id, parent, name, type, locationPath, metaInfo) {
   /**
    * @type {Tree}
    * @protected
@@ -84,6 +85,11 @@ function Node(tree, id, parent, name, type, locationPath) {
    * @private
    */
   this.locationPath = locationPath;
+  /**
+   * @type {string}
+   * @private
+   */
+  this.metaInfo = metaInfo;
   /**
    * @type {NodeState}
    * @protected
@@ -148,6 +154,9 @@ Node.prototype.getInitMessage = function (running) {
     if (this.locationPath != null) {
       text += '\' locationHint=\'' + util.escapeAttributeValue(this.type + '://' + this.locationPath);
     }
+  }
+  if (this.metaInfo != null) {
+    text += '\' metainfo=\'' + util.escapeAttributeValue(this.metaInfo);
   }
   text += '\']';
   return text;
@@ -266,11 +275,12 @@ Node.prototype.finishIfStarted = function () {
  * @param {String} name node name (e.g. config file name / browser name / suite name)
  * @param {String} type node type (e.g. 'config', 'browser')
  * @param {String} locationPath navigation info
+ * @param {String} metaInfo
  * @constructor
  * @extends Node
  */
-function TestSuiteNode(tree, id, parent, name, type, locationPath) {
-  Node.call(this, tree, id, parent, name, type, locationPath);
+function TestSuiteNode(tree, id, parent, name, type, locationPath, metaInfo) {
+  Node.call(this, tree, id, parent, name, type, locationPath, metaInfo);
   /**
    * @type {Array}
    * @public
@@ -333,12 +343,12 @@ TestSuiteNode.prototype.getExtraFinishMessageParameters = function () {
  * @param {string} locationPath navigation info
  * @returns {TestNode}
  */
-TestSuiteNode.prototype.addTestChild = function (childName, nodeType, locationPath) {
+TestSuiteNode.prototype.addTestChild = function (childName, nodeType, locationPath, metaInfo) {
   if (this.state === NodeState.FINISHED) {
     throw Error('Child node cannot be created for finished nodes!');
   }
   var childId = this.tree.nextId++;
-  var child = new TestNode(this.tree, childId, this, childName, nodeType, locationPath);
+  var child = new TestNode(this.tree, childId, this, childName, nodeType, locationPath, metaInfo);
   this.children.push(child);
   this.lookupMap[childName] = child;
   return child;
@@ -349,14 +359,15 @@ TestSuiteNode.prototype.addTestChild = function (childName, nodeType, locationPa
  * @param {String} childName node name (e.g. browser name / suite name / spec name)
  * @param {String} nodeType child node type (e.g. 'config', 'browser')
  * @param {String} locationPath navigation info
+ * @param {String} metaInfo
  * @returns {TestSuiteNode}
  */
-TestSuiteNode.prototype.addTestSuiteChild = function (childName, nodeType, locationPath) {
+TestSuiteNode.prototype.addTestSuiteChild = function (childName, nodeType, locationPath, metaInfo) {
   if (this.state === NodeState.FINISHED) {
     throw Error('Child node cannot be created for finished nodes!');
   }
   var childId = this.tree.nextId++;
-  var child = new TestSuiteNode(this.tree, childId, this, childName, nodeType, locationPath);
+  var child = new TestSuiteNode(this.tree, childId, this, childName, nodeType, locationPath, metaInfo);
   this.children.push(child);
   this.lookupMap[childName] = child;
   return child;
@@ -385,8 +396,8 @@ TestSuiteNode.prototype.onChildFinished = function() {
  * @param {string} locationPath navigation info
  * @constructor
  */
-function TestNode(tree, id, parent, name, type, locationPath) {
-  Node.call(this, tree, id, parent, name, type, locationPath);
+function TestNode(tree, id, parent, name, type, locationPath, metaInfo) {
+  Node.call(this, tree, id, parent, name, type, locationPath, metaInfo);
   /**
    * @type {TestOutcome}
    * @private
@@ -464,9 +475,6 @@ Tree.TestOutcome = TestOutcome;
 TestNode.prototype.setOutcome = function (outcome, durationMillis, failureMsg, failureDetails,
                                           expectedStr, actualStr,
                                           expectedFilePath, actualFilePath) {
-  if (this.outcome != null) {
-    throw Error("Test outcome has already been set!");
-  }
   this.outcome = outcome;
   this.durationMillis = durationMillis;
   this.failureMsg = failureMsg;

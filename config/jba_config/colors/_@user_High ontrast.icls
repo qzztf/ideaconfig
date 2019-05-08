@@ -3,7 +3,7 @@
     <property name="created">2018-12-06T21:07:13</property>
     <property name="ide">idea</property>
     <property name="ideVersion">2018.3.1.0.0</property>
-    <property name="modified">2018-12-10T10:03:40</property>
+    <property name="modified">2019-04-25T14:54:32</property>
     <property name="originalScheme">High сontrast</property>
   </metaInfo>
   <colors>
@@ -631,6 +631,21 @@
         <option name="EFFECT_TYPE" value="2" />
       </value>
     </option>
+    <option name="ROUND_BRACKETS_RAINBOW_COLOR0">
+      <value>
+        <option name="FOREGROUND" value="ffd700" />
+      </value>
+    </option>
+    <option name="ROUND_BRACKETS_RAINBOW_COLOR1">
+      <value>
+        <option name="FOREGROUND" value="da70d6" />
+      </value>
+    </option>
+    <option name="ROUND_BRACKETS_RAINBOW_COLOR2">
+      <value>
+        <option name="FOREGROUND" value="87cefa" />
+      </value>
+    </option>
     <option name="SASS_MIXIN">
       <value />
     </option>
@@ -680,6 +695,36 @@
       <value>
         <option name="BACKGROUND" value="1233" />
         <option name="EFFECT_TYPE" value="2" />
+      </value>
+    </option>
+    <option name="SQUARE_BRACKETS_RAINBOW_COLOR0">
+      <value>
+        <option name="FOREGROUND" value="ffd700" />
+      </value>
+    </option>
+    <option name="SQUARE_BRACKETS_RAINBOW_COLOR1">
+      <value>
+        <option name="FOREGROUND" value="da70d6" />
+      </value>
+    </option>
+    <option name="SQUARE_BRACKETS_RAINBOW_COLOR2">
+      <value>
+        <option name="FOREGROUND" value="87cefa" />
+      </value>
+    </option>
+    <option name="SQUIGGLY_BRACKETS_RAINBOW_COLOR0">
+      <value>
+        <option name="FOREGROUND" value="ffd700" />
+      </value>
+    </option>
+    <option name="SQUIGGLY_BRACKETS_RAINBOW_COLOR1">
+      <value>
+        <option name="FOREGROUND" value="da70d6" />
+      </value>
+    </option>
+    <option name="SQUIGGLY_BRACKETS_RAINBOW_COLOR2">
+      <value>
+        <option name="FOREGROUND" value="87cefa" />
       </value>
     </option>
     <option name="TEMPLATE_VARIABLE_ATTRIBUTES">

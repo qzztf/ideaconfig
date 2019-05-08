@@ -43,3 +43,16 @@ com.chrisrm.idea.MaterialThemeUI
 com.intellij.plugins.watcher
 com.github.pshirshov.bytecodeeditor
 in.1ton.idea.spring.assistant.plugin
+GenerateSerialVersionUID
+com.jetbrains.CyanTheme
+com.jetbrains.grayTheme
+com.tylerthrailkill.intellij.solarized
+com.github.holgerbrandl.pasteimages/
+MyBatisLogPlugin
+io.codearte.props2yaml
+GsonFormat
+izhangzhihao.rainbow.brackets
+GrepConsole
+Gitflow
+me.xdrop.night-owl
+com.yiycf.plugins.mavenDependencyHelper

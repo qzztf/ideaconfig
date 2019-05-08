@@ -7,11 +7,11 @@
     <option name="upperCaseButtons" value="false" />
     <option name="useMaterialFont2" value="true" />
     <option name="rightTreeIndent" value="6" />
-    <option name="tabsHeight" value="30" />
+    <option name="tabsHeight" value="20" />
     <option name="accentColor" value="84ffff" />
     <option name="highlightColor" value="80cbc4" />
-    <option name="selectedTheme" value="SOLARIZED_DARK" />
+    <option name="selectedTheme" value="CUSTOM" />
     <option name="userId" value="3bf33fac:1660e773a0f:-8000" />
-    <option name="version" value="3.3.0" />
+    <option name="version" value="3.9.2" />
   </component>
 </application>

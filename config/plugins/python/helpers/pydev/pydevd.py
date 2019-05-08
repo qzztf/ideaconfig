@@ -173,10 +173,22 @@ class CheckOutputThread(PyDBDaemonThread):
                 except:
                     traceback.print_exc()
 
+                self.wait_pydb_threads_to_finish()
+
                 self.killReceived = True
 
             self.py_db.check_output_redirect()
 
+    def wait_pydb_threads_to_finish(self, timeout=0.5):
+        pydev_log.debug("Waiting for pydb daemon threads to finish")
+        pydb_daemon_threads = self.created_pydb_daemon_threads
+        started_at = time.time()
+        while time.time() < started_at + timeout:
+            if len(pydb_daemon_threads) == 1 and pydb_daemon_threads.get(self, None):
+                return
+            time.sleep(0.01)
+        pydev_log.debug("The following pydb threads may not finished correctly: %s"
+                        % ', '.join([t.getName() for t in pydb_daemon_threads if t is not self]))
 
     def do_kill_pydev_thread(self):
         self.killReceived = True
@@ -1016,7 +1028,7 @@ class PyDB:
                 frame = frame.f_back
         del frame
 
-    def prepare_to_run(self):
+    def prepare_to_run(self, enable_tracing_from_start=True):
         ''' Shared code to prepare debugging by installing traces and registering threads '''
         if self.signature_factory is not None or self.thread_analyser is not None:
             # we need all data to be sent to IDE even after program finishes
@@ -1025,14 +1037,13 @@ class PyDB:
             self.frame_eval_func = None
 
         self.patch_threads()
-        pydevd_tracing.SetTrace(self.trace_dispatch, self.frame_eval_func, self.dummy_trace_dispatch)
-        # There is no need to set tracing function if frame evaluation is available. Moreover, there is no need to patch thread
-        # functions, because frame evaluation function is set to all threads by default.
+        if enable_tracing_from_start:
+            pydevd_tracing.SetTrace(self.trace_dispatch, self.frame_eval_func, self.dummy_trace_dispatch)
 
         PyDBCommandThread(self).start()
 
         if show_tracing_warning or show_frame_eval_warning:
-            cmd = self.cmd_factory.make_show_cython_warning_message()
+            cmd = self.cmd_factory.make_show_warning_message("cython")
             self.writer.add_command(cmd)
 
 
@@ -1100,7 +1111,8 @@ class PyDB:
             while not self.ready_to_run:
                 time.sleep(0.1)  # busy wait until we receive run command
 
-            if self.break_on_caught_exceptions or (self.plugin and self.plugin.has_exception_breaks()) or self.signature_factory:
+            if self.break_on_caught_exceptions or self.has_plugin_line_breaks or self.has_plugin_exception_breaks \
+                    or self.signature_factory:
                 # disable frame evaluation if there are exception breakpoints with 'On raise' activation policy
                 # or if there are plugin exception breakpoints or if collecting run-time types is enabled
                 self.frame_eval_func = None
@@ -1311,6 +1323,9 @@ def _locked_settrace(
     global bufferStdOutToServer
     global bufferStdErrToServer
 
+    # Reset created PyDB daemon threads after fork - parent threads don't exist in a child process.
+    PyDBDaemonThread.created_pydb_daemon_threads = {}
+
     if not connected:
         pydevd_vm_type.setup_type()
 
@@ -1478,15 +1493,19 @@ class DispatchReader(ReaderThread):
             self.killReceived = True
 
 
-DISPATCH_APPROACH_NEW_CONNECTION = 1 # Used by PyDev
-DISPATCH_APPROACH_EXISTING_CONNECTION = 2 # Used by PyCharm
-DISPATCH_APPROACH = DISPATCH_APPROACH_NEW_CONNECTION
+def _should_use_existing_connection(setup):
+    '''
+    The new connection dispatch approach is used by PyDev when the `multiprocess` option is set,
+    the existing connection approach is used by PyCharm when the `multiproc` option is set.
+    '''
+    return setup.get('multiproc', False)
+
 
 def dispatch():
     setup = SetupHolder.setup
     host = setup['client']
     port = setup['port']
-    if DISPATCH_APPROACH == DISPATCH_APPROACH_EXISTING_CONNECTION:
+    if _should_use_existing_connection(setup):
         dispatcher = Dispatcher()
         try:
             dispatcher.connect(host, port)
@@ -1616,8 +1635,6 @@ def main():
 
         elif setup['multiproc']: # PyCharm
             pydev_log.debug("Started in multiproc mode\n")
-            global DISPATCH_APPROACH
-            DISPATCH_APPROACH = DISPATCH_APPROACH_EXISTING_CONNECTION
 
             dispatcher = Dispatcher()
             try:

@@ -1,8 +1,8 @@
 <idea-plugin version="2" url="https://github.com/asciidoctor/asciidoctor-intellij-plugin">
   <id>org.asciidoctor.intellij.asciidoc</id>
   <name>AsciiDoc</name>
-  <version>0.23.2</version>
-  <vendor email="erik.pragt@jworks.nl" url="http://asciidoctor.org">Asciidoctor Project</vendor>
+  <version>0.24.4</version>
+  <vendor email="alexander.schwartz@gmx.net" url="http://asciidoctor.org">Asciidoctor Project</vendor>
   <description>
       &lt;p&gt;&lt;a href="http://www.methods.co.nz/asciidoc/"&gt;AsciiDoc&lt;/a&gt; language support for IntelliJ platform.&lt;p&gt;
       &lt;p&gt;AsciiDoc is a text document format, similar to formats like Markdown, for writing notes, documentation, articles,
@@ -27,6 +27,17 @@ Therefore, JetBrains OpenJDK pre-bundled with your IDE is recommended.
   </description>
   <change-notes>
     &lt;ul&gt;
+      &lt;li&gt;0.24.4 Fixing preview line calculation when using .asciidoctorconfig-files
+      &lt;li&gt;0.24.3 Filter out problematic pass-through JavaScript with Twitter being the first candidate (#235)
+      &lt;li&gt;0.24.2 Support JDK11 as of IntelliJ 2019.1 EAP (#238)
+      &lt;li&gt;0.24.1 Upgrade to AsciidoctorJ 1.6.2 and JRuby 9.2.6.0 (it's still backed by Asciidoctor 1.5.8)
+      &lt;br&gt;Upgrade to asciidoctor diagram 1.5.12
+      &lt;br&gt;Additional logging to analyze errors (#236)
+      &lt;li&gt;0.24.0 Upgrade to AsciidoctorJ 1.6.1 and JRuby 9.2.5.0 (it's still backed by Asciidoctor 1.5.8)
+      &lt;br&gt;Upgrade to asciidoctor diagram 1.5.11
+      &lt;br&gt;Updated parser for old style multiline headings to be more specific (#233)
+      &lt;br&gt;Added description for old style heading inspection (#233)
+      &lt;/li&gt;
       &lt;li&gt;0.23.2 Resource cleanup for Asciidoctor Ruby Extensions (#220)&lt;/li&gt;
       &lt;li&gt;0.23.1 Updated file icon with less intrusive icon, also introducing SVG for icons (#230)
       &lt;br&gt;Editor notification to switch to JetBrains 64bit JDK (#189)
@@ -49,7 +60,7 @@ Therefore, JetBrains OpenJDK pre-bundled with your IDE is recommended.
     &lt;/ul&gt;
       
   </change-notes>
-  <idea-version since-build="171.000"/>
+  <idea-version since-build="172.2465.6"/>
   <depends>com.intellij.modules.lang</depends>
   <application-components/>
   <project-components>
@@ -105,6 +116,6 @@ Therefore, JetBrains OpenJDK pre-bundled with your IDE is recommended.
     <editorNotificationProvider implementation="org.asciidoc.intellij.editor.ExtenionsAvailableNotificationProvider"/>
     <gotoSymbolContributor implementation="org.asciidoc.intellij.psi.AsciiDocChooseByNameContributor"/>
     <searchEverywhereClassifier implementation="org.asciidoc.intellij.psi.AsciiDocSearchEverywhereClassifier"/>
-    <localInspection language="AsciiDoc" displayName="Heading inspection" groupPath="AsciiDoc" groupName="General" enabledByDefault="true" level="WARNING" implementationClass="org.asciidoc.intellij.inspections.AsciidocHeadingStyleInspection"/>
+    <localInspection language="AsciiDoc" displayName="Heading inspection" groupPath="AsciiDoc" groupName="General" enabledByDefault="true" level="WARNING" shortName="AsciidocHeadingStyleInspection" implementationClass="org.asciidoc.intellij.inspections.AsciidocHeadingStyleInspection"/>
   </extensions>
 </idea-plugin>
